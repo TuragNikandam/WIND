@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:andromeda_app/models/news_article_model.dart';
 import 'package:andromeda_app/services/base_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -19,7 +20,9 @@ class NewsService extends BaseService {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ${await getJWTToken() ?? ""}',
         },
-      ).timeout(const Duration(seconds: 3));
+      ).timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -31,6 +34,9 @@ class NewsService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -52,13 +58,18 @@ class NewsService extends BaseService {
               'viewCount': newsArticleBackend.getViewCount,
             }),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode != 200) {
         throw Exception('Failed to update news article!');
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -75,7 +86,9 @@ class NewsService extends BaseService {
             url,
             headers: await baseService.getStandardHeaders(),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
@@ -85,6 +98,9 @@ class NewsService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -103,7 +119,9 @@ class NewsService extends BaseService {
             url,
             headers: await baseService.getStandardHeaders(),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -116,6 +134,9 @@ class NewsService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -135,7 +156,9 @@ class NewsService extends BaseService {
             headers: await baseService.getStandardHeaders(),
             body: jsonEncode(newsArticleComment.toJson()),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 201) {
         return;
@@ -144,6 +167,9 @@ class NewsService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);

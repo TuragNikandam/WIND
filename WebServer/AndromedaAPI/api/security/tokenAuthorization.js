@@ -16,15 +16,28 @@ async function authenticate(req, res, next) {
     const isRevoked = await isTokenRevoked(token);
     if (!isRevoked) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      if (req.path !== '/logout') {
+        const newToken = jwt.sign({ _id: decoded._id, role: decoded.role }, process.env.JWT_SECRET, {
+          expiresIn: process.env.JWT_EXPIRATION_TIME,
+        });
+
+        res.header("x-new-token", newToken);
+      }
+
       log.info(`Authorization successful`);
       next(); // Weiter zur nächsten Middleware oder Route
     } else {
       log.info(`Token is revoked, access denied.`);
-      return res.status(401).send("Access denied. Token is revoked.");
+      return res.status(401).json({ error: 'TokenRevoked' });
     }
   } catch (error) {
     log.crit(error);
-    res.status(401).send("Invalid token");
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ error: 'TokenExpired' });
+    } else {
+      return res.status(401).json({ error: 'InvalidToken' });
+    }
   }
 }
 

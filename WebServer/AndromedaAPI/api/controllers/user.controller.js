@@ -200,7 +200,7 @@ exports.login = async (req, res) => {
     }   
 
     const token = jwt.sign({ _id: user._id, role: 'user' }, process.env.JWT_SECRET, {
-      expiresIn: "3h",
+      expiresIn: process.env.JWT_EXPIRATION_TIME,
     });
     log.info(`Token for user created.`);
        res.status(200).json({ token });
