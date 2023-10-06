@@ -1,0 +1,9 @@
+{
+<<<<<<< HEAD
+    "android_apiBaseUrl": "https://10.0.2.2:3000",
+    "ios_apiBaseUrl": "https://localhost:3000"
+=======
+    "apiBaseUrl": "https://localhost:3000"
+    
+>>>>>>> 569a3b85f1ea8ec3ac7821bafc2b646889580c38
+}

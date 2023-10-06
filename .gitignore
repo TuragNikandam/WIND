@@ -1,0 +1,5 @@
+/WebServer/HttpsConfig/
+/WebServer/AndromedaAPI/api/node_modules/
+/WebServer/AndromedaAPI/api/logs/
+/WebServer/AndromedaAPI/api/.env
+**/.DS_Store
