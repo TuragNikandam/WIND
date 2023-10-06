@@ -26,7 +26,7 @@ class _NewsDetailControllerState extends State<NewsDetailController> {
     _newsService = Provider.of<NewsService>(context, listen: false);
   }
 
-  Future<List<NewsArticleComment>> _fetchNewsArticleComments() async {
+  Future<List<NewsArticleComment>?> _fetchNewsArticleComments() async {
     try {
       var comments =
           await _newsService.getNewsArticleComments(_newsArticle.getId);
@@ -43,7 +43,7 @@ class _NewsDetailControllerState extends State<NewsDetailController> {
         );
       });
     }
-    return List.empty(growable: true);
+    return null;
   }
 
   Future<void> _sendNewsArticleComments(NewsArticleComment comment) async {
@@ -108,8 +108,8 @@ class _NewsDetailControllerState extends State<NewsDetailController> {
     return FutureBuilder(
         future: _fetchNewsArticleComments(),
         builder: (BuildContext context,
-            AsyncSnapshot<List<NewsArticleComment>> snapshot) {
-          if (snapshot.hasData && snapshot.data?.isNotEmpty == true) {
+            AsyncSnapshot<List<NewsArticleComment>?> snapshot) {
+          if (snapshot.hasData) {
             return NewsDetailView(
                 newsArticle: _newsArticle,
                 comments: _comments,

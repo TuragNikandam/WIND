@@ -106,6 +106,7 @@ class _DiscussionViewState extends State<DiscussionView> {
 
       await widget.onSendDiscussionPost(newPost);
       posts = await widget.onFetchDiscussionPosts();
+      setState(() {});
 
       SchedulerBinding.instance.addPostFrameCallback((_) async {
         if (_scrollController.hasClients) {
@@ -153,6 +154,7 @@ class _DiscussionViewState extends State<DiscussionView> {
                 triggerMode: RefreshIndicatorTriggerMode.onEdge,
                 onRefresh: () async {
                   posts = await widget.onFetchDiscussionPosts();
+                  setState(() {});
                 },
                 child: CustomScrollView(
                   controller: _scrollController,

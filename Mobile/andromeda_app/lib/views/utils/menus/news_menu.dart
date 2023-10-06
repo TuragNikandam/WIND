@@ -39,7 +39,14 @@ class _NewsMenuState extends State<NewsMenu> {
           default:
             builder = (BuildContext _) => const NewsController();
         }
-        return MaterialPageRoute(builder: builder, settings: settings);
+        return PageRouteBuilder(
+          pageBuilder: (ctx, animation, secondaryAnimation) => builder(ctx),
+          transitionsBuilder: (ctx, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          settings: settings,
+        );
+        //No transition: return MaterialPageRoute(builder: builder, settings: settings);
       },
     );
   }

@@ -40,7 +40,14 @@ class _ForumMenuState extends State<ForumMenu> {
           default:
             builder = (BuildContext _) => const ForumController();
         }
-        return MaterialPageRoute(builder: builder, settings: settings);
+        return PageRouteBuilder(
+          pageBuilder: (ctx, animation, secondaryAnimation) => builder(ctx),
+          transitionsBuilder: (ctx, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          settings: settings,
+        );
+        // No transition: return MaterialPageRoute(builder: builder, settings: settings);
       },
     );
   }

@@ -95,7 +95,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                       imageErrorBuilder:
                           (BuildContext context, Object y, StackTrace? z) {
                         return SizedBox(
-                          height: imageHeight / 2.5,
+                          height: imageHeight * 0.3,
                           child: const FittedBox(
                             fit: BoxFit.cover,
                             child: Center(

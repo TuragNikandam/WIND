@@ -24,7 +24,6 @@ class _VotingOpenDetailControllerState
   late Voting _voting;
   late User user;
   bool userHasVoted = false;
-  bool _isLoading = true; // Add this line
 
   @override
   void initState() {
@@ -32,40 +31,14 @@ class _VotingOpenDetailControllerState
     _voting = widget.voting;
     votingService = Provider.of<VotingService>(context, listen: false);
     user = Provider.of<User>(context, listen: false);
-
-    // Check if the user has already voted
-    _checkIfUserHasVoted();
-  }
-
-  Future<void> _checkIfUserHasVoted() async {
-    try {
-      bool hasVoted = await votingService.hasUserVoted(_voting.id, context);
-      setState(() {
-        userHasVoted = hasVoted;
-        _isLoading = false; // Stop the loading state
-      });
-    } catch (error) {
-      // Handle error, for example, you could set userHasVoted to false
-      print("Error checking if user has voted: $error");
-      setState(() {
-        _isLoading = false; // Stop the loading state
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
     return VotingOpenDetailView(
         voting: _voting,
-        userHasVoted: userHasVoted,
+        userHasVoted: _voting.options
+            .any((option) => option.votedUsers.contains(user.getId)),
         onVote: (String votingId, List<String> selectedOptionIds) async {
           try {
             await votingService.vote(votingId, selectedOptionIds, context);

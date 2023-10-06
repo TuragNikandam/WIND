@@ -18,30 +18,21 @@ class _DiscussionControllerState extends State<DiscussionController> {
   late Discussion _discussion;
   late DiscussionService _discussionService;
   List<DiscussionPost> _discussionPosts = List.empty(growable: true);
-  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _discussion = widget.discussion;
     _discussionService = Provider.of<DiscussionService>(context, listen: false);
-
-    _fetchDiscussionPosts();
   }
 
-  Future<List<DiscussionPost>> _fetchDiscussionPosts() async {
+  Future<List<DiscussionPost>?> _fetchDiscussionPosts() async {
     try {
       var posts = await _discussionService.getAllPosts(_discussion.getId);
       posts.sort((a, b) => a.getCreationDate.compareTo(b.getCreationDate));
-      setState(() {
-        _discussionPosts = posts;
-        _isLoading = false;
-      });
+      _discussionPosts = posts;
       return posts;
     } catch (error) {
-      setState(() {
-        _isLoading = false;
-      });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);
@@ -52,7 +43,7 @@ class _DiscussionControllerState extends State<DiscussionController> {
         );
       });
     }
-    return List.empty(growable: true);
+    return null;
   }
 
   Future<void> _sendDiscussionPost(DiscussionPost post) async {
@@ -73,20 +64,20 @@ class _DiscussionControllerState extends State<DiscussionController> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-            child: CircularProgressIndicator(
-          color: Colors.deepOrange,
-        )),
-      );
-    } else {
-      return DiscussionView(
-          discussion: _discussion,
-          posts: _discussionPosts,
-          onSendDiscussionPost: _sendDiscussionPost,
-          onFetchDiscussionPosts: _fetchDiscussionPosts);
-    }
+    return FutureBuilder(
+      future: _fetchDiscussionPosts(),
+      builder: (BuildContext context, AsyncSnapshot<List<DiscussionPost>?> snapshot) {
+      if (snapshot.hasData) {
+        return DiscussionView(
+            discussion: _discussion,
+            posts: _discussionPosts,
+            onSendDiscussionPost: _sendDiscussionPost,
+            onFetchDiscussionPosts: _fetchDiscussionPosts);
+      }
+      return const Center(
+          child: CircularProgressIndicator(
+        color: Colors.deepOrange,
+      ));
+    });
   }
 }

@@ -62,6 +62,7 @@ class _NewsViewState extends State<NewsView> {
                       RefreshIndicator(
                         onRefresh: () async {
                           newsArticles = await widget.onFetchNewsArticle();
+                          setState(() {});
                         },
                         child: ListView(
                           scrollDirection: Axis.vertical,
@@ -241,16 +242,9 @@ class _NewsViewState extends State<NewsView> {
                           image: NetworkImage(newsArticle.getImage.getUrl),
                           imageErrorBuilder:
                               (BuildContext context, Object y, StackTrace? z) {
-                            return const SizedBox(
-                              height: 80,
-                              width: 100,
-                              child: FittedBox(
-                                fit: BoxFit.fill,
-                                child: Icon(
-                                  Icons.broken_image,
-                                  color: Colors.black26,
-                                ),
-                              ),
+                            return const Icon(
+                              Icons.broken_image,
+                              color: Colors.black26,
                             );
                           },
                           height: 90,

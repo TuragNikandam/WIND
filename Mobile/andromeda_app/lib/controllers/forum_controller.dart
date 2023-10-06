@@ -20,20 +20,13 @@ class _ForumControllerState extends State<ForumController> {
   late NavigationService navigationService;
   List<Discussion> _discussions = List.empty();
   final int countValue = 1;
-  bool _isLoading = true;
 
   Future<List<Discussion>> _fetchDiscussions() async {
     try {
       var discussions = await discussionService.getAllDiscussions();
-      setState(() {
-        _discussions = discussions;
-        _isLoading = false;
-      });
+      _discussions = discussions;
       return discussions;
     } catch (error) {
-      setState(() {
-        _isLoading = false;
-      });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);
@@ -51,28 +44,29 @@ class _ForumControllerState extends State<ForumController> {
     super.initState();
     discussionService = Provider.of<DiscussionService>(context, listen: false);
     navigationService = Provider.of<NavigationService>(context, listen: false);
-
-    _fetchDiscussions();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-            child: CircularProgressIndicator(
-          color: Colors.deepOrange,
-        )),
-      );
-    } else {
-      return ForumView(
+    return FutureBuilder(
+      future: _fetchDiscussions(),
+      builder: (BuildContext context, AsyncSnapshot<List<Discussion>> snapshot) {
+        if (snapshot.hasData)
+        {
+          return ForumView(
           discussions: _discussions,
           onFetchDiscussions: _fetchDiscussions,
           onShowDiscussion: (Discussion discussion) {
             navigationService.navigate(context, DiscussionController.route,
                 isRootNavigator: false, arguments: {'discussion': discussion});
           });
+        }
+        return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.deepOrange,
+          ));
     }
+    );
+      
   }
 }

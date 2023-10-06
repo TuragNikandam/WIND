@@ -22,7 +22,6 @@ class _VotingControllerState extends State<VotingController> {
   late NavigationService navigationService;
   List<Voting> _activeVotings = List.empty();
   List<Voting> _closedVotings = List.empty();
-  bool _isLoading = true;
   late User user;
 
   Future<List<Voting>> refreshData(bool isOpenVoting) async {
@@ -36,16 +35,8 @@ class _VotingControllerState extends State<VotingController> {
   Future<List<Voting>> _fetchActiveVotings() async {
     try {
       // Await the API call
-      final fetchedVotings = await votingService.getActiveVotings();
-      setState(() {
-        _activeVotings = fetchedVotings;
-        _isLoading = false; // Stop the loading state
-      });
-      return fetchedVotings;
+      return await votingService.getActiveVotings();
     } catch (error) {
-      setState(() {
-        _isLoading = false; // Stop the loading state
-      });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);
@@ -61,17 +52,8 @@ class _VotingControllerState extends State<VotingController> {
 
   Future<List<Voting>> _fetchClosedVotings() async {
     try {
-      // Await the API call
-      final fetchedVotings = await votingService.getClosedVotings();
-      setState(() {
-        _closedVotings = fetchedVotings;
-        _isLoading = false; // Stop the loading state
-      });
-      return fetchedVotings;
+      return await votingService.getClosedVotings();
     } catch (error) {
-      setState(() {
-        _isLoading = false; // Stop the loading state
-      });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);
@@ -85,58 +67,58 @@ class _VotingControllerState extends State<VotingController> {
     }
   }
 
+  Future<bool> fetchVotings() async {
+    _activeVotings = await _fetchActiveVotings();
+    _closedVotings = await _fetchClosedVotings();
+    return _activeVotings.isNotEmpty && _closedVotings.isNotEmpty;
+  }
+
   @override
   void initState() {
     super.initState();
     votingService = Provider.of<VotingService>(context, listen: false);
     navigationService = Provider.of<NavigationService>(context, listen: false);
     user = Provider.of<User>(context, listen: false);
-    _fetchClosedVotings();
-    _fetchActiveVotings();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      // If loading, show the CircularProgressIndicator
-      return const Scaffold(
-        backgroundColor: Colors.white, // White background
-        body: Center(
-            child: CircularProgressIndicator(
-          color: Colors.deepOrange,
-        )),
-      );
-    } else if (_activeVotings.isEmpty || _closedVotings.isEmpty) {
-      // Return an empty widget; navigation will occur if there's an error
-      return const Scaffold(
-        backgroundColor: Colors.white, // White background
-      );
-    } else {
-      return VotingView(
-          activeVotings: _activeVotings,
-          closedVotings: _closedVotings,
-          onShowVoting:
-              (Voting voting, bool isOpenVotings, Function showError) {
-            if (isOpenVotings) {
-              navigationService.navigate(
-                  context, VotingOpenDetailController.route,
-                  isRootNavigator: false,
-                  arguments: {
-                    'voting': voting,
-                    'onUpdate': () => setState(() {})
-                  });
-            } else {
-              if (user.getIsGuest) {
-                navigationService.navigate(context, GuestNoPermissionView.route,
-                    isRootNavigator: false);
-              } else {
-                navigationService.navigate(
-                    context, VotingClosedDetailController.route,
-                    isRootNavigator: false, arguments: {'voting': voting});
-              }
-            }
-          },
-          onRefresh: refreshData);
-    }
+    return FutureBuilder(
+        future: fetchVotings(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData) {
+            return VotingView(
+                activeVotings: _activeVotings,
+                closedVotings: _closedVotings,
+                onShowVoting:
+                    (Voting voting, bool isOpenVotings, Function showError) {
+                  if (isOpenVotings) {
+                    navigationService.navigate(
+                        context, VotingOpenDetailController.route,
+                        isRootNavigator: false,
+                        arguments: {
+                          'voting': voting,
+                          'onUpdate': () => setState(() {})
+                        });
+                  } else {
+                    if (user.getIsGuest) {
+                      navigationService.navigate(
+                          context, GuestNoPermissionView.route,
+                          isRootNavigator: false);
+                    } else {
+                      navigationService.navigate(
+                          context, VotingClosedDetailController.route,
+                          isRootNavigator: false,
+                          arguments: {'voting': voting});
+                    }
+                  }
+                },
+                onRefresh: refreshData);
+          }
+          return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.deepOrange,
+          ));
+        });
   }
 }

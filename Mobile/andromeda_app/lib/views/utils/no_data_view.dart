@@ -10,10 +10,13 @@ class NoDataView extends StatefulWidget {
 class _NoDataViewState extends State<NoDataView> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        body: const Center(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Nichts zu zeigen...'),
+      ),
+      backgroundColor: Colors.grey[100],
+      body: const SafeArea(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -37,7 +40,10 @@ class _NoDataViewState extends State<NoDataView> {
               SizedBox(height: 10),
               Text(
                 'Sieht leer aus hier...',
-                style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 130),

@@ -64,6 +64,7 @@ class _ForumViewState extends State<ForumView> {
                 child: RefreshIndicator(
                   onRefresh: () async {
                     discussions = await widget.onFetchDiscussions();
+                    setState(() {});
                   },
                   child: ListView.separated(
                     itemCount: filteredDiscussions.isEmpty

@@ -67,25 +67,25 @@ class _NewsControllerState extends State<NewsController> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-          future: _fetchNews(),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<NewsArticle>> snapshot) {
-            if (snapshot.hasData && snapshot.data?.isNotEmpty == true) {
-              return NewsView(
-                  newsArticles: _newsArticles,
-                  onFetchNewsArticle: _fetchNews,
-                  onShowNewsArticle: (NewsArticle newsArticle) {
-                     _updateNewsViews(newsArticle);
-                    navigationService.navigate(
-                        context, NewsDetailController.route,
-                        isRootNavigator: false,
-                        arguments: {'newsArticle': newsArticle});
-                  });
-            }
-            return const Center(
-                child: CircularProgressIndicator(
-              color: Colors.deepOrange,
-            ));
-          });
+        future: _fetchNews(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<NewsArticle>> snapshot) {
+          if (snapshot.hasData) {
+            return NewsView(
+                newsArticles: _newsArticles,
+                onFetchNewsArticle: _fetchNews,
+                onShowNewsArticle: (NewsArticle newsArticle) {
+                  _updateNewsViews(newsArticle);
+                  navigationService.navigate(
+                      context, NewsDetailController.route,
+                      isRootNavigator: false,
+                      arguments: {'newsArticle': newsArticle});
+                });
+          }
+          return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.deepOrange,
+          ));
+        });
   }
 }

@@ -123,6 +123,7 @@ class _VotingViewState extends State<VotingView> {
                   _filterVotings(await widget.onRefresh(isOpenVotings))
               : _filteredClosedVotings =
                   _filterVotings(await widget.onRefresh(isOpenVotings));
+          setState(() {});
         },
         child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
