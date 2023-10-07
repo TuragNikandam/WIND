@@ -1,6 +1,8 @@
 import 'package:andromeda_app/models/discussion_model.dart';
 import 'package:andromeda_app/services/discussion_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:andromeda_app/views/discussion_view.dart';
+import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +41,10 @@ class _DiscussionControllerState extends State<DiscussionController> {
       });
       return posts;
     } catch (error) {
+      if (error is SessionExpiredException) {
+        showSessionExpiredDialog(context);
+        return List.empty();
+      }
       setState(() {
         _isLoading = false;
       });
