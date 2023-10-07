@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/models/voting_model.dart';
 import 'package:andromeda_app/services/base_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert';
@@ -20,7 +21,9 @@ class VotingService extends BaseService {
             url,
             headers: await baseService.getStandardHeaders(),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -32,6 +35,9 @@ class VotingService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -48,7 +54,9 @@ class VotingService extends BaseService {
             url,
             headers: await baseService.getStandardHeaders(),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -60,6 +68,9 @@ class VotingService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -80,7 +91,9 @@ class VotingService extends BaseService {
                 "optionIds": optionIds,
                 "userId": user.getId,
               }))
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 201) {
         return;
@@ -89,6 +102,9 @@ class VotingService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -111,7 +127,9 @@ class VotingService extends BaseService {
               "userId": user.getId,
             }),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -121,6 +139,9 @@ class VotingService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);

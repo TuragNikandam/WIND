@@ -20,4 +20,10 @@ class NavigationService {
           Map<String, dynamic>? arguments}) =>
       Navigator.of(context, rootNavigator: isRootNavigator)
           .pushNamed(route, arguments: arguments);
+
+  Future<void> navigateAndRemoveAll(BuildContext context, String route,
+          {bool isRootNavigator = true, Map<String, dynamic>? arguments}) =>
+      Navigator.of(context, rootNavigator: isRootNavigator)
+          .pushNamedAndRemoveUntil(route, (Route<dynamic> route) => false,
+              arguments: arguments);
 }

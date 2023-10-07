@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:andromeda_app/models/discussion_model.dart';
 import 'package:andromeda_app/services/base_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:http/http.dart' as http;
 
 class DiscussionService extends BaseService {
@@ -18,7 +19,9 @@ class DiscussionService extends BaseService {
             url,
             headers: await baseService.getStandardHeaders(),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -26,6 +29,12 @@ class DiscussionService extends BaseService {
       } else {
         throw Exception('Failed to fetch discussions!');
       }
+    } on TimeoutException catch (tex) {
+      print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
+      rethrow;
     } catch (ex) {
       print(ex);
       rethrow;
@@ -42,7 +51,9 @@ class DiscussionService extends BaseService {
             url,
             headers: await baseService.getStandardHeaders(),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -52,27 +63,12 @@ class DiscussionService extends BaseService {
       } else {
         throw Exception('Failed to fetch posts!');
       }
-    } catch (ex) {
-      print(ex);
+    } on TimeoutException catch (tex) {
+      print(tex);
       rethrow;
-    }
-  }
-
-  Future<void> deletePost(String discussionId, String postId) async {
-    final Uri url = Uri.parse(
-        '${baseService.apiBaseUrl}/discussion/$discussionId/post/$postId');
-
-    try {
-      final response = await http
-          .delete(
-            url,
-            headers: await baseService.getStandardHeaders(),
-          )
-          .timeout(const Duration(seconds: 3));
-
-      if (response.statusCode != 200) {
-        throw Exception('Failed to delete post!');
-      }
+    } on SessionExpiredException catch (sex) {
+      print(sex);
+      rethrow;
     } catch (ex) {
       print(ex);
       rethrow;
@@ -91,11 +87,19 @@ class DiscussionService extends BaseService {
             headers: await baseService.getStandardHeaders(),
             body: jsonEncode(updatedPost.toJson()),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode != 200) {
         throw Exception('Failed to update post!');
       }
+    } on TimeoutException catch (tex) {
+      print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
+      rethrow;
     } catch (ex) {
       print(ex);
       rethrow;
@@ -113,11 +117,19 @@ class DiscussionService extends BaseService {
             headers: await baseService.getStandardHeaders(),
             body: jsonEncode(newPost.toJson()),
           )
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode != 201) {
         throw Exception('Failed to create post!');
       }
+    } on TimeoutException catch (tex) {
+      print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
+      rethrow;
     } catch (ex) {
       print(ex);
       rethrow;

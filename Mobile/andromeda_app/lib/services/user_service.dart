@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/services/base_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -26,6 +27,8 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
+      await baseService.handleDefaultResponse(response);
+
       if (response.statusCode == 200) {
         await setJWTToken(jsonDecode(response.body));
       } else {
@@ -50,6 +53,8 @@ class UserService extends BaseService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       ).timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         await setJWTToken(jsonDecode(response.body));
@@ -78,6 +83,8 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
+      await baseService.handleDefaultResponse(response);
+
       if (response.statusCode == 201) {
         await login(user.getUsername, user.getPassword);
       } else {
@@ -103,6 +110,8 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
+      await baseService.handleDefaultResponse(response);
+
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse);
@@ -111,6 +120,9 @@ class UserService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -135,6 +147,8 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
+      await baseService.handleDefaultResponse(response);
+
       if (response.statusCode == 409) {
         return true;
       } else if (response.statusCode == 200) {
@@ -144,6 +158,9 @@ class UserService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -167,6 +184,8 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
+      await baseService.handleDefaultResponse(response);
+
       if (response.statusCode == 409) {
         return true;
       } else if (response.statusCode == 200) {
@@ -176,6 +195,9 @@ class UserService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -196,6 +218,8 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
+      await baseService.handleDefaultResponse(response);
+
       if (response.statusCode == 200) {
         return true;
       } else {
@@ -203,6 +227,9 @@ class UserService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
@@ -225,6 +252,8 @@ class UserService extends BaseService {
 
       if (response.statusCode == 200) {
         await setJWTToken(emptyTokenMap);
+        String? token = await getJWTToken();
+        print(token);
       } else {
         throw Exception('Failed to logout!');
       }
@@ -248,6 +277,8 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
+      await baseService.handleDefaultResponse(response);
+
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse = json.decode(response.body);
         final List<User> users =
@@ -258,6 +289,9 @@ class UserService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);

@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 void main() => runApp(
       MultiProvider(
         providers: [
+          Provider<NavigationService>(create: (_) => NavigationService()),
           Provider<BaseService>(create: (_) => BaseService()),
           ProxyProvider<BaseService, UserService>(
             update: (_, baseService, userService) => UserService(baseService),
@@ -39,7 +40,6 @@ void main() => runApp(
                 DiscussionService(baseService),
           ),
           ChangeNotifierProvider<User>(create: (_) => User()),
-          Provider<NavigationService>(create: (_) => NavigationService()),
           // ... other providers ...
         ],
         child: const MyApp(),
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Projekt Andromeda',
+      title: 'W.I.N.D',
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),

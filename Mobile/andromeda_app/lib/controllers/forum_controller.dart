@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:andromeda_app/controllers/discussion_controller.dart';
 import 'package:andromeda_app/models/discussion_model.dart';
 import 'package:andromeda_app/services/discussion_service.dart';
 import 'package:andromeda_app/services/navigation_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:andromeda_app/views/forum_view.dart';
+import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +31,12 @@ class _ForumControllerState extends State<ForumController> {
       _discussions = discussions;
       return discussions;
     } catch (error) {
+      if (error is SessionExpiredException) {
+        showSessionExpiredDialog(context);
+        return List.empty();
+      }
+
+      print(error);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);

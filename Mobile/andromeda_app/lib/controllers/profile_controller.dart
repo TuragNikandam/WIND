@@ -40,15 +40,14 @@ class _ProfileControllerState extends State<ProfileController> {
   Future<void> _logout(BuildContext context) async {
     try {
       await userService.logout();
-
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-      }
     } catch (error) {
       // Show an error message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Logout fehlgeschlagen.')),
       );
+    }
+    if (mounted) {
+      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
     }
   }
 

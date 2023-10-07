@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:andromeda_app/services/dev_http_override.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 class BaseService {
   String? apiBaseUrl;
@@ -47,5 +49,23 @@ class BaseService {
     }
     final configData = jsonDecode(configString) as Map<String, dynamic>;
     apiBaseUrl = configData[configStringName];
+  }
+
+  Future<void> handleDefaultResponse(http.Response response) async {
+    await _handleResponseHeaders(response.headers);
+
+    if (response.statusCode == 401) {
+      throw SessionExpiredException('Token expired or not valid');
+    }
+  }
+
+  Future<void> _handleResponseHeaders(Map<String, String> headers) async {
+    // Capture the new token from the response headers
+    String? newToken = headers['x-new-token'];
+
+    if (newToken != null) {
+      // Store the new token using setJWTToken
+      await setJWTToken({"token": newToken});
+    }
   }
 }

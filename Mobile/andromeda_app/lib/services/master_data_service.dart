@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:andromeda_app/services/base_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/organization_model.dart';
@@ -16,7 +17,9 @@ class MasterDataService extends BaseService {
     try {
       final response = await http
           .get(url, headers: await baseService.getStandardHeaders())
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -31,6 +34,9 @@ class MasterDataService extends BaseService {
     } on TimeoutException catch (tex) {
       print(tex);
       rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
+      rethrow;
     } catch (ex) {
       print(ex);
       rethrow;
@@ -43,7 +49,9 @@ class MasterDataService extends BaseService {
     try {
       final response = await http
           .get(url, headers: await baseService.getStandardHeaders())
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -58,6 +66,9 @@ class MasterDataService extends BaseService {
     } on TimeoutException catch (tex) {
       print(tex);
       rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
+      rethrow;
     } catch (ex) {
       print(ex);
       rethrow;
@@ -70,7 +81,9 @@ class MasterDataService extends BaseService {
     try {
       final response = await http
           .get(url, headers: await baseService.getStandardHeaders())
-          .timeout(const Duration(seconds: 3));
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -84,6 +97,9 @@ class MasterDataService extends BaseService {
       }
     } on TimeoutException catch (tex) {
       print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
       rethrow;
     } catch (ex) {
       print(ex);
