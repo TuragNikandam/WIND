@@ -37,7 +37,7 @@ class _DiscussionControllerState extends State<DiscussionController> {
     } catch (error) {
       if (error is SessionExpiredException) {
         showSessionExpiredDialog(context);
-        return List.empty();
+        return null;
       }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
@@ -71,19 +71,20 @@ class _DiscussionControllerState extends State<DiscussionController> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _fetchDiscussionPosts(),
-      builder: (BuildContext context, AsyncSnapshot<List<DiscussionPost>?> snapshot) {
-      if (snapshot.hasData) {
-        return DiscussionView(
-            discussion: _discussion,
-            posts: _discussionPosts,
-            onSendDiscussionPost: _sendDiscussionPost,
-            onFetchDiscussionPosts: _fetchDiscussionPosts);
-      }
-      return const Center(
-          child: CircularProgressIndicator(
-        color: Colors.deepOrange,
-      ));
-    });
+        future: _fetchDiscussionPosts(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<DiscussionPost>?> snapshot) {
+          if (snapshot.hasData) {
+            return DiscussionView(
+                discussion: _discussion,
+                posts: _discussionPosts,
+                onSendDiscussionPost: _sendDiscussionPost,
+                onFetchDiscussionPosts: _fetchDiscussionPosts);
+          }
+          return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.deepOrange,
+          ));
+        });
   }
 }

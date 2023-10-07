@@ -2,7 +2,9 @@ import 'package:andromeda_app/controllers/news_detail_controller.dart';
 import 'package:andromeda_app/models/news_article_model.dart';
 import 'package:andromeda_app/services/navigation_service.dart';
 import 'package:andromeda_app/services/news_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:andromeda_app/views/news_view.dart';
+import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +29,10 @@ class _NewsControllerState extends State<NewsController> {
       _newsArticles = news;
       return news;
     } catch (error) {
+      if (error is SessionExpiredException) {
+        showSessionExpiredDialog(context);
+        return List.empty();
+      }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);

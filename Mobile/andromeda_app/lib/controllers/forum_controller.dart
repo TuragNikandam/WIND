@@ -36,7 +36,6 @@ class _ForumControllerState extends State<ForumController> {
         return List.empty();
       }
 
-      print(error);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);
@@ -59,24 +58,24 @@ class _ForumControllerState extends State<ForumController> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _fetchDiscussions(),
-      builder: (BuildContext context, AsyncSnapshot<List<Discussion>> snapshot) {
-        if (snapshot.hasData)
-        {
-          return ForumView(
-          discussions: _discussions,
-          onFetchDiscussions: _fetchDiscussions,
-          onShowDiscussion: (Discussion discussion) {
-            navigationService.navigate(context, DiscussionController.route,
-                isRootNavigator: false, arguments: {'discussion': discussion});
-          });
-        }
-        return const Center(
+        future: _fetchDiscussions(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Discussion>> snapshot) {
+          if (snapshot.hasData) {
+            return ForumView(
+                discussions: _discussions,
+                onFetchDiscussions: _fetchDiscussions,
+                onShowDiscussion: (Discussion discussion) {
+                  navigationService.navigate(
+                      context, DiscussionController.route,
+                      isRootNavigator: false,
+                      arguments: {'discussion': discussion});
+                });
+          }
+          return const Center(
               child: CircularProgressIndicator(
             color: Colors.deepOrange,
           ));
-    }
-    );
-      
+        });
   }
 }
