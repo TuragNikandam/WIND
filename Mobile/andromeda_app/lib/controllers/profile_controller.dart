@@ -1,6 +1,9 @@
 import 'package:andromeda_app/models/organization_model.dart';
 import 'package:andromeda_app/models/party_model.dart';
+import 'package:andromeda_app/services/navigation_service.dart';
+import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:andromeda_app/utils/validators.dart';
+import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/services/user_service.dart';
@@ -17,6 +20,7 @@ class ProfileController extends StatefulWidget {
 class _ProfileControllerState extends State<ProfileController> {
   late User user;
   late UserService userService;
+  late NavigationService navigationService;
   List<Party> _parties = List.empty();
   List<Organization> _organizations = List.empty();
 
@@ -25,6 +29,7 @@ class _ProfileControllerState extends State<ProfileController> {
     super.initState();
     userService = Provider.of<UserService>(context, listen: false);
     user = Provider.of<User>(context, listen: false);
+    navigationService = Provider.of<NavigationService>(context, listen: false);
     _parties = PartyManager().getPartyList;
     _organizations = OrganizationManager().getOrganizationList;
   }
@@ -47,7 +52,7 @@ class _ProfileControllerState extends State<ProfileController> {
       );
     }
     if (mounted) {
-      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+      navigationService.navigateAndRemoveAll(context, '/');
     }
   }
 
@@ -74,6 +79,9 @@ class _ProfileControllerState extends State<ProfileController> {
                   )
                 : showError(context, "Das hat nicht geklappt, sorry!");
           }).catchError((error) {
+            if (error is SessionExpiredException) {
+              showSessionExpiredDialog(context);
+            }
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Das hat nicht geklappt, sorry!')));
           });

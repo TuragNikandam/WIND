@@ -55,6 +55,7 @@ class BaseService {
     await _handleResponseHeaders(response.headers);
 
     if (response.statusCode == 401) {
+      setJWTToken({"token": ''});
       throw SessionExpiredException('Token expired or not valid');
     }
   }

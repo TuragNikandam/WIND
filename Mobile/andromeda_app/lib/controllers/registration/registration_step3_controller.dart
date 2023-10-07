@@ -1,4 +1,5 @@
 import 'package:andromeda_app/models/user_model.dart';
+import 'package:andromeda_app/services/navigation_service.dart';
 import 'package:andromeda_app/services/user_service.dart';
 import 'package:andromeda_app/utils/validators.dart';
 import 'package:andromeda_app/views/main_view.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationStep3Controller extends StatefulWidget {
+  static const String route = "/registration_step3";
   @override
   State<RegistrationStep3Controller> createState() =>
       _RegistrationStep3ContollerState();
@@ -18,12 +20,14 @@ class _RegistrationStep3ContollerState
     extends State<RegistrationStep3Controller> {
   late UserService userService;
   late User user;
+  late NavigationService navigationService;
 
   @override
   void initState() {
     super.initState();
     userService = Provider.of<UserService>(context, listen: false);
     user = Provider.of<User>(context, listen: false);
+    navigationService = Provider.of<NavigationService>(context, listen: false);
   }
 
   String? _validate(
@@ -43,7 +47,7 @@ class _RegistrationStep3ContollerState
         return false; // Check if the widget is still in the widget tree
       }
       print("Registration done!");
-      Navigator.pushNamedAndRemoveUntil(context, MainView.route, (_) => false);
+      navigationService.navigateAndRemoveAll(context, MainView.route);
     } catch (error) {
       // Show an error message to the user
       ScaffoldMessenger.of(context).showSnackBar(

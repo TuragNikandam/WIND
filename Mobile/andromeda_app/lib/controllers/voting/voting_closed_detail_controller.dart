@@ -36,10 +36,12 @@ class _VotingClosedDetailControllerState
     } catch (error) {
       if (error is SessionExpiredException) {
         showSessionExpiredDialog(context);
+        return;
       }
       setState(() {
         _isLoading = false; // Stop the loading state
       });
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Navigator.canPop(context)) {
           Navigator.pop(context);

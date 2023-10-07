@@ -1,12 +1,15 @@
+import 'package:andromeda_app/controllers/registration/registration_step2_controller.dart';
 import 'package:andromeda_app/models/party_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/services/master_data_service.dart';
+import 'package:andromeda_app/services/navigation_service.dart';
 import 'package:andromeda_app/utils/validators.dart';
 import 'package:andromeda_app/views/registration/registration_step1_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationStep1Controller extends StatefulWidget {
+  static const String route = "/registration_step3";
   @override
   State<RegistrationStep1Controller> createState() =>
       _RegistrationStep1ContollerState();
@@ -18,6 +21,7 @@ class _RegistrationStep1ContollerState
     extends State<RegistrationStep1Controller> {
   late User user;
   late MasterDataService masterDataService;
+  late NavigationService navigationService;
   List<Party> _parties = List.empty();
   bool _isLoading = true; // Control the loading state
 
@@ -43,6 +47,7 @@ class _RegistrationStep1ContollerState
     super.initState();
     user = Provider.of<User>(context, listen: false);
     masterDataService = Provider.of<MasterDataService>(context, listen: false);
+    navigationService = Provider.of<NavigationService>(context, listen: false);
     _fetchMasterData(); // Call the method to start fetching data
   }
 
@@ -68,7 +73,8 @@ class _RegistrationStep1ContollerState
           } else {
             user.setSelectedParty(selectedParty!);
             user.setShowPartyInProfile(visible);
-            Navigator.pushNamed(context, '/registration_step2');
+            navigationService.navigate(
+                context, RegistrationStep2Controller.route);
           }
         },
       );
