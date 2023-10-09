@@ -15,10 +15,12 @@ async function authenticate(req, res, next) {
   try {
     const isRevoked = await isTokenRevoked(token);
     if (!isRevoked) {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const verified = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.user = verified;
 
       if (req.path !== '/logout') {
-        const newToken = jwt.sign({ _id: decoded._id, role: decoded.role }, process.env.JWT_SECRET, {
+        const newToken = jwt.sign({ _id: req.user._id, role: req.user.role }, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRATION_TIME,
         });
 

@@ -38,7 +38,7 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
       int count = 0;
       for (var userId in option.votedUsers) {
         var user = widget.userList
-            .firstWhere((u) => u.id == userId, orElse: () => User());
+            .firstWhere((u) => u.getId == userId, orElse: () => User());
         if (VotingFilterUtility.shouldIncludeVote(user, _filterParameters)) {
           count++;
         }
@@ -56,12 +56,12 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
     for (var option in widget.voting.options) {
       for (var userId in option.votedUsers) {
         var user = widget.userList
-            .firstWhere((u) => u.id == userId, orElse: () => User());
+            .firstWhere((u) => u.getId == userId, orElse: () => User());
 
         if (VotingFilterUtility.shouldIncludeVote(user, _filterParameters)) {
           newTotalVotes++;
 
-          if (user.isGuest) {
+          if (user.getIsGuest) {
             newGuestVotes++;
           }
         }

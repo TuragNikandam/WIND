@@ -12,13 +12,18 @@ let userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ['user', 'guest', 'admin'], // Enum to ensure only valid roles are set
+    default: 'user'
+  },
   email: {
     type: String,
     required: true,
     unique: true,
     trim: true,
   },  
-  is_guest: Boolean,
+  isGuest: Boolean,
   party: {
     visible: Boolean,
     id: { 
@@ -48,10 +53,11 @@ let userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  zip_code: {
+  zipCode: {
     type: Number,
     required: true,
   },
+  personalInformationVisible : Boolean,
 });
 
 userSchema.plugin(uniqueValidator);

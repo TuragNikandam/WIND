@@ -90,7 +90,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _buildProfileName() => Center(
         child: Text(
-          widget.user.username,
+          widget.user.getUsername,
           style: const TextStyle(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
           textAlign: TextAlign.center,
@@ -99,7 +99,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _buildEmail() => Center(
         child: Text(
-          widget.user.email,
+          widget.user.getEmail,
           style: const TextStyle(color: Colors.black87),
           textAlign: TextAlign.center,
         ),

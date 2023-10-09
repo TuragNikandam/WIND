@@ -96,7 +96,6 @@ exports.findOne = async (req, res) => {
   }
 };
 
-//TODO: do not allow password updates
 exports.update = async (req, res) => {
   if (!req.body) {
     log.warn("Update user failed because of empty body data.");
@@ -104,6 +103,11 @@ exports.update = async (req, res) => {
   }
 
   const userId = req.params.userId;
+
+  if (req.user && req.user.role !== 'admin' && (req.body.password || req.body.userRole)) {
+    log.warn(`User with id=${userId} and role=${req.user.role} attempted to update restricted fields.`);
+    return res.status(403).send({ message: "You don't have permission to update password or userRole." });
+  }
 
   try {
     const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
@@ -199,7 +203,7 @@ exports.login = async (req, res) => {
       return res.status(400).send({ message: `Invalid password` });
     }   
 
-    const token = jwt.sign({ _id: user._id, role: 'user' }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRATION_TIME,
     });
     log.info(`Token for user created.`);
@@ -313,6 +317,7 @@ exports.loginAsGuest = async (req, res) => {
         const user = new User({
           username,
           password: "guest", // Default value
+          role: "guest",
           email,
           is_guest: true,
           party: {

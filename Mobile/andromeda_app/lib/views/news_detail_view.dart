@@ -255,9 +255,9 @@ class _NewsDetailViewState extends State<NewsDetailView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: user.isGuest ? null : _showCommentDialog,
+        onPressed: user.getIsGuest ? null : _showCommentDialog,
         backgroundColor:
-            user.isGuest ? Colors.grey : Theme.of(context).primaryColor,
+            user.getIsGuest ? Colors.grey : Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -320,7 +320,8 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                       TextFormField(
                         controller: commentController,
                         decoration: const InputDecoration(
-                            hintText: 'Ergänze den Artikel mit nützlichen Informationen oder Korrekturen...'),
+                            hintText:
+                                'Ergänze den Artikel mit nützlichen Informationen oder Korrekturen...'),
                         validator: (value) => value?.isEmpty == true
                             ? "Sprachlos? Wohl kaum..."
                             : null,

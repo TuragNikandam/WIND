@@ -65,7 +65,7 @@ class _VotingClosedDetailControllerState
 
     // Filter _allUsers to only include users who voted
     _usersVoted =
-        _allUsers.where((user) => votedUserIds.contains(user.id)).toList();
+        _allUsers.where((user) => votedUserIds.contains(user.getId)).toList();
   }
 
   @override

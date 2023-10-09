@@ -46,8 +46,8 @@ class _VotingFilterState extends State<VotingFilter> {
 
     // Calculate the minimum and maximum ages based on the user data
     List<int> birthYears = widget.userList
-        .where((user) => !user.isGuest)
-        .map((user) => user.birthYear)
+        .where((user) => !user.getIsGuest)
+        .map((user) => user.getBirthYear)
         .toList();
 
     if (birthYears.isNotEmpty) {
@@ -58,18 +58,20 @@ class _VotingFilterState extends State<VotingFilter> {
 
     _filterParameters.currentRangeValues = RangeValues(_minAge, _maxAge);
 
-    _uniqueParties = widget.userList.where((user) => !user.isGuest).map((user) {
-      return PartyManager().getPartyById(user.selectedParty);
+    _uniqueParties =
+        widget.userList.where((user) => !user.getIsGuest).map((user) {
+      return PartyManager().getPartyById(user.getSelectedParty);
     }).toSet();
 
-    _uniqueGenders = widget.userList.where((user) => !user.isGuest).map((user) {
+    _uniqueGenders =
+        widget.userList.where((user) => !user.getIsGuest).map((user) {
       // Replace 'someGender' with the condition you want to check
       return GenderText.getTexts()
           .firstWhere((element) => element == user.getGender);
     }).toSet();
 
     _uniqueReligions =
-        widget.userList.where((user) => !user.isGuest).map((user) {
+        widget.userList.where((user) => !user.getIsGuest).map((user) {
       // Replace 'someGender' with the condition you want to check
       return ReligionText.getTexts()
           .firstWhere((element) => element == user.getReligion);
@@ -660,24 +662,24 @@ class _VotingFilterState extends State<VotingFilter> {
 class VotingFilterUtility {
   static bool shouldIncludeVote(User user, FilterParameters params) {
     final int currentYear = DateTime.now().year;
-    final int userAge = currentYear - user.birthYear;
+    final int userAge = currentYear - user.getBirthYear;
 
     bool isPartyMatch() {
       return params.selectedParty == null ||
-          params.selectedParty == user.selectedParty;
+          params.selectedParty == user.getSelectedParty;
     }
 
     bool isGenderMatch() {
       return params.selectedGender == null ||
-          params.selectedGender == user.gender;
+          params.selectedGender == user.getGender;
     }
 
     bool isGuestMatch() {
-      return params.includeGuests || !user.isGuest;
+      return params.includeGuests || !user.getIsGuest;
     }
 
     bool isAgeMatch() {
-      return user.isGuest ||
+      return user.getIsGuest ||
           (userAge >= params.currentRangeValues.start &&
               userAge <= params.currentRangeValues.end);
     }
@@ -690,7 +692,7 @@ class VotingFilterUtility {
 
     bool isReligionMatch() {
       return params.selectedReligion == null ||
-          params.selectedReligion == user.religion;
+          params.selectedReligion == user.getReligion;
     }
 
     return isPartyMatch() &&

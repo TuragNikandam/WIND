@@ -1,98 +1,106 @@
 import 'package:flutter/foundation.dart';
 
 class User extends ChangeNotifier {
-  String id = "";
-  String username = "";
-  String email = "";
-  String password = "";
-  String selectedParty = "";
-  List<String> selectedOrganizations = List.empty(growable: true);
-  bool showPartyInProfile = false;
-  bool showOrganizationsInProfile = false;
-  int birthYear = 0000;
-  String gender = "";
-  String religion = "";
-  int zipCode = 0000;
-  bool isGuest = false;
+  String _id = "";
+  String _username = "";
+  String _email = "";
+  String _password = "";
+  String _selectedParty = "";
+  List<String> _selectedOrganizations = List.empty(growable: true);
+  bool _showPartyInProfile = false;
+  bool _showOrganizationsInProfile = false;
+  int _birthYear = 0000;
+  String _gender = "";
+  String _religion = "";
+  int _zipCode = 0000;
+  bool _isGuest = false;
+  bool _showPersonalInformationInProfile = false;
 
   // Getters
-  String get getId => id;
-  String get getUsername => username;
-  String get getEmail => email;
-  String get getPassword => password;
-  String get getSelectedParty => selectedParty;
-  List<String> get getSelectedOrganizations => selectedOrganizations;
-  bool get getShowPartyInProfile => showPartyInProfile;
-  bool get getShowOrganizationsInProfile => showOrganizationsInProfile;
-  int get getBirthYear => birthYear;
-  String get getGender => gender;
-  String get getReligion => religion;
-  int get getZipCode => zipCode;
-  bool get getIsGuest => isGuest;
+  String get getId => _id;
+  String get getUsername => _username;
+  String get getEmail => _email;
+  String get getPassword => _password;
+  String get getSelectedParty => _selectedParty;
+  List<String> get getSelectedOrganizations => _selectedOrganizations;
+  bool get getShowPartyInProfile => _showPartyInProfile;
+  bool get getShowOrganizationsInProfile => _showOrganizationsInProfile;
+  int get getBirthYear => _birthYear;
+  String get getGender => _gender;
+  String get getReligion => _religion;
+  int get getZipCode => _zipCode;
+  bool get getIsGuest => _isGuest;
+  bool get getShowPersonalInformationInProfile =>
+      _showPersonalInformationInProfile;
 
   // Setters
   void setId(String value) {
-    id = value;
+    _id = value;
     notifyListeners();
   }
 
   void setUsername(String value) {
-    username = value;
+    _username = value;
     notifyListeners();
   }
 
   void setEmail(String value) {
-    email = value;
+    _email = value;
     notifyListeners();
   }
 
   void setPassword(String value) {
-    password = value;
+    _password = value;
     notifyListeners();
   }
 
   void setSelectedParty(String value) {
-    selectedParty = value;
+    _selectedParty = value;
     notifyListeners();
   }
 
   void setSelectedOrganizations(List<String> value) {
-    selectedOrganizations = value;
+    _selectedOrganizations = value;
     notifyListeners();
   }
 
   void setShowPartyInProfile(bool value) {
-    showPartyInProfile = value;
+    _showPartyInProfile = value;
     notifyListeners();
   }
 
   void setShowOrganizationsInProfile(bool value) {
-    showOrganizationsInProfile = value;
+    _showOrganizationsInProfile = value;
     notifyListeners();
   }
 
   void setBirthYear(int value) {
-    birthYear = value;
+    _birthYear = value;
     notifyListeners();
   }
 
   void setGender(String value) {
-    gender = value;
+    _gender = value;
     notifyListeners();
   }
 
   void setReligion(String value) {
-    religion = value;
+    _religion = value;
     notifyListeners();
   }
 
   void setZipCode(int value) {
-    zipCode = value;
+    _zipCode = value;
     notifyListeners();
   }
 
   void setIsGuest(bool value) {
-    isGuest = value;
+    _isGuest = value;
+    notifyListeners();
+  }
+
+  void setShowPersonalInformationInProfile(bool value) {
+    _showPersonalInformationInProfile = value;
     notifyListeners();
   }
 
@@ -110,6 +118,7 @@ class User extends ChangeNotifier {
     setReligion(newUser.getReligion);
     setZipCode(newUser.getZipCode);
     setIsGuest(newUser.getIsGuest);
+    setShowOrganizationsInProfile(newUser.getShowPersonalInformationInProfile);
   }
 
 // Static method to create a User object from a JSON map
@@ -122,35 +131,38 @@ class User extends ChangeNotifier {
     user.setBirthYear(json['birthyear'] ?? 0);
     user.setGender(json['gender']);
     user.setReligion(json['religion']);
-    user.setZipCode(json['zip_code'] ?? 0);
+    user.setZipCode(json['zipCode'] ?? 0);
     user.setShowPartyInProfile(json['party']['visible'] ?? false);
     user.setSelectedParty(json['party']['id']);
     user.setShowOrganizationsInProfile(
         json['organizations']['visible'] ?? false);
     user.setSelectedOrganizations(
         List<String>.from(json['organizations']['ids'] ?? List.empty()));
-    user.setIsGuest(json['is_guest'] ?? false);
+    user.setIsGuest(json['isGuest'] ?? false);
+    user.setShowOrganizationsInProfile(
+        json['personalInformationVisible'] ?? false);
     return user;
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'username': username,
-      'password': password,
-      'email': email,
+      'username': _username,
+      'password': _password,
+      'email': _email,
       'party': {
-        'visible': showPartyInProfile,
-        'id': selectedParty,
+        'visible': _showPartyInProfile,
+        'id': _selectedParty,
       },
       'organizations': {
-        'visible': showOrganizationsInProfile,
-        'ids': selectedOrganizations,
+        'visible': _showOrganizationsInProfile,
+        'ids': _selectedOrganizations,
       },
-      'birthyear': birthYear,
-      'gender': gender,
-      'religion': religion,
-      'zip_code': zipCode,
-      'is_guest': isGuest,
+      'birthyear': _birthYear,
+      'gender': _gender,
+      'religion': _religion,
+      'zipCode': _zipCode,
+      'isGuest': _isGuest,
+      'personalInformationVisible': _showPersonalInformationInProfile,
     };
   }
 }
