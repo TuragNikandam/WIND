@@ -25,16 +25,16 @@ class _NoDataViewState extends State<NoDataView> {
                   Image(
                     image: AssetImage("assets/images/sad_cat.png"),
                   ),
-                  Positioned(
-                    bottom: 70,
-                    left: 0,
-                    right: 0,
-                    child: Text(
-                      'Image by pngtree.com',
-                      style: TextStyle(fontSize: 10, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                 // Positioned(
+                 //   bottom: 70,
+                 //   left: 0,
+                 //   right: 0,
+                 //   child: Text(
+                 //     'Image by pngtree.com',
+                 //     style: TextStyle(fontSize: 10, color: Colors.grey),
+                 //     textAlign: TextAlign.center,
+                 //   ),
+                 // ),
                 ],
               ),
               SizedBox(height: 10),

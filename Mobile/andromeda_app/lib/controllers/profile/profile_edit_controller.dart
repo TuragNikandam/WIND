@@ -7,7 +7,7 @@ import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/services/user_service.dart';
-import 'package:andromeda_app/views/profile_edit_view.dart';
+import 'package:andromeda_app/views/profile/profile_edit_view.dart';
 import 'package:provider/provider.dart';
 
 class ProfileController extends StatefulWidget {
@@ -43,6 +43,9 @@ class _ProfileControllerState extends State<ProfileController> {
   }
 
   Future<void> _logout(BuildContext context) async {
+    if (mounted) {
+      navigationService.navigateAndRemoveAll(context, '/');
+    }
     try {
       await userService.logout();
     } catch (error) {
@@ -50,9 +53,6 @@ class _ProfileControllerState extends State<ProfileController> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Logout fehlgeschlagen.')),
       );
-    }
-    if (mounted) {
-      navigationService.navigateAndRemoveAll(context, '/');
     }
   }
 
@@ -67,7 +67,7 @@ class _ProfileControllerState extends State<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return ProfileView(
+    return ProfileEditView(
       user: user,
       onUpdateProfile: (User updatedUser, Function showError) {
         String? errorMessage = _validate(updatedUser);

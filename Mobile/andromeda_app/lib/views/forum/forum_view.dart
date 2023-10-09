@@ -251,19 +251,14 @@ class _ForumViewState extends State<ForumView> {
             Image(
               image: AssetImage("assets/images/sad_cat.png"),
             ),
-            Positioned(
-              bottom: 70,
-              left: 0,
-              right: 0,
-              child: Text(
-                'Image by pngtree.com',
-                style: TextStyle(fontSize: 10, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            ),
           ],
         ),
-        Center(child: Text("Nichts zu diskutieren...")),
+        Text(
+          'Nichts zu diskutieren...',
+          style: TextStyle(
+              fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        )
       ],
     );
   }

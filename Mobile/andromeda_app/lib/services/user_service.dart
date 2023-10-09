@@ -298,4 +298,35 @@ class UserService extends BaseService {
       rethrow;
     }
   }
+
+  Future<User> getUserById(String userId) async {
+    final Uri url = Uri.parse('${baseService.apiBaseUrl}/user/$userId');
+
+    try {
+      final response = await http
+          .get(
+            url,
+            headers: await baseService.getStandardHeaders(),
+          )
+          .timeout(Duration(seconds: baseService.timeOutSeconds));
+
+      await baseService.handleDefaultResponse(response);
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        return User.fromJson(jsonResponse);
+      } else {
+        throw Exception('Failed to fetch user data!');
+      }
+    } on TimeoutException catch (tex) {
+      print(tex);
+      rethrow;
+    } on SessionExpiredException catch (sex) {
+      print(sex);
+      rethrow;
+    } catch (ex) {
+      print(ex);
+      rethrow;
+    }
+  }
 }

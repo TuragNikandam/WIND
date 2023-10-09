@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:andromeda_app/controllers/profile_controller.dart';
+import 'package:andromeda_app/controllers/profile/profile_edit_controller.dart';
 import 'package:andromeda_app/services/navigation_service.dart';
 import 'package:andromeda_app/views/utils/bottom_navigation_bar.dart';
 import 'package:andromeda_app/views/utils/enums/navigation_menu.dart';
