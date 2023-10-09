@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginController extends StatefulWidget {
+  static const String route = '/login';
   @override
   State<LoginController> createState() => _LoginControllerState();
 

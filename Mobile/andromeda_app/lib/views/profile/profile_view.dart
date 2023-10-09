@@ -87,8 +87,8 @@ class ProfileView {
                           "(${PartyManager().getPartyById(user.getSelectedParty).getShortName})\n"),
                 if (user.getShowOrganizationsInProfile)
                   _buildInfoCard("Organisation", Icons.business, "Orgaaaaa"),
-                // if getShowProfileInfo ->
-                buildMultiInfoCard("Persönliches", tileData),
+                if (user.getShowPersonalInformationInProfile)
+                  buildMultiInfoCard("Persönliches", tileData),
               ],
             ),
           ),
