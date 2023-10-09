@@ -125,7 +125,7 @@ class _ForumViewState extends State<ForumView> {
               fontStyle: FontStyle.normal,
               color: isActive ? const Color(0xFF333333) : Colors.grey,
             ),
-            backgroundColor: isActive ? Colors.orange : const Color(0xffffffff),
+            backgroundColor: isActive ? Theme.of(context).primaryColor : const Color(0xffffffff),
             elevation: 0,
             shadowColor: const Color(0xff808080),
             shape: RoundedRectangleBorder(
@@ -164,10 +164,10 @@ class _ForumViewState extends State<ForumView> {
                       TopicManager()
                           .getTopicById(discussion.getTopicId)
                           .getName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontStyle: FontStyle.normal,
-                        color: Colors.orange,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -251,19 +251,14 @@ class _ForumViewState extends State<ForumView> {
             Image(
               image: AssetImage("assets/images/sad_cat.png"),
             ),
-            Positioned(
-              bottom: 70,
-              left: 0,
-              right: 0,
-              child: Text(
-                'Image by pngtree.com',
-                style: TextStyle(fontSize: 10, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            ),
           ],
         ),
-        Center(child: Text("Nichts zu diskutieren...")),
+        Text(
+          'Nichts zu diskutieren...',
+          style: TextStyle(
+              fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        )
       ],
     );
   }

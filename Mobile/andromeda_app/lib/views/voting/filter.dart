@@ -1,3 +1,4 @@
+import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/organization_model.dart';
 import 'package:andromeda_app/models/party_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
@@ -361,11 +362,11 @@ class _VotingFilterState extends State<VotingFilter> {
             Expanded(
               child: SliderTheme(
                 data: SliderThemeData(
-                  activeTrackColor: Colors.orange,
-                  inactiveTrackColor: Colors.orange.withOpacity(0.3),
-                  thumbColor: Colors.orangeAccent,
-                  overlayColor: Colors.orange.withOpacity(0.2),
-                  valueIndicatorColor: Colors.orange,
+                  activeTrackColor: Theme.of(context).primaryColor,
+                  inactiveTrackColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                  thumbColor: MyApp.secondaryColor,
+                  overlayColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                  valueIndicatorColor: Theme.of(context).primaryColor,
                   valueIndicatorTextStyle: const TextStyle(
                     color: Colors.white,
                   ),

@@ -115,7 +115,7 @@ class _NewsViewState extends State<NewsView> {
               fontStyle: FontStyle.normal,
               color: isActive ? const Color(0xFF333333) : Colors.grey,
             ),
-            backgroundColor: isActive ? Colors.orange : const Color(0xffffffff),
+            backgroundColor: isActive ? Theme.of(context).primaryColor : const Color(0xffffffff),
             elevation: 0,
             shadowColor: const Color(0xff808080),
             shape: RoundedRectangleBorder(
@@ -170,11 +170,11 @@ class _NewsViewState extends State<NewsView> {
                                   .getName,
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.clip,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.normal,
                                 fontSize: 14,
-                                color: Colors.orange,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                             Padding(
@@ -265,27 +265,28 @@ class _NewsViewState extends State<NewsView> {
     }
 
     if (news.isEmpty) {
-      news.add(
-        const Stack(
+      news.add(_buildEmptyNewsContent());
+    }
+    return news;
+  }
+
+  Widget _buildEmptyNewsContent() {
+    return const Column(
+      children: [
+        Stack(
           children: [
             Image(
               image: AssetImage("assets/images/sad_cat.png"),
             ),
-            Positioned(
-              bottom: 70,
-              left: 0,
-              right: 0,
-              child: Text(
-                'Image by pngtree.com',
-                style: TextStyle(fontSize: 10, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            ),
           ],
         ),
-      );
-      news.add(const Center(child: Text("Nichts zu informieren...")));
-    }
-    return news;
+        Text(
+          'Nichts zu informieren...',
+          style: TextStyle(
+              fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
   }
 }

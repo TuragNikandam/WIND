@@ -1,5 +1,5 @@
-import 'package:andromeda_app/controllers/discussion_controller.dart';
-import 'package:andromeda_app/controllers/forum_controller.dart';
+import 'package:andromeda_app/controllers/forum/discussion_controller.dart';
+import 'package:andromeda_app/controllers/forum/forum_controller.dart';
 import 'package:andromeda_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

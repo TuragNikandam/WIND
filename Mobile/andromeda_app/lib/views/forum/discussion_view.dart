@@ -2,8 +2,10 @@ import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/discussion_model.dart';
 import 'package:andromeda_app/models/party_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
+import 'package:andromeda_app/views/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -44,22 +46,29 @@ class _DiscussionViewState extends State<DiscussionView> {
   Widget buildUserColumn(DiscussionPost post, bool isCurrentUser) {
     return isCurrentUser
         ? Container()
-        : Column(
-            children: [
-              CircleAvatar(
-                radius: avatarRadius,
-                backgroundColor: MyApp.secondaryColor,
-                child: const Icon(Icons.person, color: Colors.white, size: 20),
-              ),
-              Text(
-                post.getUsername,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
-              Text(post.getPartyIsVisible
-                  ? PartyManager().getPartyById(post.getPartyId).getShortName
-                  : "")
-            ],
+        : GestureDetector(
+            onTap: () {
+              HapticFeedback.selectionClick();
+              ProfileView(post.getAuthorId, context).showProfile();
+            },
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: MyApp.secondaryColor,
+                  child:
+                      const Icon(Icons.person, color: Colors.white, size: 20),
+                ),
+                Text(
+                  post.getUsername,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                ),
+                Text(post.getPartyIsVisible
+                    ? PartyManager().getPartyById(post.getPartyId).getShortName
+                    : "")
+              ],
+            ),
           );
   }
 
@@ -195,12 +204,7 @@ class _DiscussionViewState extends State<DiscussionView> {
                               children: [
                                 SizedBox(
                                     width: screenWidth * 0.2,
-                                    child: Tooltip(
-                                      message: post.getUsername,
-                                      triggerMode: TooltipTriggerMode.tap,
-                                      child:
-                                          buildUserColumn(post, isCurrentUser),
-                                    )),
+                                    child: buildUserColumn(post, isCurrentUser)),
                                 SizedBox(
                                     width: screenWidth * 0.55,
                                     child: _buildSpeechBubble(post,

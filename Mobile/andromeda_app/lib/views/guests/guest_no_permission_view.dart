@@ -1,3 +1,4 @@
+import 'package:andromeda_app/main.dart';
 import 'package:flutter/material.dart';
 
 class GuestNoPermissionView extends StatefulWidget {
@@ -77,10 +78,10 @@ class _GuestNoPermissionViewState extends State<GuestNoPermissionView>
                       return LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
-                        colors: const [
-                          Colors.orangeAccent,
+                        colors: [
+                          MyApp.secondaryColor,
                           Colors.white70,
-                          Colors.orange
+                          Theme.of(context).primaryColor
                         ],
                         stops: [
                           0.0,
@@ -107,6 +108,7 @@ class _GuestNoPermissionViewState extends State<GuestNoPermissionView>
                         'Jetzt registrieren!',
                         style: TextStyle(
                           fontSize: 18,
+                          color: Colors.black,
                         ),
                       ),
                     ),

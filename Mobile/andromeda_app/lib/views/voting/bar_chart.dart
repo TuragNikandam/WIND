@@ -1,3 +1,4 @@
+import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/views/voting/filter.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -160,10 +161,10 @@ class _VotingBarChartState extends State<VotingBarChart> {
         ),
       );
 
-  LinearGradient get _barsGradient => const LinearGradient(
+  LinearGradient get _barsGradient => LinearGradient(
         colors: [
-          Colors.blue,
-          Colors.orange,
+          Theme.of(context).primaryColor,
+          MyApp.secondaryColor,
         ],
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,
@@ -182,7 +183,7 @@ class _VotingBarChartState extends State<VotingBarChart> {
           barRods: [
             BarChartRodData(
               toY: filteredVoteCount.toDouble(),
-              color: Colors.orange,
+              color: Theme.of(context).primaryColor,
               gradient: _barsGradient,
               width: 30,
             ),

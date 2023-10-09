@@ -62,8 +62,8 @@ class _BottomNavBarState extends State<BottomNavBarWidget> {
       currentIndex: navBarInstance.getCurrentNavigationType.index,
       unselectedLabelStyle: unselecetedStyle,
       selectedLabelStyle: selecetedStyle,
-      selectedIconTheme: const IconThemeData(color: Colors.orange, size: 30),
-      selectedItemColor: Colors.orange,
+      selectedIconTheme: IconThemeData(color: Theme.of(context).primaryColor, size: 30),
+      selectedItemColor: Theme.of(context).primaryColor,
       unselectedItemColor: Colors.black,
       onTap: (int index) {
         navBarInstance.getCurrentNavigationType.index == index

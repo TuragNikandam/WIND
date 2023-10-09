@@ -2,7 +2,9 @@ import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/news_article_model.dart';
 import 'package:andromeda_app/models/topic_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
+import 'package:andromeda_app/views/profile/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,11 +62,11 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                       .getName,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.clip,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.normal,
                     fontSize: 20,
-                    color: Colors.orange,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -204,12 +206,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                               padding: const EdgeInsets.only(right: 12.0),
                               child: SizedBox(
                                   width: 80,
-                                  child: Tooltip(
-                                    message: comments[index].getUsername,
-                                    triggerMode: TooltipTriggerMode.tap,
-                                    child: _buildCommentAvatarAndUsername(
-                                        comments[index]),
-                                  ))),
+                                  child: _buildCommentAvatarAndUsername(comments[index]))),
                           // Comment Text
                           Expanded(
                             child: Container(
@@ -265,7 +262,12 @@ class _NewsDetailViewState extends State<NewsDetailView> {
   }
 
   Widget _buildCommentAvatarAndUsername(NewsArticleComment comment) {
-    return Column(
+  return GestureDetector(
+    onTap: () {
+      HapticFeedback.selectionClick();
+      ProfileView(comment.getAuthorId, context).showProfile();
+    },
+    child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const CircleAvatar(
@@ -285,8 +287,9 @@ class _NewsDetailViewState extends State<NewsDetailView> {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Uri? getUriByStringURL(String url) {
     try {

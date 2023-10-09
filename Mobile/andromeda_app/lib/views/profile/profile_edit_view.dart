@@ -7,14 +7,14 @@ import 'package:andromeda_app/models/party_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/views/utils/dialogs.dart';
 
-class ProfileView extends StatefulWidget {
+class ProfileEditView extends StatefulWidget {
   final User user;
   final List<Party> parties;
   final List<Organization> organizations;
   final Function(User, Function(BuildContext, String)) onUpdateProfile;
   final Function() logout;
 
-  const ProfileView({
+  const ProfileEditView({
     Key? key,
     required this.user,
     required this.onUpdateProfile,
@@ -24,10 +24,10 @@ class ProfileView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProfileView> createState() => _ProfileViewState();
+  State<ProfileEditView> createState() => _ProfileEditViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class _ProfileEditViewState extends State<ProfileEditView> {
   @override
   void initState() {
     super.initState();
@@ -80,10 +80,10 @@ class _ProfileViewState extends State<ProfileView> {
             shape: BoxShape.circle,
             boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black26)],
           ),
-          child: const CircleAvatar(
+          child: CircleAvatar(
             radius: 50,
             backgroundColor: MyApp.secondaryColor,
-            child: Icon(Icons.person, size: 80, color: Colors.white),
+            child: Icon(Icons.person, size: MediaQuery.of(context).size.width * 0.15, color: Colors.white),
           ),
         ),
       );

@@ -155,8 +155,8 @@ class _VotingViewState extends State<VotingView> {
                                         TopicManager()
                                             .getTopicById(voting.topic)
                                             .getName,
-                                        style: const TextStyle(
-                                            color: Colors.orange),
+                                        style: TextStyle(
+                                            color: Theme.of(context).primaryColor),
                                       ),
                                     ),
                                     Padding(

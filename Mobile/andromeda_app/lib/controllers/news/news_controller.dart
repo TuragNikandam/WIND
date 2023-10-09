@@ -1,9 +1,9 @@
-import 'package:andromeda_app/controllers/news_detail_controller.dart';
+import 'package:andromeda_app/controllers/news/news_detail_controller.dart';
 import 'package:andromeda_app/models/news_article_model.dart';
 import 'package:andromeda_app/services/navigation_service.dart';
 import 'package:andromeda_app/services/news_service.dart';
 import 'package:andromeda_app/utils/session_expired_exception.dart';
-import 'package:andromeda_app/views/news_view.dart';
+import 'package:andromeda_app/views/news/news_view.dart';
 import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +71,7 @@ class _NewsControllerState extends State<NewsController> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return FutureBuilder(
         future: _fetchNews(),
         builder:
