@@ -20,23 +20,23 @@ class _RegistrationStep2ContollerState
     extends State<RegistrationStep2Controller> {
   late User user;
   late MasterDataService masterDataService;
-  List<Organization> _organizations = List.empty();
   late NavigationService navigationService;
+  late List<Organization> organizations;
 
   @override
   void initState() {
     super.initState();
     user = Provider.of<User>(context, listen: false);
-    _organizations = OrganizationManager().getOrganizationList;
     navigationService = Provider.of<NavigationService>(context, listen: false);
+    organizations = OrganizationManager().getOrganizationList;
   }
 
   @override
   Widget build(BuildContext context) {
     return RegistrationStep2View(
-      organizations: _organizations,
-      onStep3: (List<String> selectedOrganizations, bool visable) {
-        user.setSelectedOrganizations(selectedOrganizations);
+      organizations: organizations,
+      onStep3: (List<String> organizations, bool visable) {
+        user.setSelectedOrganizations(organizations);
         user.setShowOrganizationsInProfile(visable);
         navigationService.navigate(context, RegistrationStep3Controller.route);
       },

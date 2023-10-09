@@ -33,6 +33,14 @@ class _ProfileViewState extends State<ProfileView> {
     super.initState();
   }
 
+  Uri? getUriByStringURL(String url) {
+    try {
+      return Uri.parse(url);
+    } catch (e) {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,14 +111,6 @@ class _ProfileViewState extends State<ProfileView> {
           style: const TextStyle(color: Colors.black87),
           textAlign: TextAlign.center,
         ),
-      );
-
-  // TODO: Maybe use this on Cards to show other user profile? Delete afterwards.
-  Widget _buildInformationSection(
-          {required String label, required String value}) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(label), Text(value)],
       );
 
   Widget _buildPartySection() => _buildCardContainer(
@@ -241,6 +241,14 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Widget _buildOrganizationList() {
+    // Extract IDs of selected organizations
+    final selectedOrganizationIds = widget.user.getSelectedOrganizations;
+
+    // Filter out already selected organizations
+    final unselectedOrganizations = widget.organizations
+        .where((org) => !selectedOrganizationIds.contains(org.getId))
+        .toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -254,37 +262,24 @@ class _ProfileViewState extends State<ProfileView> {
             scrollDirection: Axis.horizontal,
             itemCount: widget.user.getSelectedOrganizations.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Chip(
-                  avatar: CircleAvatar(
-                    backgroundColor: Colors.orangeAccent,
-                    child: Text(OrganizationManager()
-                        .getOrganizationById(
-                            widget.user.getSelectedOrganizations[index])
-                        .getShortName[0]),
-                  ),
-                  label: Text(OrganizationManager()
-                      .getOrganizationById(
-                          widget.user.getSelectedOrganizations[index])
-                      .getShortName),
-                  deleteIcon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                  onDeleted: () {
-                    setState(() {
-                      if (widget
-                          .user.getSelectedOrganizations[index].isNotEmpty) {
-                        List<String> selectedOrganizations =
-                            widget.user.getSelectedOrganizations;
-                        selectedOrganizations.removeAt(index);
-                        widget.user
-                            .setSelectedOrganizations(selectedOrganizations);
-                      }
-                    });
-                  },
-                ),
+              final organization = OrganizationManager().getOrganizationById(
+                  widget.user.getSelectedOrganizations[index]);
+              return buildChip(
+                organization.getShortName,
+                buildOrganizationImage(
+                    organization,
+                    CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: Text(organization.getShortName[0],
+                          style: const TextStyle(color: Colors.white)),
+                    )),
+                () {
+                  setState(() {
+                    final organization = widget.user.getSelectedOrganizations;
+                    organization.removeAt(index);
+                    widget.user.setSelectedOrganizations(organization);
+                  });
+                },
               );
             },
           ),
@@ -298,40 +293,65 @@ class _ProfileViewState extends State<ProfileView> {
           height: 60,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: OrganizationManager().getOrganizationList.length,
+            itemCount: unselectedOrganizations.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      List<String> selectedOrganizations =
-                          widget.user.getSelectedOrganizations;
-                      selectedOrganizations.add(OrganizationManager()
-                          .getOrganizationList[index]
-                          .getId);
-                      widget.user
-                          .setSelectedOrganizations(selectedOrganizations);
-                    });
-                  },
-                  child: Chip(
-                    avatar: const CircleAvatar(
+              final organization = unselectedOrganizations[index];
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    final organizations = widget.user.getSelectedOrganizations;
+                    organizations.add(organization.getId);
+                    widget.user.setSelectedOrganizations(organizations);
+                  });
+                },
+                child: buildChip(
+                    organization.getShortName,
+                    const CircleAvatar(
                       backgroundColor: Colors.green,
                       child: Icon(
                         Icons.add,
                         color: Colors.white,
                       ),
                     ),
-                    label: Text(OrganizationManager()
-                        .getOrganizationList[index]
-                        .getShortName),
-                  ),
-                ),
+                    null),
               );
             },
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildChip(String label, Widget image, VoidCallback? onDelete) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Chip(
+        avatar: image,
+        label: Text(label),
+        deleteIcon: onDelete == null
+            ? null
+            : const Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+        onDeleted: onDelete,
+      ),
+    );
+  }
+
+  Widget buildOrganizationImage(Organization organization, Widget avatar) {
+    Uri? uri = getUriByStringURL(organization.getImageUrl);
+    return ClipOval(
+      child: FadeInImage(
+        image: NetworkImage(uri.toString()),
+        imageErrorBuilder: (BuildContext context, Object y, StackTrace? z) {
+          return avatar;
+        },
+        height: 90,
+        width: 90,
+        fit: BoxFit.cover,
+        placeholder: const AssetImage("assets/images/placeholder.png"),
+      ),
     );
   }
 

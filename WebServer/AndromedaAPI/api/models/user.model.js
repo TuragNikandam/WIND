@@ -35,9 +35,9 @@ let userSchema = new mongoose.Schema({
   organizations: {
     visible: Boolean,
     ids: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Organization",
-    }],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organization",
+  }],
   },
   birthyear: {
     type: Number,

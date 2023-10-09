@@ -252,8 +252,6 @@ class UserService extends BaseService {
 
       if (response.statusCode == 200) {
         await setJWTToken(emptyTokenMap);
-        String? token = await getJWTToken();
-        print(token);
       } else {
         throw Exception('Failed to logout!');
       }
