@@ -115,7 +115,7 @@ class _NewsViewState extends State<NewsView> {
               fontStyle: FontStyle.normal,
               color: isActive ? const Color(0xFF333333) : Colors.grey,
             ),
-            backgroundColor: isActive ? Colors.orange : const Color(0xffffffff),
+            backgroundColor: isActive ? Theme.of(context).primaryColor : const Color(0xffffffff),
             elevation: 0,
             shadowColor: const Color(0xff808080),
             shape: RoundedRectangleBorder(
@@ -170,11 +170,11 @@ class _NewsViewState extends State<NewsView> {
                                   .getName,
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.clip,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.normal,
                                 fontSize: 14,
-                                color: Colors.orange,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                             Padding(

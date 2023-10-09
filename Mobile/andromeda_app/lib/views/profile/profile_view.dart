@@ -13,6 +13,7 @@ class ProfileView {
   late User user;
   Future<void>? _cachedProfileData;
   final BuildContext parentContext;
+  late BuildContext currentContext;
 
   ProfileView(this.userId, this.parentContext) {
     _cachedProfileData = _fetchProfileData(parentContext);
@@ -29,7 +30,7 @@ class ProfileView {
       context: parentContext,
       builder: (BuildContext context) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.75,
+          height: MediaQuery.of(context).size.height * 0.65,
           child: _buildUser(context),
         );
       },
@@ -46,7 +47,7 @@ class ProfileView {
             color: Colors.deepOrange,
           ));
         } else if (snapshot.hasError) {
-          return const Text("Fehler beim Laden des Benutzers");
+          return const Center(child: Text("Fehler beim Laden des Benutzers"));
         } else {
           return Center(
             child: _buildProfile(context),
@@ -67,35 +68,27 @@ class ProfileView {
   }
 
   Widget _buildProfile(BuildContext context) {
+    currentContext = context;
+    final tileData = _createTileData();
     return Padding(
       padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
       child: Column(
         children: [
-          _buildProfileAvatar(context),
+          _buildProfileAvatar(),
+          SizedBox(height: MediaQuery.of(currentContext).size.height*0.02),
           Expanded(
             child: ListView(
               children: [
-                const Spacer(),
-                _buildInfoCard(
-                    "Email-Adresse", Icons.email, user.getEmail, context),
-                _buildInfoCard(
-                    "Alter",
-                    Icons.cake,
-                    user.getBirthYear.toString(),
-                    context), // Should be actual age
-                _buildInfoCard(
-                    "Geschlecht", Icons.people, user.getGender, context),
-                _buildInfoCard(
-                    "Religion", Icons.book, user.getReligion, context),
-                _buildInfoCard("Postleitzahl", Icons.location_pin,
-                    user.getZipCode.toString(), context),
-                _buildInfoCard(
-                    "Partei",
-                    Icons.gavel,
-                    "${PartyManager().getPartyById(user.getSelectedParty).getName} (${PartyManager().getPartyById(user.getSelectedParty).getShortName})",
-                    context),
-                _buildInfoCard(
-                    "Organisation", Icons.business, "Orgaaaaa", context),
+                if (user.getShowPartyInProfile)
+                  _buildInfoCard(
+                      "Partei",
+                      Icons.gavel,
+                      "${PartyManager().getPartyById(user.getSelectedParty).getName} "
+                          "(${PartyManager().getPartyById(user.getSelectedParty).getShortName})\n"),
+                if (user.getShowOrganizationsInProfile)
+                  _buildInfoCard("Organisation", Icons.business, "Orgaaaaa"),
+                // if getShowProfileInfo ->
+                buildMultiInfoCard("Persönliches", tileData),
               ],
             ),
           ),
@@ -104,26 +97,58 @@ class ProfileView {
     );
   }
 
-  Widget _buildProfileAvatar(BuildContext context) {
-    return Center(
-      child: Container(
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black26)],
+  List<Map<String, dynamic>> _createTileData () {
+    return [
+      //{'title': 'Email-Adresse', 'icon': Icons.email, 'value': user.getEmail},
+      {
+        'title': 'Geburtsjahr',
+        'icon': Icons.cake,
+        'value': user.getBirthYear.toString()
+      },
+      {'title': 'Geschlecht', 'icon': Icons.people, 'value': user.getGender},
+      {'title': 'Religion', 'icon': Icons.book, 'value': user.getReligion},
+      //{
+      //  'title': 'Postleitzahl',
+      //  'icon': Icons.location_pin,
+      //  'value': user.getZipCode.toString()
+      //},
+    ];
+  }
+
+  Widget _buildProfileAvatar() {
+    return Column(
+      children: [
+        Center(
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black26)],
+            ),
+            child: CircleAvatar(
+              radius: 50,
+              backgroundColor: MyApp.secondaryColor,
+              child: Icon(Icons.person,
+                  size: MediaQuery.of(currentContext).size.width * 0.15,
+                  color: Colors.white),
+            ),
+          ),
         ),
-        child: CircleAvatar(
-          radius: 50,
-          backgroundColor: MyApp.secondaryColor,
-          child: Icon(Icons.person,
-              size: MediaQuery.of(context).size.width * 0.1,
-              color: Colors.white),
-        ),
-      ),
+        SizedBox(height: MediaQuery.of(currentContext).size.height*0.02),
+        _buildProfileName(),
+      ],
     );
   }
 
-  Widget _buildInfoCard(
-      String title, IconData icon, String value, BuildContext context) {
+    Widget _buildProfileName() => Center(
+        child: Text(
+          user.getUsername,
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+          textAlign: TextAlign.center,
+        ),
+      );
+
+  Widget _buildInfoCard(String title, IconData icon, String value) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -131,9 +156,44 @@ class ProfileView {
       ),
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
-        leading: Icon(icon, color: Theme.of(context).primaryColor),
+        leading: Icon(icon, color: Theme.of(currentContext).primaryColor),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(value),
+      ),
+    );
+  }
+
+  Widget buildMultiInfoCard(
+      String cardTitle, List<Map<String, dynamic>> tileData) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              cardTitle,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          ...tileData.map((data) {
+            return ListTile(
+              leading: Icon(data['icon'] as IconData,
+                  color: Theme.of(currentContext).primaryColor),
+              title: Text(data['title'] as String,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(data['value'] as String),
+            );
+          }).toList(),
+        ],
       ),
     );
   }

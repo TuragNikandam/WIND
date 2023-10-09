@@ -125,7 +125,7 @@ class _ForumViewState extends State<ForumView> {
               fontStyle: FontStyle.normal,
               color: isActive ? const Color(0xFF333333) : Colors.grey,
             ),
-            backgroundColor: isActive ? Colors.orange : const Color(0xffffffff),
+            backgroundColor: isActive ? Theme.of(context).primaryColor : const Color(0xffffffff),
             elevation: 0,
             shadowColor: const Color(0xff808080),
             shape: RoundedRectangleBorder(
@@ -164,10 +164,10 @@ class _ForumViewState extends State<ForumView> {
                       TopicManager()
                           .getTopicById(discussion.getTopicId)
                           .getName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontStyle: FontStyle.normal,
-                        color: Colors.orange,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     const SizedBox(height: 4),

@@ -80,10 +80,10 @@ class _ProfileEditViewState extends State<ProfileEditView> {
             shape: BoxShape.circle,
             boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black26)],
           ),
-          child: const CircleAvatar(
+          child: CircleAvatar(
             radius: 50,
             backgroundColor: MyApp.secondaryColor,
-            child: Icon(Icons.person, size: 80, color: Colors.white),
+            child: Icon(Icons.person, size: MediaQuery.of(context).size.width * 0.15, color: Colors.white),
           ),
         ),
       );

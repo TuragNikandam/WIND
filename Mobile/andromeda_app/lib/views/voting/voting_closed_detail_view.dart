@@ -203,8 +203,8 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
       child: DotsIndicator(
         dotsCount: 2,
         position: currentPage,
-        decorator: const DotsDecorator(
-          activeColor: Colors.orange,
+        decorator: DotsDecorator(
+          activeColor: Theme.of(context).primaryColor,
         ),
       ),
     ));

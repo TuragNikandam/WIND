@@ -62,11 +62,11 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                       .getName,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.clip,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.normal,
                     fontSize: 20,
-                    color: Colors.orange,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -206,12 +206,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                               padding: const EdgeInsets.only(right: 12.0),
                               child: SizedBox(
                                   width: 80,
-                                  child: Tooltip( //TODO: Remove if Userprofile can be opened?
-                                    message: comments[index].getUsername,
-                                    triggerMode: TooltipTriggerMode.tap,
-                                    child: _buildCommentAvatarAndUsername(
-                                        comments[index]),
-                                  ))),
+                                  child: _buildCommentAvatarAndUsername(comments[index]))),
                           // Comment Text
                           Expanded(
                             child: Container(

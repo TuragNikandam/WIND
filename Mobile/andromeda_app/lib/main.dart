@@ -49,14 +49,14 @@ void main() => runApp(
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static const secondaryColor = Color.fromARGB(255, 167, 107, 86);
+  static const secondaryColor = Color.fromARGB(255, 80, 163, 149);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'W.I.N.D',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.blueGrey,
       ),
       home: const LoginController(),
       onGenerateRoute: (settings) {
