@@ -4,7 +4,6 @@ import 'package:andromeda_app/models/topic_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/views/profile/profile_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -262,9 +261,8 @@ class _NewsDetailViewState extends State<NewsDetailView> {
   }
 
   Widget _buildCommentAvatarAndUsername(NewsArticleComment comment) {
-  return GestureDetector(
+  return InkWell(
     onTap: () {
-      HapticFeedback.selectionClick();
       ProfileView(comment.getAuthorId, context).showProfile();
     },
     child: Column(

@@ -47,7 +47,7 @@ class _DiscussionViewState extends State<DiscussionView> {
   Widget buildUserColumn(DiscussionPost post, bool isCurrentUser) {
     return isCurrentUser
         ? Container()
-        : GestureDetector(
+        : InkWell(
             onTap: () {
               HapticFeedback.selectionClick();
               ProfileView(post.getAuthorId, context).showProfile();
@@ -138,17 +138,20 @@ class _DiscussionViewState extends State<DiscussionView> {
     }
   }
 
-  String? customValidator(String? value){
+  String? customValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Bitte schreibe einen Beitrag.';
     }
-    return Validators.hasStringBadWord(value) ? "Ihre Eingabe enthält nicht erlaubte Wörter" : null;
+    return Validators.hasStringBadWord(value)
+        ? "Ihre Eingabe enthält nicht erlaubte Wörter"
+        : null;
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    double radius = MediaQuery.of(context).size.height * 0.023;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Diskussion')),
@@ -202,7 +205,8 @@ class _DiscussionViewState extends State<DiscussionView> {
                               children: [
                                 SizedBox(
                                     width: screenWidth * 0.2,
-                                    child: buildUserColumn(post, isCurrentUser)),
+                                    child:
+                                        buildUserColumn(post, isCurrentUser)),
                                 SizedBox(
                                     width: screenWidth * 0.55,
                                     child: _buildSpeechBubble(post,
@@ -245,11 +249,14 @@ class _DiscussionViewState extends State<DiscussionView> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.send),
-                    color: Theme.of(context).primaryColor,
-                    onPressed: _handleSend,
-                  ),
+                  InkWell(
+                    onTap: _handleSend,
+                    child: CircleAvatar(
+                      radius: radius,
+                      backgroundColor: MyApp.secondaryColor,
+                      child: const Icon(Icons.send, color: Colors.white),
+                      ),
+                    ),
                 ],
               ),
             ),
