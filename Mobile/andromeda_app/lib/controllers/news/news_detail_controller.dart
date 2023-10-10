@@ -125,7 +125,7 @@ class _NewsDetailControllerState extends State<NewsDetailController> {
           }
           return const Center(
               child: CircularProgressIndicator(
-            color: Colors.deepOrange,
+            color: Colors.blueGrey,
           ));
         });
   }

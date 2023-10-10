@@ -113,7 +113,7 @@ class _NewsViewState extends State<NewsView> {
               fontSize: 14,
               fontWeight: FontWeight.w700,
               fontStyle: FontStyle.normal,
-              color: isActive ? const Color(0xFF333333) : Colors.grey,
+              color: isActive ? Colors.white : Colors.grey,
             ),
             backgroundColor: isActive ? Theme.of(context).primaryColor : const Color(0xffffffff),
             elevation: 0,

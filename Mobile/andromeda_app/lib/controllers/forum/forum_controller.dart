@@ -74,7 +74,7 @@ class _ForumControllerState extends State<ForumController> {
           }
           return const Center(
               child: CircularProgressIndicator(
-            color: Colors.deepOrange,
+            color: Colors.blueGrey,
           ));
         });
   }

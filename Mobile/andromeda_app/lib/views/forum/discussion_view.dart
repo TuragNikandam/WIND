@@ -136,8 +136,6 @@ class _DiscussionViewState extends State<DiscussionView> {
         }
       });
     }
-    //TODO: leer oder Language Filter hat zugeschlagen
-    else {}
   }
 
   String? customValidator(String? value){
@@ -183,7 +181,7 @@ class _DiscussionViewState extends State<DiscussionView> {
                                   widget.discussion.getTitle,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     fontSize: 20.0,
                                   ),
                                 )),
