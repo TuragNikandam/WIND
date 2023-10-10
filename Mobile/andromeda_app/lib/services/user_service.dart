@@ -79,7 +79,7 @@ class UserService extends BaseService {
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: jsonEncode(user.toJson()),
+            body: jsonEncode(user.toJsonRegister()),
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
@@ -252,8 +252,6 @@ class UserService extends BaseService {
 
       if (response.statusCode == 200) {
         await setJWTToken(emptyTokenMap);
-        String? token = await getJWTToken();
-        print(token);
       } else {
         throw Exception('Failed to logout!');
       }

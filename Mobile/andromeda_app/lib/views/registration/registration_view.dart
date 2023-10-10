@@ -2,7 +2,8 @@ import 'package:andromeda_app/views/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationView extends StatefulWidget {
-  final Function(String, String, String, String, Function(BuildContext, String)) onStep1;
+  final Function(String, String, String, String, Function(BuildContext, String))
+      onStep1;
 
   const RegistrationView({super.key, required this.onStep1});
 
@@ -16,16 +17,23 @@ class _RegistrationViewState extends State<RegistrationView> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
+  late double spaceHeight;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registrierung'),
         automaticallyImplyLeading: false, // This removes the "Back" button
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(spaceHeight * 1.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -34,18 +42,18 @@ class _RegistrationViewState extends State<RegistrationView> {
               labelText: 'Benutzername',
               icon: Icons.help_outline,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: spaceHeight),
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(labelText: 'E-Mail Adresse'),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: spaceHeight),
             _buildPasswordTextField(_passwordController, 'Passwort'),
-            const SizedBox(height: 16),
+            SizedBox(height: spaceHeight),
             _buildPasswordTextField(
                 _confirmPasswordController, 'Passwort bestätigen'),
-            const SizedBox(height: 32),
+            SizedBox(height: spaceHeight * 2),
             ElevatedButton(
               onPressed: () => widget.onStep1(
                   _usernameController.text,
@@ -55,7 +63,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                   _showError),
               child: const Text('Registrieren'),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: spaceHeight),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -83,11 +91,12 @@ class _RegistrationViewState extends State<RegistrationView> {
       controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
-        suffixIcon: IconButton(
-          icon: Icon(icon),
-          onPressed: () {
-            //TODO: Tooltip
-          },
+        suffixIcon: Tooltip(
+          message:
+              'Der Benutzername wird im Profil angezeigt.\nVermeide persönliche Informationen.',
+          triggerMode: TooltipTriggerMode.tap,
+          showDuration: const Duration(seconds: 10),
+          child: Icon(icon),
         ),
       ),
     );
@@ -115,6 +124,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   }
 
   void _showError(BuildContext context, String errorMessage) {
-    Dialogs.showErrorDialog(context, 'Fehler beim Registrieren', 'Behebe ich!', errorMessage);
+    Dialogs.showErrorDialog(
+        context, 'Fehler beim Registrieren', 'Behebe ich!', errorMessage);
   }
 }

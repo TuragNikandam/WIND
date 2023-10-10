@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationStep1Controller extends StatefulWidget {
-  static const String route = "/registration_step3";
+  static const String route = "/registration_step1";
   @override
   State<RegistrationStep1Controller> createState() =>
       _RegistrationStep1ContollerState();
