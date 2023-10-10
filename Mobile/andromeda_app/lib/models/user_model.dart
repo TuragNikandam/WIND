@@ -118,7 +118,8 @@ class User extends ChangeNotifier {
     setReligion(newUser.getReligion);
     setZipCode(newUser.getZipCode);
     setIsGuest(newUser.getIsGuest);
-    setShowOrganizationsInProfile(newUser.getShowPersonalInformationInProfile);
+    setShowPersonalInformationInProfile(
+        newUser.getShowPersonalInformationInProfile);
   }
 
 // Static method to create a User object from a JSON map
@@ -138,7 +139,7 @@ class User extends ChangeNotifier {
     user.setSelectedOrganizations(
         List<String>.from(json['organizations']['ids'] ?? List.empty()));
     user.setIsGuest(json['isGuest'] ?? false);
-    user.setShowOrganizationsInProfile(
+    user.setShowPersonalInformationInProfile(
         json['personalInformationVisible'] ?? false);
     return user;
   }

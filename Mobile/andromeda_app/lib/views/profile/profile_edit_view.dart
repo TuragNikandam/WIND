@@ -258,120 +258,118 @@ class _ProfileEditViewState extends State<ProfileEditView> {
         .where((org) => !selectedOrganizationIds.contains(org.getId))
         .toList();
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Meine Organisationen:',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          SizedBox(
-            height: (spaceHeight * 5 * selectedOrganizationIds.length),
-            child: ReorderableListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              onReorder: (int oldIndex, int newIndex) {
-                setState(() {
-                  if (newIndex > oldIndex) {
-                    newIndex -= 1;
-                  }
-                  final item = selectedOrganizationIds.removeAt(oldIndex);
-                  selectedOrganizationIds.insert(newIndex, item);
-                });
-              },
-              children: [
-                for (int index = 0;
-                    index < selectedOrganizationIds.length;
-                    index++)
-                  ReorderableDragStartListener(
-                    index: index,
-                    key: ValueKey(selectedOrganizationIds[index]),
-                    child: Card(
-                      child: ListTile(
-                        leading: buildOrganizationImage(
-                            OrganizationManager().getOrganizationById(
-                                selectedOrganizationIds[index]),
-                            CircleAvatar(
-                              radius: radius / 3,
-                              backgroundColor: Theme.of(context).primaryColor,
-                              child: Text(
-                                  OrganizationManager()
-                                      .getOrganizationById(
-                                          selectedOrganizationIds[index])
-                                      .getShortName[0],
-                                  style: const TextStyle(color: Colors.white)),
-                            )),
-                        title: Text(OrganizationManager()
-                            .getOrganizationById(selectedOrganizationIds[index])
-                            .getShortName),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete_rounded,
-                                  color: Colors.red),
-                              onPressed: () {
-                                setState(() {
-                                  final organization = OrganizationManager()
-                                      .getOrganizationById(
-                                          selectedOrganizationIds[index]);
-                                  selectedOrganizationIds.removeAt(index);
-                                  unselectedOrganizations.add(organization);
-                                });
-                              },
-                            ),
-                            Icon(Icons.drag_handle,
-                                color: Theme.of(context).primaryColor),
-                          ],
-                        ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Text(
+          'Meine Organisationen:',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        SizedBox(
+          height: (spaceHeight * 5 * selectedOrganizationIds.length),
+          child: ReorderableListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            onReorder: (int oldIndex, int newIndex) {
+              setState(() {
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
+                }
+                final item = selectedOrganizationIds.removeAt(oldIndex);
+                selectedOrganizationIds.insert(newIndex, item);
+              });
+            },
+            children: [
+              for (int index = 0;
+                  index < selectedOrganizationIds.length;
+                  index++)
+                ReorderableDragStartListener(
+                  index: index,
+                  key: ValueKey(selectedOrganizationIds[index]),
+                  child: Card(
+                    child: ListTile(
+                      leading: buildOrganizationImage(
+                          OrganizationManager().getOrganizationById(
+                              selectedOrganizationIds[index]),
+                          CircleAvatar(
+                            radius: radius / 3,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Text(
+                                OrganizationManager()
+                                    .getOrganizationById(
+                                        selectedOrganizationIds[index])
+                                    .getShortName[0],
+                                style: const TextStyle(color: Colors.white)),
+                          )),
+                      title: Text(OrganizationManager()
+                          .getOrganizationById(selectedOrganizationIds[index])
+                          .getShortName),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.delete_rounded,
+                                color: Colors.red),
+                            onPressed: () {
+                              setState(() {
+                                final organization = OrganizationManager()
+                                    .getOrganizationById(
+                                        selectedOrganizationIds[index]);
+                                selectedOrganizationIds.removeAt(index);
+                                unselectedOrganizations.add(organization);
+                              });
+                            },
+                          ),
+                          Icon(Icons.drag_handle,
+                              color: Theme.of(context).primaryColor),
+                        ],
                       ),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
-          SizedBox(height: spaceHeight),
-          const Text(
-            'Organisationen:',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          SizedBox(
-            height: (unselectedOrganizations.isEmpty ? 0 : (spaceHeight * 4)),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: unselectedOrganizations.length,
-              itemBuilder: (context, index) {
-                final organization = unselectedOrganizations[index];
-                return buildChip(
-                    organization.getShortName,
-                    buildOrganizationImage(
-                      OrganizationManager()
-                          .getOrganizationById(organization.getId),
-                      CircleAvatar(
-                          radius: radius / 2,
-                          backgroundColor: Theme.of(context).primaryColor,
-                          child: Text(
-                              OrganizationManager()
-                                  .getOrganizationById(organization.getId)
-                                  .getShortName[0],
-                              style: const TextStyle(color: Colors.white))),
-                    ),
-                    const Icon(
-                      Icons.add,
-                      color: Colors.green,
-                    ), () {
-                  setState(() {
-                    final organizations = widget.user.getSelectedOrganizations;
-                    organizations.add(organization.getId);
-                    widget.user.setSelectedOrganizations(organizations);
-                  });
+        ),
+        SizedBox(height: spaceHeight),
+        const Text(
+          'Organisationen:',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        SizedBox(
+          height: (unselectedOrganizations.isEmpty ? 0 : (spaceHeight * 4)),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: unselectedOrganizations.length,
+            itemBuilder: (context, index) {
+              final organization = unselectedOrganizations[index];
+              return buildChip(
+                  organization.getShortName,
+                  buildOrganizationImage(
+                    OrganizationManager()
+                        .getOrganizationById(organization.getId),
+                    CircleAvatar(
+                        radius: radius / 2,
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: Text(
+                            OrganizationManager()
+                                .getOrganizationById(organization.getId)
+                                .getShortName[0],
+                            style: const TextStyle(color: Colors.white))),
+                  ),
+                  const Icon(
+                    Icons.add,
+                    color: Colors.green,
+                  ), () {
+                setState(() {
+                  final organizations = widget.user.getSelectedOrganizations;
+                  organizations.add(organization.getId);
+                  widget.user.setSelectedOrganizations(organizations);
                 });
-              },
-            ),
+              });
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
