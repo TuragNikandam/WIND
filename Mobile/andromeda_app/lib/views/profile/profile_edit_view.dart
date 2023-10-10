@@ -215,7 +215,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
             width: spaceWidth * 10,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(spaceWidth * 3),
-              color: value ? Colors.green[400] : Colors.grey[300],
+              color: value ? Colors.green[400] : Colors.redAccent,
             ),
             child: Stack(
               children: [
@@ -309,7 +309,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.delete_rounded,
-                                color: Colors.red),
+                                  color: MyApp.secondaryColor),
                             onPressed: () {
                               setState(() {
                                 final organization = OrganizationManager()

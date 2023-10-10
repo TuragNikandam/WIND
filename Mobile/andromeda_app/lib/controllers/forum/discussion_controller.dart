@@ -83,7 +83,7 @@ class _DiscussionControllerState extends State<DiscussionController> {
           }
           return const Center(
               child: CircularProgressIndicator(
-            color: Colors.deepOrange,
+            color: Colors.blueGrey,
           ));
         });
   }

@@ -44,7 +44,7 @@ class ProfileView {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
               child: CircularProgressIndicator(
-            color: Colors.deepOrange,
+            color: Colors.blueGrey,
           ));
         } else if (snapshot.hasError) {
           return const Center(child: Text("Fehler beim Laden des Benutzers"));

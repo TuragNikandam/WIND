@@ -86,7 +86,7 @@ class _VotingClosedDetailControllerState
         backgroundColor: Colors.white, // White background
         body: Center(
             child: CircularProgressIndicator(
-          color: Colors.deepOrange,
+          color: Colors.blueGrey,
         )),
       );
     } else {
