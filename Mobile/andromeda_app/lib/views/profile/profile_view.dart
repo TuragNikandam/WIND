@@ -1,4 +1,5 @@
 import 'package:andromeda_app/main.dart';
+import 'package:andromeda_app/models/organization_model.dart';
 import 'package:andromeda_app/models/party_model.dart';
 import 'package:andromeda_app/utils/session_expired_exception.dart';
 import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
@@ -15,6 +16,10 @@ class ProfileView {
   final BuildContext parentContext;
   late BuildContext currentContext;
 
+  double spaceHeight = 0.0;
+  double spaceWidth = 0.0;
+  double radius = 0.0;
+
   ProfileView(this.userId, this.parentContext) {
     _cachedProfileData = _fetchProfileData(parentContext);
   }
@@ -29,6 +34,9 @@ class ProfileView {
       showDragHandle: true,
       context: parentContext,
       builder: (BuildContext context) {
+        spaceHeight = MediaQuery.of(context).size.height * 0.015;
+        spaceWidth = MediaQuery.of(context).size.width * 0.015;
+        radius = MediaQuery.of(context).size.height * 0.04;
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.65,
           child: _buildUser(context),
@@ -75,7 +83,7 @@ class ProfileView {
       child: Column(
         children: [
           _buildProfileAvatar(),
-          SizedBox(height: MediaQuery.of(currentContext).size.height*0.02),
+          SizedBox(height: MediaQuery.of(currentContext).size.height * 0.02),
           Expanded(
             child: ListView(
               children: [
@@ -86,7 +94,8 @@ class ProfileView {
                       "${PartyManager().getPartyById(user.getSelectedParty).getName} "
                           "(${PartyManager().getPartyById(user.getSelectedParty).getShortName})\n"),
                 if (user.getShowOrganizationsInProfile)
-                  _buildInfoCard("Organisation", Icons.business, "Orgaaaaa"),
+                  _buildImageInfoCard("Organisationen", Icons.business,
+                      _buildImageList(context)),
                 if (user.getShowPersonalInformationInProfile)
                   buildMultiInfoCard("Persönliches", tileData),
               ],
@@ -97,7 +106,62 @@ class ProfileView {
     );
   }
 
-  List<Map<String, dynamic>> _createTileData () {
+  Uri? getUriByStringURL(String url) {
+    try {
+      return Uri.parse(url);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  List<Widget> _buildImageList(BuildContext context) {
+    List<Widget> imagesWithText = List<Widget>.empty(growable: true);
+    List<String> organizations = user.getSelectedOrganizations;
+
+    for (var id in organizations.take(3)) {
+      CircleAvatar avatar = CircleAvatar(
+        radius: radius / 2,
+        backgroundColor: Theme.of(context).primaryColor,
+        child: Text(
+          OrganizationManager().getOrganizationById(id).getShortName[0],
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      );
+
+      Uri? uri = getUriByStringURL(
+          OrganizationManager().getOrganizationById(id).getImageUrl);
+
+      imagesWithText.add(
+        Column(
+          children: [
+            ClipOval(
+              child: FadeInImage(
+                image: NetworkImage(uri.toString()),
+                imageErrorBuilder:
+                    (BuildContext context, Object y, StackTrace? z) {
+                  return avatar;
+                },
+                height: radius,
+                width: radius,
+                fit: BoxFit.cover,
+                placeholder: const AssetImage("assets/images/placeholder.png"),
+              ),
+            ),
+            Text(
+              "${OrganizationManager().getOrganizationById(id).getShortName}\n",
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return imagesWithText;
+  }
+
+  List<Map<String, dynamic>> _createTileData() {
     return [
       //{'title': 'Email-Adresse', 'icon': Icons.email, 'value': user.getEmail},
       {
@@ -133,13 +197,13 @@ class ProfileView {
             ),
           ),
         ),
-        SizedBox(height: MediaQuery.of(currentContext).size.height*0.02),
+        SizedBox(height: MediaQuery.of(currentContext).size.height * 0.02),
         _buildProfileName(),
       ],
     );
   }
 
-    Widget _buildProfileName() => Center(
+  Widget _buildProfileName() => Center(
         child: Text(
           user.getUsername,
           style: const TextStyle(
@@ -161,6 +225,35 @@ class ProfileView {
         subtitle: Text(value),
       ),
     );
+  }
+
+  Widget _buildImageInfoCard(String title, IconData icon, List<Widget> images) {
+    return Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        child: ListTile(
+          leading: Icon(icon, color: Theme.of(currentContext).primaryColor),
+          title: Padding(
+              padding: EdgeInsets.only(bottom: spaceHeight / 2),
+              child: Text(title,
+                  style: const TextStyle(fontWeight: FontWeight.bold))),
+          subtitle: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: images
+                    .expand((image) => [
+                          image,
+                          SizedBox(
+                            width: spaceWidth,
+                            height: spaceHeight,
+                          )
+                        ])
+                    .toList(),
+              )),
+        ));
   }
 
   Widget buildMultiInfoCard(
