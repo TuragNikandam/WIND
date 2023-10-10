@@ -28,6 +28,9 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  late double spaceHeight;
+  late double spaceWidth;
+  late double radius;
   @override
   void initState() {
     super.initState();
@@ -43,6 +46,10 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.height * 0.06;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profil'),
@@ -52,7 +59,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: Scrollbar(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(spaceHeight * 1.2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: _buildProfileForm(),
@@ -66,7 +73,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   List<Widget> _buildProfileForm() => [
         _buildProfileAvatar(),
-        const SizedBox(height: 20),
+        SizedBox(height: spaceHeight),
         _buildProfileName(),
         _buildEmail(),
         _buildPartySection(),
@@ -88,10 +95,10 @@ class _ProfileViewState extends State<ProfileView> {
             shape: BoxShape.circle,
             boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black26)],
           ),
-          child: const CircleAvatar(
-            radius: 50,
+          child: CircleAvatar(
+            radius: radius,
             backgroundColor: MyApp.secondaryColor,
-            child: Icon(Icons.person, size: 80, color: Colors.white),
+            child: Icon(Icons.person, size: radius * 1.5, color: Colors.white),
           ),
         ),
       );
@@ -132,6 +139,7 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildOrganizationSection() => _buildCardContainer(
         "Organisationszugehörigkeit",
         [
+          SizedBox(height: spaceHeight),
           _buildOrganizationList(),
           _buildSwitchRow(
             'Im Profil sichtbar?',
@@ -147,12 +155,13 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _buildCardContainer(String title, List<Widget> children) => Card(
         elevation: 4.0,
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        margin: EdgeInsets.symmetric(vertical: spaceHeight / 2),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0), // rounded corner radius
+          borderRadius:
+              BorderRadius.circular(radius / 2), // rounded corner radius
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(spaceHeight * 1.2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -163,7 +172,7 @@ class _ProfileViewState extends State<ProfileView> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 10), // space below title
+              SizedBox(height: spaceHeight / 2), // space below title
               ...children
             ],
           ),
@@ -195,17 +204,17 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _buildSwitchRow(String label, bool value, Function(bool) onChanged) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: EdgeInsets.only(top: spaceHeight * 1.2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            height: 28.0,
-            width: 60.0,
+            height: spaceHeight * 2.15,
+            width: spaceWidth * 10,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(spaceWidth * 3),
               color: value ? Colors.green[400] : Colors.grey[300],
             ),
             child: Stack(
@@ -213,10 +222,10 @@ class _ProfileViewState extends State<ProfileView> {
                 AnimatedPositioned(
                   curve: Curves.easeIn,
                   duration: const Duration(milliseconds: 300),
-                  left: value ? 30.0 : 0.0,
-                  right: value ? 0.0 : 30.0,
+                  left: value ? spaceWidth * 5 : 0.0,
+                  right: value ? 0.0 : spaceWidth * 5,
                   child: SizedBox(
-                    height: 28,
+                    height: spaceHeight * 2.2,
                     child: InkWell(
                       onTap: () {
                         onChanged(!value);
@@ -249,91 +258,131 @@ class _ProfileViewState extends State<ProfileView> {
         .where((org) => !selectedOrganizationIds.contains(org.getId))
         .toList();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Meine Organisationen:',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 60,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: widget.user.getSelectedOrganizations.length,
-            itemBuilder: (context, index) {
-              final organization = OrganizationManager().getOrganizationById(
-                  widget.user.getSelectedOrganizations[index]);
-              return buildChip(
-                organization.getShortName,
-                buildOrganizationImage(
-                    organization,
-                    CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Text(organization.getShortName[0],
-                          style: const TextStyle(color: Colors.white)),
-                    )),
-                () {
-                  setState(() {
-                    final organization = widget.user.getSelectedOrganizations;
-                    organization.removeAt(index);
-                    widget.user.setSelectedOrganizations(organization);
-                  });
-                },
-              );
-            },
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'Meine Organisationen:',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
           ),
-        ),
-        const SizedBox(height: 20),
-        const Text(
-          'Wählbare Organisationen:',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 60,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: unselectedOrganizations.length,
-            itemBuilder: (context, index) {
-              final organization = unselectedOrganizations[index];
-              return GestureDetector(
-                onTap: () {
+          SizedBox(
+            height: (spaceHeight * 5 * selectedOrganizationIds.length),
+            child: ReorderableListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              onReorder: (int oldIndex, int newIndex) {
+                setState(() {
+                  if (newIndex > oldIndex) {
+                    newIndex -= 1;
+                  }
+                  final item = selectedOrganizationIds.removeAt(oldIndex);
+                  selectedOrganizationIds.insert(newIndex, item);
+                });
+              },
+              children: [
+                for (int index = 0;
+                    index < selectedOrganizationIds.length;
+                    index++)
+                  ReorderableDragStartListener(
+                    index: index,
+                    key: ValueKey(selectedOrganizationIds[index]),
+                    child: Card(
+                      child: ListTile(
+                        leading: buildOrganizationImage(
+                            OrganizationManager().getOrganizationById(
+                                selectedOrganizationIds[index]),
+                            CircleAvatar(
+                              radius: radius / 3,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: Text(
+                                  OrganizationManager()
+                                      .getOrganizationById(
+                                          selectedOrganizationIds[index])
+                                      .getShortName[0],
+                                  style: const TextStyle(color: Colors.white)),
+                            )),
+                        title: Text(OrganizationManager()
+                            .getOrganizationById(selectedOrganizationIds[index])
+                            .getShortName),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.delete_rounded,
+                                  color: Colors.red),
+                              onPressed: () {
+                                setState(() {
+                                  final organization = OrganizationManager()
+                                      .getOrganizationById(
+                                          selectedOrganizationIds[index]);
+                                  selectedOrganizationIds.removeAt(index);
+                                  unselectedOrganizations.add(organization);
+                                });
+                              },
+                            ),
+                            Icon(Icons.drag_handle,
+                                color: Theme.of(context).primaryColor),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: spaceHeight),
+          const Text(
+            'Organisationen:',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          SizedBox(
+            height: (unselectedOrganizations.isEmpty ? 0 : (spaceHeight * 4)),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: unselectedOrganizations.length,
+              itemBuilder: (context, index) {
+                final organization = unselectedOrganizations[index];
+                return buildChip(
+                    organization.getShortName,
+                    buildOrganizationImage(
+                      OrganizationManager()
+                          .getOrganizationById(organization.getId),
+                      CircleAvatar(
+                          radius: radius / 2,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: Text(
+                              OrganizationManager()
+                                  .getOrganizationById(organization.getId)
+                                  .getShortName[0],
+                              style: const TextStyle(color: Colors.white))),
+                    ),
+                    const Icon(
+                      Icons.add,
+                      color: Colors.green,
+                    ), () {
                   setState(() {
                     final organizations = widget.user.getSelectedOrganizations;
                     organizations.add(organization.getId);
                     widget.user.setSelectedOrganizations(organizations);
                   });
-                },
-                child: buildChip(
-                    organization.getShortName,
-                    const CircleAvatar(
-                      backgroundColor: Colors.green,
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                    ),
-                    null),
-              );
-            },
+                });
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget buildChip(String label, Widget image, VoidCallback? onDelete) {
+  Widget buildChip(
+      String label, Widget image, Widget action, VoidCallback? onDelete) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(spaceHeight / 2),
       child: Chip(
         avatar: image,
         label: Text(label),
-        deleteIcon: onDelete == null
-            ? null
-            : const Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
+        deleteIcon: action,
         onDeleted: onDelete,
       ),
     );
@@ -347,8 +396,8 @@ class _ProfileViewState extends State<ProfileView> {
         imageErrorBuilder: (BuildContext context, Object y, StackTrace? z) {
           return avatar;
         },
-        height: 90,
-        width: 90,
+        height: radius / 2,
+        width: radius / 2,
         fit: BoxFit.cover,
         placeholder: const AssetImage("assets/images/placeholder.png"),
       ),
@@ -358,22 +407,33 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildPrivateInfoSection() => _buildCardContainer(
         "Persönliches",
         [
-          const SizedBox(height: 10),
+          SizedBox(height: spaceHeight),
           _buildBirthyearField(),
+          SizedBox(height: spaceHeight),
           _buildGenderDropdown(),
+          SizedBox(height: spaceHeight),
           _buildReligionDropdown(),
-          const SizedBox(height: 24),
+          SizedBox(height: spaceHeight * 2),
           _buildZipCodeField(),
+          _buildSwitchRow(
+            'Im Profil sichtbar?',
+            widget.user.getShowPersonalInformationInProfile,
+            (bool value) {
+              setState(() {
+                widget.user.setShowPersonalInformationInProfile(value);
+              });
+            },
+          ),
         ],
       );
 
   Widget _buildBirthyearField() {
     return TextFormField(
       initialValue: widget.user.getBirthYear.toString(),
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Geburtsjahr',
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(16.0),
+        border: const OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(spaceHeight),
       ),
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -386,10 +446,10 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildZipCodeField() {
     return TextFormField(
       initialValue: widget.user.getZipCode.toString(),
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Postleitzahl',
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(16.0),
+        border: const OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(spaceHeight),
       ),
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -438,10 +498,10 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _buildUpdateButton() {
     return Container(
-      margin: const EdgeInsets.only(top: 5),
+      margin: EdgeInsets.only(top: spaceHeight / 2),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(spaceHeight),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -463,14 +523,14 @@ class _ProfileViewState extends State<ProfileView> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return const AlertDialog(
+              return AlertDialog(
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(),
+                    const CircularProgressIndicator(),
                     Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Text("Aktualisiere...")),
+                        padding: EdgeInsets.only(top: spaceHeight),
+                        child: const Text("Aktualisiere...")),
                   ],
                 ),
               );
@@ -482,14 +542,15 @@ class _ProfileViewState extends State<ProfileView> {
           widget.onUpdateProfile(widget.user, _showError);
         },
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+          padding: EdgeInsets.symmetric(
+              horizontal: spaceWidth * 5, vertical: spaceHeight),
           textStyle: const TextStyle(
             fontSize: 16,
           ),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-                10), // Same corner radius as the container
+                spaceHeight), // Same corner radius as the container
           ),
         ),
         child: const Text('Profil aktualisieren'),

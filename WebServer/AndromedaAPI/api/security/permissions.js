@@ -1,3 +1,5 @@
+const log = require("../config/log");
+
 const defaultPermissions = {
   'GET': ["admin", "user"],
   'POST': ["admin"],
@@ -6,15 +8,13 @@ const defaultPermissions = {
 };
 
 const routeSpecificPermissions = {
-  "/user": {
-    'GET': ["admin", "user"],
+  "/user*": {
     'POST': ["admin", "user"],
     'PUT': ["admin", "user"],
   },
-  "/voting": {
+  "/voting*": {
     'GET': ["admin", "user", "guest"],
     'POST': ["admin", "user"],
-    'PUT': ["admin"],
   },
   "/news": {
     'GET': ["admin", "user", "guest"],
@@ -23,11 +23,7 @@ const routeSpecificPermissions = {
     'GET' : ["admin", "user", "guest"],
     'POST' : ["admin", "user"],
   },
-  "/discussion": {
-    'GET': ["admin", "user"],
-  },
   "/discussion/:discussionId/post": {
-    'GET' : ["admin", "user"],
     'POST' : ["admin", "user"],
   },
   "/topic": {
@@ -44,7 +40,8 @@ const routeSpecificPermissions = {
 // Function to find matching route pattern
 const findMatchingRoute = (path) => {
   for (const route in routeSpecificPermissions) {
-    if (new RegExp(`^${route.replace(/:[^\s/]+/g, "([\\w-]+)")}$`).test(path)) {
+    const regexRoute = route.replace('*', '.*').replace(/:[^\s/]+/g, "([\\w-]+)");
+    if (new RegExp(`^${regexRoute}$`).test(path)) {
       return route;
     }
   }
@@ -76,6 +73,7 @@ const permissionMiddleware = (req, res, next) => {
   }
 
   // If no permissions match, deny access
+  log.warn(`User with id=${req.user._id} and role=${req.user.role} has no permission for route=${path}.`)
   res.status(403).send("Forbidden: Insufficient permissions");
 };
 

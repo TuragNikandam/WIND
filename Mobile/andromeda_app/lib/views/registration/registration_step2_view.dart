@@ -23,6 +23,9 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
   bool _showInProfile = false;
   List<String> _selectedOrganizations = List.empty(growable: true);
   List<Organization> _unselectedOrganizations = List.empty(growable: true);
+  late double spaceHeight;
+  late double spaceWidth;
+  late double radius;
 
   @override
   void initState() {
@@ -47,7 +50,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
 
   Widget buildChip(String label, Widget image, VoidCallback? onDelete) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(spaceHeight),
       child: Chip(
         avatar: image,
         label: Text(label),
@@ -70,8 +73,8 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
         imageErrorBuilder: (BuildContext context, Object y, StackTrace? z) {
           return avatar;
         },
-        height: 50,
-        width: 50,
+        height: radius * 2,
+        width: radius * 2,
         fit: BoxFit.cover,
         placeholder: const AssetImage("assets/images/placeholder.png"),
       ),
@@ -80,25 +83,28 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
 
   @override
   Widget build(BuildContext context) {
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.height * 0.03;
     return Scaffold(
       appBar: AppBar(title: const Text('Organisationen')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(spaceHeight * 1.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Top Panel for Available Organizations
             Container(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(spaceHeight),
               color: MyApp.secondaryColor,
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.list,
                     color: Colors.white,
                   ),
-                  SizedBox(width: 8),
-                  Text(
+                  SizedBox(width: spaceWidth * 2),
+                  const Text(
                     'Organisationen:',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -120,7 +126,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                       leading: buildOrganizationImage(
                           organization,
                           CircleAvatar(
-                            radius: 25,
+                            radius: radius,
                             backgroundColor: Theme.of(context).primaryColor,
                             child: Text(
                                 OrganizationManager()
@@ -131,9 +137,9 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                           )),
                       title: Text(organization.getShortName),
                       trailing: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.add,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.green,
                         ),
                         onPressed: () {
                           setState(() {
@@ -147,16 +153,16 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: spaceWidth),
             // Bottom Panel for Selected Organizations
             Container(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(spaceHeight),
               color: MyApp.secondaryColor,
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text(
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  SizedBox(width: spaceWidth),
+                  const Text(
                     'Meine Organisationen:',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -192,7 +198,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                               OrganizationManager().getOrganizationById(
                                   _selectedOrganizations[index]),
                               CircleAvatar(
-                                radius: 25,
+                                radius: radius,
                                 backgroundColor: Theme.of(context).primaryColor,
                                 child: Text(
                                     OrganizationManager()
@@ -210,8 +216,8 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.remove,
-                                    color: Theme.of(context).primaryColor),
+                                icon: const Icon(Icons.delete_rounded,
+                                    color: Colors.red),
                                 onPressed: () {
                                   setState(() {
                                     final organization = OrganizationManager()
@@ -232,9 +238,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: spaceHeight * 2),
             Row(
               children: [
                 const Text('Im Profil anzeigen?'),

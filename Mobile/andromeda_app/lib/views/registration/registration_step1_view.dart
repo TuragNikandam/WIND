@@ -17,7 +17,8 @@ class RegistrationStep1View extends StatefulWidget {
 
 class _RegistrationStep1ViewState extends State<RegistrationStep1View> {
   late User user;
-  
+  late double spaceHeight;
+
   @override
   void initState() {
     super.initState();
@@ -26,28 +27,33 @@ class _RegistrationStep1ViewState extends State<RegistrationStep1View> {
 
   @override
   Widget build(BuildContext context) {
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
     return Scaffold(
       appBar: AppBar(title: const Text('Parteipräferenz')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(spaceHeight * 1.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DropdownButton<String>(
-              value: user.getSelectedParty.isEmpty ? null : user.getSelectedParty,
-              hint: const Text('Wählen Sie Ihre Partei'),
-              onChanged: (String? newValue) {
-                setState(() {
-                  if (newValue != null) {user.setSelectedParty(newValue);}
-                });
-              },
-              items: widget.parties.map<DropdownMenuItem<String>>((Party party) {
-                      return DropdownMenuItem<String>(
-                        value: party.getId,
-                        child: Text(party.getName),
-                      );
-                    }).toList()
-            ),
+                value: user.getSelectedParty.isEmpty
+                    ? null
+                    : user.getSelectedParty,
+                hint: const Text('Wählen Sie Ihre Partei'),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    if (newValue != null) {
+                      user.setSelectedParty(newValue);
+                    }
+                  });
+                },
+                items:
+                    widget.parties.map<DropdownMenuItem<String>>((Party party) {
+                  return DropdownMenuItem<String>(
+                    value: party.getId,
+                    child: Text(party.getName),
+                  );
+                }).toList()),
             Row(
               children: [
                 const Text('Im Profil anzeigen?'),
@@ -61,10 +67,10 @@ class _RegistrationStep1ViewState extends State<RegistrationStep1View> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: spaceHeight),
             ElevatedButton(
-              onPressed: () => widget.onStep2(user.getSelectedParty, user.getShowPartyInProfile,
-                  _showError),
+              onPressed: () => widget.onStep2(user.getSelectedParty,
+                  user.getShowPartyInProfile, _showError),
               child: const Text('Weiter'),
             ),
           ],

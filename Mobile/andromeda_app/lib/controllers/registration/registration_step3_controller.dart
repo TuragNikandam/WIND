@@ -61,13 +61,14 @@ class _RegistrationStep3ContollerState
   Widget build(BuildContext context) {
     return RegistrationStep3View(
       onRegister: (int birthYear, int zipCode, String? gender, String? religion,
-          Function showError) {
+          bool showInProfile, Function showError) {
         String? errorMessage = _validate(birthYear, zipCode, gender, religion);
         if (errorMessage == null) {
           user.setBirthYear(birthYear);
           user.setZipCode(zipCode);
           user.setGender(gender!);
           user.setReligion(religion!);
+          user.setShowPersonalInformationInProfile(showInProfile);
           _submitRegistration();
         } else {
           showError(context, errorMessage);

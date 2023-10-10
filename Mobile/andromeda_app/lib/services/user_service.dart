@@ -79,7 +79,7 @@ class UserService extends BaseService {
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: jsonEncode(user.toJson()),
+            body: jsonEncode(user.toJsonRegister()),
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 

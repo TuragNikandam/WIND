@@ -125,9 +125,8 @@ class User extends ChangeNotifier {
   static User fromJson(Map<String, dynamic> json) {
     User user = User();
     user.setId(json['_id'] ?? "");
-    user.setUsername(json['username'] ?? "");
     user.setEmail(json['email'] ?? "");
-    user.setPassword(json['password'] ?? "");
+    user.setUsername(json['username'] ?? "");
     user.setBirthYear(json['birthyear'] ?? 0);
     user.setGender(json['gender']);
     user.setReligion(json['religion']);
@@ -144,10 +143,31 @@ class User extends ChangeNotifier {
     return user;
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJsonRegister() {
     return {
       'username': _username,
       'password': _password,
+      'email': _email,
+      'party': {
+        'visible': _showPartyInProfile,
+        'id': _selectedParty,
+      },
+      'organizations': {
+        'visible': _showOrganizationsInProfile,
+        'ids': _selectedOrganizations,
+      },
+      'birthyear': _birthYear,
+      'gender': _gender,
+      'religion': _religion,
+      'zipCode': _zipCode,
+      'isGuest': _isGuest,
+      'personalInformationVisible': _showPersonalInformationInProfile,
+    };
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'username': _username,
       'email': _email,
       'party': {
         'visible': _showPartyInProfile,
