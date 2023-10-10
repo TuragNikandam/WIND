@@ -36,7 +36,7 @@ class ProfileView {
       builder: (BuildContext context) {
         spaceHeight = MediaQuery.of(context).size.height * 0.015;
         spaceWidth = MediaQuery.of(context).size.width * 0.015;
-        radius = MediaQuery.of(context).size.height * 0.04;
+        radius = MediaQuery.of(context).size.height * 0.06;
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.65,
           child: _buildUser(context),
@@ -79,11 +79,12 @@ class ProfileView {
     currentContext = context;
     final tileData = _createTileData();
     return Padding(
-      padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
+      padding: EdgeInsets.only(
+          top: spaceHeight, right: spaceHeight, left: spaceHeight),
       child: Column(
         children: [
           _buildProfileAvatar(),
-          SizedBox(height: MediaQuery.of(currentContext).size.height * 0.02),
+          SizedBox(height: spaceHeight),
           Expanded(
             child: ListView(
               children: [
@@ -120,7 +121,7 @@ class ProfileView {
 
     for (var id in organizations.take(3)) {
       CircleAvatar avatar = CircleAvatar(
-        radius: radius / 2,
+        radius: radius / 3,
         backgroundColor: Theme.of(context).primaryColor,
         child: Text(
           OrganizationManager().getOrganizationById(id).getShortName[0],
@@ -143,8 +144,8 @@ class ProfileView {
                     (BuildContext context, Object y, StackTrace? z) {
                   return avatar;
                 },
-                height: radius,
-                width: radius,
+                height: radius / 1.5,
+                width: radius / 1.5,
                 fit: BoxFit.cover,
                 placeholder: const AssetImage("assets/images/placeholder.png"),
               ),
@@ -189,15 +190,14 @@ class ProfileView {
               boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black26)],
             ),
             child: CircleAvatar(
-              radius: 50,
+              radius: radius,
               backgroundColor: MyApp.secondaryColor,
-              child: Icon(Icons.person,
-                  size: MediaQuery.of(currentContext).size.width * 0.15,
-                  color: Colors.white),
+              child:
+                  Icon(Icons.person, size: radius * 1.5, color: Colors.white),
             ),
           ),
         ),
-        SizedBox(height: MediaQuery.of(currentContext).size.height * 0.02),
+        SizedBox(height: spaceHeight),
         _buildProfileName(),
       ],
     );
@@ -216,9 +216,9 @@ class ProfileView {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(spaceHeight * 1.2),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: spaceHeight),
       child: ListTile(
         leading: Icon(icon, color: Theme.of(currentContext).primaryColor),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -231,9 +231,9 @@ class ProfileView {
     return Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(spaceHeight * 1.2),
         ),
-        margin: const EdgeInsets.symmetric(vertical: 10),
+        margin: EdgeInsets.symmetric(vertical: spaceHeight),
         child: ListTile(
           leading: Icon(icon, color: Theme.of(currentContext).primaryColor),
           title: Padding(
@@ -261,14 +261,14 @@ class ProfileView {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(spaceHeight * 1.2),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: spaceHeight),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(spaceHeight * 1.2),
             child: Text(
               cardTitle,
               style: const TextStyle(
