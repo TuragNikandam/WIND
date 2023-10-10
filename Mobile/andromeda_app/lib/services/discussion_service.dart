@@ -27,16 +27,17 @@ class DiscussionService extends BaseService {
         List<dynamic> jsonResponse = jsonDecode(response.body);
         return jsonResponse.map((json) => Discussion.fromJson(json)).toList();
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch discussions!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -61,16 +62,17 @@ class DiscussionService extends BaseService {
             .map((json) => DiscussionPost.fromJson(json))
             .toList();
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch posts!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -92,16 +94,17 @@ class DiscussionService extends BaseService {
       await baseService.handleDefaultResponse(response);
 
       if (response.statusCode != 200) {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to update post!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -122,16 +125,17 @@ class DiscussionService extends BaseService {
       await baseService.handleDefaultResponse(response);
 
       if (response.statusCode != 201) {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to create post!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }

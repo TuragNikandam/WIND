@@ -46,7 +46,6 @@ class _RegistrationStep3ContollerState
       if (!mounted) {
         return false; // Check if the widget is still in the widget tree
       }
-      print("Registration done!");
       navigationService.navigateAndRemoveAll(context, MainView.route);
     } catch (error) {
       // Show an error message to the user

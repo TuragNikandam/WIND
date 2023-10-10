@@ -32,13 +32,14 @@ class UserService extends BaseService {
       if (response.statusCode == 200) {
         await setJWTToken(jsonDecode(response.body));
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Login fehlgeschlagen!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -59,13 +60,14 @@ class UserService extends BaseService {
       if (response.statusCode == 200) {
         await setJWTToken(jsonDecode(response.body));
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Als Gast fortfahren fehlgeschlagen!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -88,13 +90,14 @@ class UserService extends BaseService {
       if (response.statusCode == 201) {
         await login(user.getUsername, user.getPassword);
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Registrierung fehlgeschlagen!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -116,16 +119,17 @@ class UserService extends BaseService {
         var jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse);
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch user data!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -154,16 +158,17 @@ class UserService extends BaseService {
       } else if (response.statusCode == 200) {
         return false;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Fehler beim Prüfen auf gültigen Benutzernamen!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -191,16 +196,17 @@ class UserService extends BaseService {
       } else if (response.statusCode == 200) {
         return false;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Fehler beim Prüfen auf gültige E-Mail Adresse!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -223,16 +229,17 @@ class UserService extends BaseService {
       if (response.statusCode == 200) {
         return true;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to update profile data!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -253,13 +260,15 @@ class UserService extends BaseService {
       if (response.statusCode == 200) {
         await setJWTToken(emptyTokenMap);
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to logout!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
-    } catch (ex) {
-      print(ex);
+    } 
+    catch (ex) {
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -283,16 +292,17 @@ class UserService extends BaseService {
             jsonResponse.map((json) => User.fromJson(json)).toList();
         return users;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch user data!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -314,16 +324,17 @@ class UserService extends BaseService {
         var jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse);
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch user data!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }

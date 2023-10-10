@@ -17,6 +17,8 @@ dependencies:
   url_launcher: ^6.1.14
   fl_chart: ^0.63.0
   dots_indicator: ^3.0.0
+  logger: ^2.0.2+1
+  collection: ^1.17.1
 
 dev_dependencies:
   flutter_test:

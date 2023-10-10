@@ -57,8 +57,6 @@ class _VotingOpenDetailControllerState
             if (error is SessionExpiredException) {
               showSessionExpiredDialog(context);
             }
-            // Handle error
-            print("Error while voting: $error");
           }
         });
   }

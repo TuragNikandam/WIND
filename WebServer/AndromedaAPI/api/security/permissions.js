@@ -16,12 +16,13 @@ const routeSpecificPermissions = {
     'GET': ["admin", "user", "guest"],
     'POST': ["admin", "user"],
   },
-  "/news": {
-    'GET': ["admin", "user", "guest"],
-  },
   "/news/:newsArticleId/comment": {
     'GET' : ["admin", "user", "guest"],
     'POST' : ["admin", "user"],
+  },
+  "/news*": {
+    'GET': ["admin", "user", "guest"],
+    'PUT': ["admin", "user", "guest"],
   },
   "/discussion/:discussionId/post": {
     'POST' : ["admin", "user"],

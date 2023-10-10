@@ -29,16 +29,17 @@ class MasterDataService extends BaseService {
           OrganizationManager().addItem(organization);
         }
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch organizations!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -61,16 +62,17 @@ class MasterDataService extends BaseService {
           PartyManager().addItem(party);
         }
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch partys!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -93,16 +95,17 @@ class MasterDataService extends BaseService {
           TopicManager().addItem(topic);
         }
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch topics!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }

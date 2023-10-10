@@ -6,11 +6,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 class BaseService {
   String? apiBaseUrl;
   final storage = const FlutterSecureStorage();
   final int timeOutSeconds = 3;
+  var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2,
+      errorMethodCount: 3,
+      lineLength: 120,
+      colors: true,
+      printEmojis: true,
+      printTime: true, 
+  ),
+);
 
   BaseService() {
     _loadConfig();

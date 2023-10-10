@@ -31,16 +31,17 @@ class VotingService extends BaseService {
             jsonResponse.map((json) => Voting.fromJson(json)).toList();
         return votings;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch active votings!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -64,16 +65,17 @@ class VotingService extends BaseService {
             jsonResponse.map((json) => Voting.fromJson(json)).toList();
         return votings;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch closed votings!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -98,16 +100,17 @@ class VotingService extends BaseService {
       if (response.statusCode == 201) {
         return;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to vote!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -135,16 +138,17 @@ class VotingService extends BaseService {
         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
         return jsonResponse['hasVoted'] ?? false;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to check if user has voted!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }

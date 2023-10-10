@@ -30,16 +30,17 @@ class NewsService extends BaseService {
             jsonResponse.map((json) => NewsArticle.fromJson(json)).toList();
         return news;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch news!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -63,16 +64,17 @@ class NewsService extends BaseService {
       await baseService.handleDefaultResponse(response);
 
       if (response.statusCode != 200) {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to update news article!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -94,16 +96,17 @@ class NewsService extends BaseService {
         var jsonResponse = jsonDecode(response.body);
         return NewsArticle.fromJson(jsonResponse);
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch news!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -130,16 +133,17 @@ class NewsService extends BaseService {
             .toList();
         return comments;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to fetch news comments!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
@@ -163,16 +167,17 @@ class NewsService extends BaseService {
       if (response.statusCode == 201) {
         return;
       } else {
+        logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to send comment request!');
       }
     } on TimeoutException catch (tex) {
-      print(tex);
+      logger.e("Error log", error: tex);
       rethrow;
     } on SessionExpiredException catch (sex) {
-      print(sex);
+      logger.e("Error log", error: sex);
       rethrow;
     } catch (ex) {
-      print(ex);
+      logger.e("Error log", error: ex);
       rethrow;
     }
   }
