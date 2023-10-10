@@ -269,7 +269,6 @@ class _ProfileEditViewState extends State<ProfileEditView> {
           height: (spaceHeight * 5 * selectedOrganizationIds.length),
           child: ReorderableListView(
             scrollDirection: Axis.vertical,
-            shrinkWrap: true,
             onReorder: (int oldIndex, int newIndex) {
               setState(() {
                 if (newIndex > oldIndex) {
@@ -309,7 +308,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.delete_rounded,
-                                  color: MyApp.secondaryColor),
+                                color: MyApp.secondaryColor),
                             onPressed: () {
                               setState(() {
                                 final organization = OrganizationManager()
@@ -341,18 +340,18 @@ class _ProfileEditViewState extends State<ProfileEditView> {
             scrollDirection: Axis.horizontal,
             itemCount: unselectedOrganizations.length,
             itemBuilder: (context, index) {
-              final organization = unselectedOrganizations[index];
               return buildChip(
-                  organization.getShortName,
+                  unselectedOrganizations[index].getShortName,
                   buildOrganizationImage(
-                    OrganizationManager()
-                        .getOrganizationById(organization.getId),
+                    OrganizationManager().getOrganizationById(
+                        unselectedOrganizations[index].getId),
                     CircleAvatar(
                         radius: radius / 2,
                         backgroundColor: Theme.of(context).primaryColor,
                         child: Text(
                             OrganizationManager()
-                                .getOrganizationById(organization.getId)
+                                .getOrganizationById(
+                                    unselectedOrganizations[index].getId)
                                 .getShortName[0],
                             style: const TextStyle(color: Colors.white))),
                   ),
@@ -362,7 +361,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                   ), () {
                 setState(() {
                   final organizations = widget.user.getSelectedOrganizations;
-                  organizations.add(organization.getId);
+                  organizations.add(unselectedOrganizations[index].getId);
                   widget.user.setSelectedOrganizations(organizations);
                 });
               });
