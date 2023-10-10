@@ -2,6 +2,7 @@ import 'package:andromeda_app/models/user_model.dart';
 import 'package:andromeda_app/services/master_data_service.dart';
 import 'package:andromeda_app/services/navigation_service.dart';
 import 'package:andromeda_app/services/user_service.dart';
+import 'package:andromeda_app/utils/validators.dart';
 import 'package:andromeda_app/views/guests/guest_main_view.dart';
 import 'package:andromeda_app/views/login_view.dart';
 import 'package:andromeda_app/views/main_view.dart';
@@ -29,6 +30,7 @@ class _LoginControllerState extends State<LoginController> {
     masterDataService = Provider.of<MasterDataService>(context, listen: false);
     user = Provider.of<User>(context, listen: false);
     navigationService = Provider.of<NavigationService>(context, listen: false);
+    Validators.loadBlacklist();
   }
 
   Future<void> _login(String username, String password) async {

@@ -2,6 +2,7 @@ import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/discussion_model.dart';
 import 'package:andromeda_app/models/party_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
+import 'package:andromeda_app/utils/validators.dart';
 import 'package:andromeda_app/views/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -139,12 +140,11 @@ class _DiscussionViewState extends State<DiscussionView> {
     else {}
   }
 
-  String? customValidator(String? value) {
+  String? customValidator(String? value){
     if (value == null || value.isEmpty) {
-      return 'This field cannot be empty';
+      return 'Bitte schreibe einen Beitrag.';
     }
-    //TODO: Add more custom validation logic here if needed
-    return null;
+    return Validators.hasStringBadWord(value) ? "Ihre Eingabe enthält nicht erlaubte Wörter" : null;
   }
 
   @override

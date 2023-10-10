@@ -1,6 +1,7 @@
 import 'package:andromeda_app/services/user_service.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class Validators {
@@ -82,5 +83,27 @@ class Validators {
       return 'Die E-Mail Adresse exisitiert bereits.\nLoggen Sie sich ein oder wählen Sie eine andere Adresse.';
     }
     return null;
+  }
+
+  static List<String> blacklist = [];
+
+  static Future<void> loadBlacklist() async {
+    final contents = await rootBundle.loadString('assets/texts/bad_word_list.txt');
+    blacklist = contents
+      .split('\n')
+      .map((word) => word.toLowerCase())
+      .map((word) => word.trim())
+      .toList();
+  }
+
+  static bool hasStringBadWord(String input) {
+    final words = input.toLowerCase().split(' ');
+
+    for (final word in words) {
+      if (blacklist.contains(word)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

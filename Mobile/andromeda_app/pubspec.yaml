@@ -29,3 +29,4 @@ flutter:
     - config/app_config_dev.json
     - config/app_config_prod.json
     - assets/images/
+    - assets/texts/
