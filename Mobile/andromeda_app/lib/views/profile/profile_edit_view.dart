@@ -183,7 +183,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
     return DropdownButtonFormField<String>(
       isExpanded: true,
       decoration: const InputDecoration(
-          labelText: 'Ihre Partei', hintText: 'Wählen...'),
+          labelText: 'Partei', hintText: 'Wählen...'),
       value: widget.user.getSelectedParty,
       onChanged: (String? newValue) {
         setState(() {
