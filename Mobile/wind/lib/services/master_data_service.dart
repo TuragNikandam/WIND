@@ -57,7 +57,7 @@ class MasterDataService extends BaseService {
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
-        PartyManager().clearItems;
+        PartyManager().clearItems();
         for (var json in jsonResponse) {
           Party party = Party();
           party.fromJson(json);
