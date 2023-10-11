@@ -1,6 +1,5 @@
 import 'package:wind/models/topic_model.dart';
 import 'package:wind/models/user_model.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:wind/models/voting_model.dart';
 import 'package:provider/provider.dart';
@@ -35,16 +34,6 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
   double screenHeight = 0.0;
   double radius = 0.0;
   List<String> selectedOptionIds = [];
-
-  void _updateLocalModelAfterVote() {
-    // Loop through each selected option ID
-    for (String optionId in selectedOptionIds) {
-      // Find the corresponding option in the voting model
-      Option? option = widget.voting.options.firstWhereOrNull(
-        (option) => option.id == optionId,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,8 +243,6 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
             : () async {
                 await widget.onVote(widget.voting.id, selectedOptionIds);
 
-                // Update the local model
-                _updateLocalModelAfterVote();
                 selectedOptionIds.clear();
               },
         style: ElevatedButton.styleFrom(
