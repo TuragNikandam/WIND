@@ -115,7 +115,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                               },
                               fit: BoxFit.cover,
                               placeholder: const AssetImage(
-                                  "assets/images/placeholder.png"),
+                                  "assets/images/placeholder.gif"),
                             )
                           : SizedBox(
                               height: imageHeight * 0.3,

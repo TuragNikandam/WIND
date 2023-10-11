@@ -38,6 +38,10 @@ class PartyManager {
     _partyList.add(party);
   }
 
+  void clearItems() {
+    _partyList.clear();
+  }
+
   bool isPartiesEmpty() {
     return _partyList.isEmpty ? true : false;
   }

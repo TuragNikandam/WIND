@@ -23,6 +23,7 @@ class MasterDataService extends BaseService {
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
+        OrganizationManager().clearItems();
         for (var json in jsonResponse) {
           Organization organization = Organization();
           organization.fromJson(json);
@@ -56,6 +57,7 @@ class MasterDataService extends BaseService {
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
+        PartyManager().clearItems;
         for (var json in jsonResponse) {
           Party party = Party();
           party.fromJson(json);
@@ -89,6 +91,7 @@ class MasterDataService extends BaseService {
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
+        TopicManager().clearItems();
         for (var json in jsonResponse) {
           Topic topic = Topic();
           topic.fromJson(json);
