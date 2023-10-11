@@ -35,32 +35,39 @@ class _VotingPieChartState extends State<VotingPieChart> {
     Colors.black
   ];
 
+  double spaceHeight = 0.0;
+  double screenWidth = 0.0;
+  double spaceWidth = 0.0;
+  double screenHeight = 0.0;
+  double radius = 0.0;
+
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.width * 0.06;
     Map<String, int> filteredVoteCounts = widget.filteredVoteCounts;
     int totalVotes = filteredVoteCounts.values.fold(0, (a, b) => a + b);
 
     return Column(
       children: [
-        const SizedBox(height: 20), // Space at the top
+        SizedBox(height: spaceHeight), // Space at the top
         SizedBox(
-          height: 250, // Set the height for the PieChart
+          height: screenHeight * 0.3, // Set the height for the PieChart
           child: PieChart(
             PieChartData(
               pieTouchData: pieTouchData(totalVotes),
               borderData: borderData(),
               sectionsSpace: 0,
-              centerSpaceRadius: 80,
+              centerSpaceRadius: radius,
               sections: showingSections(filteredVoteCounts, totalVotes),
             ),
           ),
         ),
-        const SizedBox(height: 50), // Space between PieChart and indicators
-        Wrap(
-          spacing: 8.0, // gap between adjacent chips
-          runSpacing: 4.0, // gap between lines
-          children: buildIndicators(filteredVoteCounts),
-        ),
+        SizedBox(
+            height: spaceHeight * 6), // Space between PieChart and indicators
       ],
     );
   }
@@ -160,7 +167,7 @@ class _VotingPieChartState extends State<VotingPieChart> {
 
       indicators.add(
         Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: EdgeInsets.all(radius * 0.02),
           child: Indicator(
             color: indicatorColor,
             text: option,
@@ -213,24 +220,30 @@ class Indicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    return SingleChildScrollView(
+        child: Row(
+      children: [
         Container(
-          width: 16,
-          height: 16,
+          width: screenWidth * 0.02,
+          height: screenHeight * 0.01,
           decoration: BoxDecoration(
             shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
             color: color,
           ),
         ),
-        const SizedBox(
-          width: 4,
+        SizedBox(
+          width: screenWidth * 0.015,
         ),
         Text(
           text,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis),
         ),
       ],
-    );
+    ));
   }
 }

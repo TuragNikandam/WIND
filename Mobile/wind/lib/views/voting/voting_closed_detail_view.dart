@@ -22,6 +22,10 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
   int _totalVotes = 0;
   int _guestVotes = 0;
   int currentPage = 0;
+  double spaceHeight = 0.0;
+  double spaceWidth = 0.0;
+  double screenHeight = 0.0;
+  double radius = 0.0;
 
   late FilterParameters _filterParameters;
 
@@ -82,6 +86,10 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.width * 0.06;
     updateVoteCounts();
     final controller = PageController(initialPage: currentPage);
 
@@ -97,14 +105,14 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(spaceHeight * 1.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildVotingQuestion(),
-            const SizedBox(height: 16),
+            SizedBox(height: spaceHeight),
             _buildVoteCounts(),
-            const SizedBox(height: 16),
+            SizedBox(height: spaceHeight),
             Expanded(
               child: _buildChartsCard(controller),
             ),
@@ -119,7 +127,7 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
     return Text(
       widget.voting.question,
       style: const TextStyle(
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -132,14 +140,14 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
         Text(
           "Anzahl der Stimmen: $_totalVotes",
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           "Anzahl Gäste Stimmen: $_guestVotes",
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -149,13 +157,14 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
 
   Widget _buildChartsCard(PageController controller) {
     return Card(
-      elevation: 4.0,
-      margin: const EdgeInsets.all(2.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: _buildCharts(controller),
-    );
+        elevation: 4.0,
+        margin: EdgeInsets.all(spaceHeight * 0.1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        child: Expanded(
+          child: _buildCharts(controller),
+        ));
   }
 
   Widget _buildCharts(PageController controller) {
@@ -175,7 +184,7 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
 
   Widget _buildVotingPieChart() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 20, 5, 0),
+      padding: EdgeInsets.fromLTRB(spaceWidth, spaceHeight, spaceWidth, 0),
       child: VotingPieChart(
         userList: widget.userList,
         filterParameters: _filterParameters,
@@ -186,7 +195,7 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
 
   Widget _buildVotingBarChart() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 20, 5, 0),
+      padding: EdgeInsets.fromLTRB(spaceWidth, spaceHeight, spaceWidth, 0),
       child: VotingBarChart(
         voting: widget.voting,
         userList: widget.userList,
@@ -199,7 +208,7 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
   Widget _buildDotsIndicator() {
     return Center(
         child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(radius * 0.2),
       child: DotsIndicator(
         dotsCount: 2,
         position: currentPage,
