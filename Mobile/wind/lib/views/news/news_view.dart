@@ -258,7 +258,7 @@ class _NewsViewState extends State<NewsView> {
                                 width: 100,
                                 fit: BoxFit.fill,
                                 placeholder: const AssetImage(
-                                    "assets/images/placeholder.png"),
+                                    "assets/images/placeholder.gif"),
                               )
                             : const Icon(
                                 Icons.broken_image,

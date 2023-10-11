@@ -70,7 +70,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
               height: radius * 2,
               width: radius * 2,
               fit: BoxFit.cover,
-              placeholder: const AssetImage("assets/images/placeholder.png"),
+              placeholder: const AssetImage("assets/images/placeholder.gif"),
             )
           : avatar,
     );

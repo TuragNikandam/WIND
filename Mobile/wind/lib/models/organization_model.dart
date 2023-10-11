@@ -37,6 +37,10 @@ class OrganizationManager {
     _organizationList.add(organization);
   }
 
+  void clearItems() {
+    _organizationList.clear();
+  }
+
   bool isOrganizationsEmpty() {
     return _organizationList.isEmpty ? true : false;
   }

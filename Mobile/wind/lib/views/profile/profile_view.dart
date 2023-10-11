@@ -144,7 +144,7 @@ class ProfileView {
                       width: radius / 1.5,
                       fit: BoxFit.cover,
                       placeholder:
-                          const AssetImage("assets/images/placeholder.png"),
+                          const AssetImage("assets/images/placeholder.gif"),
                     )
                   : avatar,
             ),

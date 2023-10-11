@@ -32,6 +32,10 @@ class TopicManager {
     _topicList.add(topic);
   }
 
+  void clearItems() {
+    _topicList.clear();
+  }
+
   bool isTopicsEmpty() {
     return _topicList.isEmpty ? true : false;
   }
