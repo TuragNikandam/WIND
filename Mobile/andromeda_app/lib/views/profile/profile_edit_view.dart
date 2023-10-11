@@ -1,4 +1,5 @@
 import 'package:andromeda_app/main.dart';
+import 'package:andromeda_app/utils/uri_helper.dart';
 import 'package:andromeda_app/views/utils/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,14 +35,6 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   @override
   void initState() {
     super.initState();
-  }
-
-  Uri? getUriByStringURL(String url) {
-    try {
-      return Uri.parse(url);
-    } catch (e) {
-      return null;
-    }
   }
 
   @override
@@ -182,8 +175,8 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   Widget _buildPartyPreferenceDropdown() {
     return DropdownButtonFormField<String>(
       isExpanded: true,
-      decoration: const InputDecoration(
-          labelText: 'Partei', hintText: 'Wählen...'),
+      decoration:
+          const InputDecoration(labelText: 'Partei', hintText: 'Wählen...'),
       value: widget.user.getSelectedParty,
       onChanged: (String? newValue) {
         setState(() {
@@ -261,15 +254,15 @@ class _ProfileEditViewState extends State<ProfileEditView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          'Meine Organisationen:',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        Text(
+          'Meine Organisationen (${selectedOrganizationIds.length}/5):',
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         SizedBox(
-          height: (spaceHeight * 5 * selectedOrganizationIds.length),
+          height: (spaceHeight * (5 * selectedOrganizationIds.length) + 1),
           child: ReorderableListView(
             scrollDirection: Axis.vertical,
-            shrinkWrap: true,
             onReorder: (int oldIndex, int newIndex) {
               setState(() {
                 if (newIndex > oldIndex) {
@@ -309,7 +302,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.delete_rounded,
-                                  color: MyApp.secondaryColor),
+                                color: MyApp.secondaryColor),
                             onPressed: () {
                               setState(() {
                                 final organization = OrganizationManager()
@@ -341,29 +334,33 @@ class _ProfileEditViewState extends State<ProfileEditView> {
             scrollDirection: Axis.horizontal,
             itemCount: unselectedOrganizations.length,
             itemBuilder: (context, index) {
-              final organization = unselectedOrganizations[index];
               return buildChip(
-                  organization.getShortName,
+                  unselectedOrganizations[index].getShortName,
                   buildOrganizationImage(
-                    OrganizationManager()
-                        .getOrganizationById(organization.getId),
+                    OrganizationManager().getOrganizationById(
+                        unselectedOrganizations[index].getId),
                     CircleAvatar(
                         radius: radius / 2,
                         backgroundColor: Theme.of(context).primaryColor,
                         child: Text(
                             OrganizationManager()
-                                .getOrganizationById(organization.getId)
+                                .getOrganizationById(
+                                    unselectedOrganizations[index].getId)
                                 .getShortName[0],
                             style: const TextStyle(color: Colors.white))),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.add,
-                    color: Colors.green,
+                    color: widget.user.getSelectedOrganizations.length < 5
+                        ? Colors.green
+                        : Colors.grey,
                   ), () {
                 setState(() {
-                  final organizations = widget.user.getSelectedOrganizations;
-                  organizations.add(organization.getId);
-                  widget.user.setSelectedOrganizations(organizations);
+                  if (widget.user.getSelectedOrganizations.length < 5) {
+                    final organizations = widget.user.getSelectedOrganizations;
+                    organizations.add(unselectedOrganizations[index].getId);
+                    widget.user.setSelectedOrganizations(organizations);
+                  }
                 });
               });
             },
@@ -387,18 +384,20 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   }
 
   Widget buildOrganizationImage(Organization organization, Widget avatar) {
-    Uri? uri = getUriByStringURL(organization.getImageUrl);
     return ClipOval(
-      child: FadeInImage(
-        image: NetworkImage(uri.toString()),
-        imageErrorBuilder: (BuildContext context, Object y, StackTrace? z) {
-          return avatar;
-        },
-        height: radius / 2,
-        width: radius / 2,
-        fit: BoxFit.cover,
-        placeholder: const AssetImage("assets/images/placeholder.png"),
-      ),
+      child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
+          ? FadeInImage(
+              image: NetworkImage(organization.getImageUrl),
+              imageErrorBuilder:
+                  (BuildContext context, Object y, StackTrace? z) {
+                return avatar;
+              },
+              height: radius / 2,
+              width: radius / 2,
+              fit: BoxFit.cover,
+              placeholder: const AssetImage("assets/images/placeholder.png"),
+            )
+          : avatar,
     );
   }
 

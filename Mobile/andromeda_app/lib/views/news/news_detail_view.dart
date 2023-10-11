@@ -2,6 +2,7 @@ import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/news_article_model.dart';
 import 'package:andromeda_app/models/topic_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
+import 'package:andromeda_app/utils/uri_helper.dart';
 import 'package:andromeda_app/views/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -90,29 +91,44 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                 child: SizedBox(
                   height: imageHeight,
                   child: Align(
-                    alignment: Alignment.center,
-                    child: FadeInImage(
-                      image: NetworkImage(widget.newsArticle.getImage.getUrl),
-                      imageErrorBuilder:
-                          (BuildContext context, Object y, StackTrace? z) {
-                        return SizedBox(
-                          height: imageHeight * 0.3,
-                          child: const FittedBox(
-                            fit: BoxFit.cover,
-                            child: Center(
-                              child: Icon(
-                                Icons.broken_image,
-                                color: Colors.black26,
+                      alignment: Alignment.center,
+                      child: UriHelper.getUriByStringURL(
+                                  widget.newsArticle.getImage.getUrl) !=
+                              null
+                          ? FadeInImage(
+                              image: NetworkImage(
+                                  widget.newsArticle.getImage.getUrl),
+                              imageErrorBuilder: (BuildContext context,
+                                  Object y, StackTrace? z) {
+                                return SizedBox(
+                                  height: imageHeight * 0.3,
+                                  child: const FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        color: Colors.black26,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              fit: BoxFit.cover,
+                              placeholder: const AssetImage(
+                                  "assets/images/placeholder.png"),
+                            )
+                          : SizedBox(
+                              height: imageHeight * 0.3,
+                              child: const FittedBox(
+                                fit: BoxFit.cover,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    color: Colors.black26,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                      fit: BoxFit.cover,
-                      placeholder:
-                          const AssetImage("assets/images/placeholder.png"),
-                    ),
-                  ),
+                            )),
                 ),
               ),
               Padding(
@@ -151,7 +167,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             String url = widget.newsArticle.getSources[index];
-                            Uri? uri = getUriByStringURL(url);
+                            Uri? uri = UriHelper.getUriByStringURL(url);
                             if (uri != null) {
                               return ListTile(
                                 title: Text(
@@ -205,7 +221,8 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                               padding: const EdgeInsets.only(right: 12.0),
                               child: SizedBox(
                                   width: 80,
-                                  child: _buildCommentAvatarAndUsername(comments[index]))),
+                                  child: _buildCommentAvatarAndUsername(
+                                      comments[index]))),
                           // Comment Text
                           Expanded(
                             child: Container(
@@ -261,40 +278,32 @@ class _NewsDetailViewState extends State<NewsDetailView> {
   }
 
   Widget _buildCommentAvatarAndUsername(NewsArticleComment comment) {
-  return InkWell(
-    onTap: () {
-      ProfileView(comment.getAuthorId, context).showProfile();
-    },
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const CircleAvatar(
-          radius: 20,
-          backgroundColor: MyApp.secondaryColor,
-          child: Icon(Icons.person, color: Colors.white, size: 24),
-        ),
-        const SizedBox(height: 4),
-        SizedBox(
-          width: 80,
-          child: Text(
-            comment.getUsername,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.grey[700],
+    return InkWell(
+      onTap: () {
+        ProfileView(comment.getAuthorId, context).showProfile();
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const CircleAvatar(
+            radius: 20,
+            backgroundColor: MyApp.secondaryColor,
+            child: Icon(Icons.person, color: Colors.white, size: 24),
+          ),
+          const SizedBox(height: 4),
+          SizedBox(
+            width: 80,
+            child: Text(
+              comment.getUsername,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.grey[700],
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-  Uri? getUriByStringURL(String url) {
-    try {
-      return Uri.parse(url);
-    } catch (e) {
-      return null;
-    }
+        ],
+      ),
+    );
   }
 
   void _showCommentDialog() async {

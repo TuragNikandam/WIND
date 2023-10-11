@@ -2,6 +2,7 @@ import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/organization_model.dart';
 import 'package:andromeda_app/models/party_model.dart';
 import 'package:andromeda_app/utils/session_expired_exception.dart';
+import 'package:andromeda_app/utils/uri_helper.dart';
 import 'package:andromeda_app/views/utils/session_expired_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:andromeda_app/models/user_model.dart';
@@ -107,14 +108,6 @@ class ProfileView {
     );
   }
 
-  Uri? getUriByStringURL(String url) {
-    try {
-      return Uri.parse(url);
-    } catch (e) {
-      return null;
-    }
-  }
-
   List<Widget> _buildImageList(BuildContext context) {
     List<Widget> imagesWithText = List<Widget>.empty(growable: true);
     List<String> organizations = user.getSelectedOrganizations;
@@ -131,24 +124,29 @@ class ProfileView {
         ),
       );
 
-      Uri? uri = getUriByStringURL(
-          OrganizationManager().getOrganizationById(id).getImageUrl);
-
       imagesWithText.add(
         Column(
           children: [
             ClipOval(
-              child: FadeInImage(
-                image: NetworkImage(uri.toString()),
-                imageErrorBuilder:
-                    (BuildContext context, Object y, StackTrace? z) {
-                  return avatar;
-                },
-                height: radius / 1.5,
-                width: radius / 1.5,
-                fit: BoxFit.cover,
-                placeholder: const AssetImage("assets/images/placeholder.png"),
-              ),
+              child: UriHelper.getUriByStringURL(OrganizationManager()
+                          .getOrganizationById(id)
+                          .getImageUrl) !=
+                      null
+                  ? FadeInImage(
+                      image: NetworkImage(OrganizationManager()
+                          .getOrganizationById(id)
+                          .getImageUrl),
+                      imageErrorBuilder:
+                          (BuildContext context, Object y, StackTrace? z) {
+                        return avatar;
+                      },
+                      height: radius / 1.5,
+                      width: radius / 1.5,
+                      fit: BoxFit.cover,
+                      placeholder:
+                          const AssetImage("assets/images/placeholder.png"),
+                    )
+                  : avatar,
             ),
             Text(
               "${OrganizationManager().getOrganizationById(id).getShortName}\n",
