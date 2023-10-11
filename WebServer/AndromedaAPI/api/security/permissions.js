@@ -15,7 +15,7 @@ const routeSpecificPermissions = {
   },
   "/voting*": {
     'GET': ["admin", "user", "guest"],
-    'POST': ["admin", "user"],
+    'POST': ["admin", "user", "guest"],
   },
   "/news/:newsArticleId/comment": {
     'GET' : ["admin", "user", "guest"],

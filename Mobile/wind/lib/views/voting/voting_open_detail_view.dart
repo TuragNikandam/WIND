@@ -43,11 +43,6 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
       Option? option = widget.voting.options.firstWhereOrNull(
         (option) => option.id == optionId,
       );
-
-      // Increment the vote count of the option
-      if (option != null) {
-        option.incrementVoteCount(user.getId);
-      }
     }
   }
 
@@ -146,11 +141,15 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
   List<Widget> _buildOptionsList(Option option, bool isSelected) {
     List<Widget> optionsList = [];
 
-    int totalVotes = widget.voting.options.fold(
-        0, (prev, option) => prev + option.voteCount); // Calculate total votes
-    final double fillRatio =
+    int totalVotes = widget.voting.options
+        .fold(0, (prev, option) => prev + option.voteCount);
+
+    final double fillRatioWidth =
         totalVotes == 0 ? 0 : (option.voteCount / totalVotes);
-    final double percentage = (fillRatio * 100).roundToDouble();
+    const double threshold = 0.14;
+    final double fillRatioHeight =
+        calculateFillRatioHeight(fillRatioWidth, threshold);
+    final double percentage = (fillRatioWidth * 100).roundToDouble();
     final bool userHasVotedForThisOption =
         option.votedUsers.contains(user.getId);
 
@@ -173,7 +172,8 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
       optionsList.add(Positioned.fill(
         child: FractionallySizedBox(
           alignment: Alignment.centerLeft,
-          widthFactor: fillRatio,
+          widthFactor: fillRatioWidth,
+          heightFactor: fillRatioHeight,
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor.withOpacity(0.5),
@@ -217,6 +217,14 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
     }
 
     return optionsList;
+  }
+
+  double calculateFillRatioHeight(double fillRatioWidth, double threshold) {
+    if (fillRatioWidth >= threshold) {
+      return 1.0;
+    } else {
+      return fillRatioWidth / threshold + threshold;
+    }
   }
 
   Widget _buildVoteButton() {
