@@ -17,6 +17,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    bool loginPressed = false;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Willkommen bei W.I.N.D.'),
@@ -26,13 +27,13 @@ class _LoginViewState extends State<LoginView> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch, 
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Center(
                 child: Image.asset(
                   "assets/images/WIND_logo.png",
-                  height: MediaQuery.of(context).size.height * 0.25, 
-                  width: MediaQuery.of(context).size.width * 0.5, 
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   fit: BoxFit.fill,
                 ),
               ),
@@ -49,8 +50,14 @@ class _LoginViewState extends State<LoginView> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               ElevatedButton(
-                onPressed: () => widget.onLogin(
-                    _usernameController.text, _passwordController.text),
+                onPressed: () => {
+                  if (!loginPressed)
+                    {
+                      loginPressed = true,
+                      widget.onLogin(
+                          _usernameController.text, _passwordController.text)
+                    }
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -72,8 +79,7 @@ class _LoginViewState extends State<LoginView> {
                   const Text('Kein Account?'),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context,
-                          '/registration');
+                      Navigator.pushNamed(context, '/registration');
                     },
                     child: const Text('Registrieren'),
                   ),
@@ -82,7 +88,10 @@ class _LoginViewState extends State<LoginView> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    widget.onLoginAsGuest();
+                    if (!loginPressed) {
+                      loginPressed = true;
+                      widget.onLoginAsGuest();
+                    }
                   },
                   child: const Text('Als Gast fortfahren'),
                 ),
