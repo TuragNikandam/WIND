@@ -174,68 +174,74 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
             ),
             Flexible(
               flex: 1,
-              child: ReorderableListView(
-                shrinkWrap: true,
-                onReorder: (int oldIndex, int newIndex) {
-                  setState(() {
-                    if (newIndex > oldIndex) {
-                      newIndex -= 1;
-                    }
-                    final item = _selectedOrganizations.removeAt(oldIndex);
-                    _selectedOrganizations.insert(newIndex, item);
-                  });
-                },
-                children: [
-                  for (int index = 0;
-                      index < _selectedOrganizations.length;
-                      index++)
-                    ReorderableDragStartListener(
-                      index: index,
-                      key: ValueKey(_selectedOrganizations[index]),
-                      child: Card(
-                        child: ListTile(
-                          leading: buildOrganizationImage(
-                              OrganizationManager().getOrganizationById(
-                                  _selectedOrganizations[index]),
-                              CircleAvatar(
-                                radius: radius,
-                                backgroundColor: Theme.of(context).primaryColor,
-                                child: Text(
-                                    OrganizationManager()
-                                        .getOrganizationById(
-                                            _selectedOrganizations[index])
-                                        .getShortName[0],
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 40)),
-                              )),
-                          title: Text(OrganizationManager()
-                              .getOrganizationById(
-                                  _selectedOrganizations[index])
-                              .getShortName),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.delete_rounded,
-                                    color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    final organization = OrganizationManager()
-                                        .getOrganizationById(
-                                            _selectedOrganizations[index]);
-                                    _selectedOrganizations.removeAt(index);
-                                    _unselectedOrganizations.add(organization);
-                                  });
-                                },
-                              ),
-                              Icon(Icons.drag_handle,
-                                  color: Theme.of(context).primaryColor),
-                            ],
+              child: ConstrainedBox(
+                // If the minHeight is not set, errors get thrown around due to a bug in the calculation
+                // of the height of reordableListView when shrinkWrap is set to true. 
+                // shrinkWrap can alterternativly be conditionally set.  
+                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height*0.1),
+                child: ReorderableListView(
+                  shrinkWrap: true,
+                  onReorder: (int oldIndex, int newIndex) {
+                    setState(() {
+                      if (newIndex > oldIndex) {
+                        newIndex -= 1;
+                      }
+                      final item = _selectedOrganizations.removeAt(oldIndex);
+                      _selectedOrganizations.insert(newIndex, item);
+                    });
+                  },
+                  children: [
+                    for (int index = 0;
+                        index < _selectedOrganizations.length;
+                        index++)
+                      ReorderableDragStartListener(
+                        index: index,
+                        key: ValueKey(_selectedOrganizations[index]),
+                        child: Card(
+                          child: ListTile(
+                            leading: buildOrganizationImage(
+                                OrganizationManager().getOrganizationById(
+                                    _selectedOrganizations[index]),
+                                CircleAvatar(
+                                  radius: radius,
+                                  backgroundColor: Theme.of(context).primaryColor,
+                                  child: Text(
+                                      OrganizationManager()
+                                          .getOrganizationById(
+                                              _selectedOrganizations[index])
+                                          .getShortName[0],
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 40)),
+                                )),
+                            title: Text(OrganizationManager()
+                                .getOrganizationById(
+                                    _selectedOrganizations[index])
+                                .getShortName),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.delete_rounded,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      final organization = OrganizationManager()
+                                          .getOrganizationById(
+                                              _selectedOrganizations[index]);
+                                      _selectedOrganizations.removeAt(index);
+                                      _unselectedOrganizations.add(organization);
+                                    });
+                                  },
+                                ),
+                                Icon(Icons.drag_handle,
+                                    color: Theme.of(context).primaryColor),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
             SizedBox(height: spaceHeight * 2),
