@@ -9,6 +9,7 @@ const defaultPermissions = {
 
 const routeSpecificPermissions = {
   "/user*": {
+    'GET' : ["admin", "user", "guest"],
     'POST': ["admin", "user"],
     'PUT': ["admin", "user"],
   },

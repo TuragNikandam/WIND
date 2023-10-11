@@ -319,7 +319,7 @@ exports.loginAsGuest = async (req, res) => {
           password: "guest", // Default value
           role: "guest",
           email,
-          is_guest: true,
+          isGuest: true,
           party: {
             visible: false,
             id : "64ce483430b6a5ec478704df",
@@ -328,7 +328,7 @@ exports.loginAsGuest = async (req, res) => {
           birthyear: 0, // Default value
           gender: "guest", // Default value
           religion: "guest", // Default value
-          zip_code: 0, // Default value
+          zipCode: 0, // Default value
         });
 
     const data = await user.save();

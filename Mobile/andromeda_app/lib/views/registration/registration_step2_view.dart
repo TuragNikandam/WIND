@@ -132,14 +132,18 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                           )),
                       title: Text(organization.getShortName),
                       trailing: IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.add,
-                          color: Colors.green,
+                          color: _selectedOrganizations.length < 5
+                              ? Colors.green
+                              : Colors.grey,
                         ),
                         onPressed: () {
                           setState(() {
-                            _selectedOrganizations.add(organization.getId);
-                            _unselectedOrganizations.remove(organization);
+                            if (_selectedOrganizations.length < 5) {
+                              _selectedOrganizations.add(organization.getId);
+                              _unselectedOrganizations.remove(organization);
+                            }
                           });
                         },
                       ),
@@ -157,9 +161,9 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                 children: [
                   const Icon(Icons.check_circle, color: Colors.white),
                   SizedBox(width: spaceWidth),
-                  const Text(
-                    'Meine Organisationen:',
-                    style: TextStyle(
+                  Text(
+                    'Meine Organisationen (${_selectedOrganizations.length}/5):',
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         color: Colors.white),
@@ -168,12 +172,13 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
               ),
             ),
             Flexible(
-              flex: 1,
+              flex: 2,
               child: ConstrainedBox(
                 // If the minHeight is not set, errors get thrown around due to a bug in the calculation
-                // of the height of reordableListView when shrinkWrap is set to true. 
-                // shrinkWrap can alterternativly be conditionally set.  
-                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height*0.1),
+                // of the height of reordableListView when shrinkWrap is set to true.
+                // shrinkWrap can alterternativly be conditionally set.
+                constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height * 0.1),
                 child: ReorderableListView(
                   shrinkWrap: true,
                   onReorder: (int oldIndex, int newIndex) {
@@ -199,7 +204,8 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                                     _selectedOrganizations[index]),
                                 CircleAvatar(
                                   radius: radius,
-                                  backgroundColor: Theme.of(context).primaryColor,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
                                   child: Text(
                                       OrganizationManager()
                                           .getOrganizationById(
@@ -224,7 +230,8 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                                           .getOrganizationById(
                                               _selectedOrganizations[index]);
                                       _selectedOrganizations.removeAt(index);
-                                      _unselectedOrganizations.add(organization);
+                                      _unselectedOrganizations
+                                          .add(organization);
                                     });
                                   },
                                 ),
@@ -239,7 +246,8 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                 ),
               ),
             ),
-            SizedBox(height: spaceHeight * 2),
+            SizedBox(height: spaceHeight),
+
             Row(
               children: [
                 const Text('Im Profil anzeigen?'),

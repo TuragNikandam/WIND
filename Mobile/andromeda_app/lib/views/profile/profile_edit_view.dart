@@ -32,6 +32,8 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   late double spaceHeight;
   late double spaceWidth;
   late double radius;
+  bool isButtonPressed = false;
+
   @override
   void initState() {
     super.initState();
@@ -515,29 +517,36 @@ class _ProfileEditViewState extends State<ProfileEditView> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () async {
-          // Show loading indicator
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CircularProgressIndicator(),
-                    Padding(
-                        padding: EdgeInsets.only(top: spaceHeight),
-                        child: const Text("Aktualisiere...")),
-                  ],
-                ),
-              );
-            },
-          );
-          await Future.delayed(
-              const Duration(milliseconds: 850)); // Dummy wait time
-          if (context.mounted) Navigator.of(context).pop();
-          widget.onUpdateProfile(widget.user, _showError);
-        },
+        onPressed: isButtonPressed
+            ? null
+            : () async {
+                setState(() {
+                  isButtonPressed = true;
+                });
+                // Show loading indicator
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const CircularProgressIndicator(),
+                          Padding(
+                              padding: EdgeInsets.only(top: spaceHeight),
+                              child: const Text("Aktualisiere...")),
+                        ],
+                      ),
+                    );
+                  },
+                );
+                await Future.delayed(
+                    const Duration(milliseconds: 850)); // Dummy wait time
+                if (context.mounted) Navigator.of(context).pop();
+                widget.onUpdateProfile(widget.user, _showError);
+                isButtonPressed = false;
+              },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
               horizontal: spaceWidth * 5, vertical: spaceHeight),
