@@ -55,13 +55,14 @@ class _VotingPieChartState extends State<VotingPieChart> {
       children: [
         SizedBox(height: spaceHeight), // Space at the top
         SizedBox(
-          height: screenHeight * 0.3, // Set the height for the PieChart
+          height: screenHeight * 0.35, // Set the height for the PieChart
+
           child: PieChart(
             PieChartData(
               pieTouchData: pieTouchData(totalVotes),
               borderData: borderData(),
-              sectionsSpace: 0,
-              centerSpaceRadius: radius,
+              sectionsSpace: 2,
+              centerSpaceRadius: radius * 2.5,
               sections: showingSections(filteredVoteCounts, totalVotes),
             ),
           ),
@@ -222,8 +223,7 @@ class Indicator extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-        child: Row(
+    return Row(
       children: [
         Container(
           width: screenWidth * 0.02,
@@ -244,6 +244,6 @@ class Indicator extends StatelessWidget {
               overflow: TextOverflow.ellipsis),
         ),
       ],
-    ));
+    );
   }
 }

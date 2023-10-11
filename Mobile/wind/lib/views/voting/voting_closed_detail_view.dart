@@ -157,14 +157,13 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
 
   Widget _buildChartsCard(PageController controller) {
     return Card(
-        elevation: 4.0,
-        margin: EdgeInsets.all(spaceHeight * 0.1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        child: Expanded(
-          child: _buildCharts(controller),
-        ));
+      elevation: 4.0,
+      margin: EdgeInsets.all(spaceHeight * 0.1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: _buildCharts(controller),
+    );
   }
 
   Widget _buildCharts(PageController controller) {
@@ -203,6 +202,10 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
         filteredVoteCounts: getFilteredVoteCounts(widget.voting),
       ),
     );
+  }
+
+  Widget _buildVotingOptions() {
+    return Container();
   }
 
   Widget _buildDotsIndicator() {

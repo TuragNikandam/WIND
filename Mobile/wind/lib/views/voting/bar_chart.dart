@@ -44,7 +44,7 @@ class _VotingBarChartState extends State<VotingBarChart> {
           barTouchData: _barTouchData(),
           titlesData: _getBarTitlesData(voting),
           borderData: _barBorderData,
-          //barGroups: _buildBarGroups(voting),
+          barGroups: _buildBarGroups(voting),
           gridData: const FlGridData(show: false),
           alignment: BarChartAlignment.spaceAround,
           maxY: _getHighestVote(voting).toDouble() + 1),
@@ -104,7 +104,7 @@ class _VotingBarChartState extends State<VotingBarChart> {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 30,
-          interval: 3, // Set the interval here
+          interval: 3,
           getTitlesWidget: (value, meta) {
             return Text(
               value.toInt().toString(),
@@ -194,7 +194,7 @@ class _VotingBarChartState extends State<VotingBarChart> {
               width: 30,
             ),
           ],
-          showingTooltipIndicators: [0],
+          showingTooltipIndicators: [1],
         ),
       );
     }
