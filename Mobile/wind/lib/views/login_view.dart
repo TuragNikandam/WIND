@@ -14,10 +14,10 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool loginPressed = false;
 
   @override
   Widget build(BuildContext context) {
-    bool loginPressed = false;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Willkommen bei W.I.N.D.'),
@@ -50,14 +50,16 @@ class _LoginViewState extends State<LoginView> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               ElevatedButton(
-                onPressed: () => {
-                  if (!loginPressed)
-                    {
-                      loginPressed = true,
-                      widget.onLogin(
-                          _usernameController.text, _passwordController.text)
-                    }
-                },
+                onPressed: loginPressed
+                    ? null
+                    : () {
+                        setState(() {
+                          loginPressed = true;
+                        });
+                        widget.onLogin(
+                            _usernameController.text, _passwordController.text);
+                        loginPressed = false;
+                      },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
