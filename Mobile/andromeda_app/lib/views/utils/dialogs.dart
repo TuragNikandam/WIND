@@ -5,6 +5,7 @@ class Dialogs {
       String errorButtonText, String errorMessage) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(errorTitle),
