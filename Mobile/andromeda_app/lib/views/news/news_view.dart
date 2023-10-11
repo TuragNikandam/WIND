@@ -1,5 +1,6 @@
 import 'package:andromeda_app/models/news_article_model.dart';
 import 'package:andromeda_app/models/topic_model.dart';
+import 'package:andromeda_app/utils/uri_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -115,7 +116,9 @@ class _NewsViewState extends State<NewsView> {
               fontStyle: FontStyle.normal,
               color: isActive ? Colors.white : Colors.grey,
             ),
-            backgroundColor: isActive ? Theme.of(context).primaryColor : const Color(0xffffffff),
+            backgroundColor: isActive
+                ? Theme.of(context).primaryColor
+                : const Color(0xffffffff),
             elevation: 0,
             shadowColor: const Color(0xff808080),
             shape: RoundedRectangleBorder(
@@ -238,21 +241,29 @@ class _NewsViewState extends State<NewsView> {
                       padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12.0),
-                        child: FadeInImage(
-                          image: NetworkImage(newsArticle.getImage.getUrl),
-                          imageErrorBuilder:
-                              (BuildContext context, Object y, StackTrace? z) {
-                            return const Icon(
-                              Icons.broken_image,
-                              color: Colors.black26,
-                            );
-                          },
-                          height: 90,
-                          width: 100,
-                          fit: BoxFit.fill,
-                          placeholder:
-                              const AssetImage("assets/images/placeholder.png"),
-                        ),
+                        child: UriHelper.getUriByStringURL(
+                                    newsArticle.getImage.getUrl) !=
+                                null
+                            ? FadeInImage(
+                                image:
+                                    NetworkImage(newsArticle.getImage.getUrl),
+                                imageErrorBuilder: (BuildContext context,
+                                    Object y, StackTrace? z) {
+                                  return const Icon(
+                                    Icons.broken_image,
+                                    color: Colors.black26,
+                                  );
+                                },
+                                height: 90,
+                                width: 100,
+                                fit: BoxFit.fill,
+                                placeholder: const AssetImage(
+                                    "assets/images/placeholder.png"),
+                              )
+                            : const Icon(
+                                Icons.broken_image,
+                                color: Colors.black26,
+                              ),
                       ),
                     ),
                   ],

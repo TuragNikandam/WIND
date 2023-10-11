@@ -1,4 +1,5 @@
 import 'package:andromeda_app/main.dart';
+import 'package:andromeda_app/utils/uri_helper.dart';
 import 'package:andromeda_app/views/utils/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,14 +35,6 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   @override
   void initState() {
     super.initState();
-  }
-
-  Uri? getUriByStringURL(String url) {
-    try {
-      return Uri.parse(url);
-    } catch (e) {
-      return null;
-    }
   }
 
   @override
@@ -182,8 +175,8 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   Widget _buildPartyPreferenceDropdown() {
     return DropdownButtonFormField<String>(
       isExpanded: true,
-      decoration: const InputDecoration(
-          labelText: 'Partei', hintText: 'Wählen...'),
+      decoration:
+          const InputDecoration(labelText: 'Partei', hintText: 'Wählen...'),
       value: widget.user.getSelectedParty,
       onChanged: (String? newValue) {
         setState(() {
@@ -386,18 +379,20 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   }
 
   Widget buildOrganizationImage(Organization organization, Widget avatar) {
-    Uri? uri = getUriByStringURL(organization.getImageUrl);
     return ClipOval(
-      child: FadeInImage(
-        image: NetworkImage(uri.toString()),
-        imageErrorBuilder: (BuildContext context, Object y, StackTrace? z) {
-          return avatar;
-        },
-        height: radius / 2,
-        width: radius / 2,
-        fit: BoxFit.cover,
-        placeholder: const AssetImage("assets/images/placeholder.png"),
-      ),
+      child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
+          ? FadeInImage(
+              image: NetworkImage(organization.getImageUrl),
+              imageErrorBuilder:
+                  (BuildContext context, Object y, StackTrace? z) {
+                return avatar;
+              },
+              height: radius / 2,
+              width: radius / 2,
+              fit: BoxFit.cover,
+              placeholder: const AssetImage("assets/images/placeholder.png"),
+            )
+          : avatar,
     );
   }
 

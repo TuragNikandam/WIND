@@ -1,6 +1,7 @@
 import 'package:andromeda_app/main.dart';
 import 'package:andromeda_app/models/organization_model.dart';
 import 'package:andromeda_app/models/user_model.dart';
+import 'package:andromeda_app/utils/uri_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,14 +41,6 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
         .toList();
   }
 
-  Uri? getUriByStringURL(String url) {
-    try {
-      return Uri.parse(url);
-    } catch (e) {
-      return null;
-    }
-  }
-
   Widget buildChip(String label, Widget image, VoidCallback? onDelete) {
     return Padding(
       padding: EdgeInsets.all(spaceHeight),
@@ -66,18 +59,20 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
   }
 
   Widget buildOrganizationImage(Organization organization, Widget avatar) {
-    Uri? uri = getUriByStringURL(organization.getImageUrl);
     return ClipOval(
-      child: FadeInImage(
-        image: NetworkImage(uri.toString()),
-        imageErrorBuilder: (BuildContext context, Object y, StackTrace? z) {
-          return avatar;
-        },
-        height: radius * 2,
-        width: radius * 2,
-        fit: BoxFit.cover,
-        placeholder: const AssetImage("assets/images/placeholder.png"),
-      ),
+      child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
+          ? FadeInImage(
+              image: NetworkImage(organization.getImageUrl),
+              imageErrorBuilder:
+                  (BuildContext context, Object y, StackTrace? z) {
+                return avatar;
+              },
+              height: radius * 2,
+              width: radius * 2,
+              fit: BoxFit.cover,
+              placeholder: const AssetImage("assets/images/placeholder.png"),
+            )
+          : avatar,
     );
   }
 
