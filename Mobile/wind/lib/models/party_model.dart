@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 class Party {
   String _id = "";
   String _name = "";
@@ -32,7 +34,7 @@ class PartyManager {
 
   final List<Party> _partyList = [];
 
-  List<Party> get getPartyList => _partyList;
+  List<Party> get getPartyList => _partyList.sorted((a, b) => a.getName.compareTo(b.getName));
 
   void addItem(Party party) {
     _partyList.add(party);

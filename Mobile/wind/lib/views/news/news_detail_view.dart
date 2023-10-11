@@ -89,7 +89,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                 padding: const EdgeInsets.fromLTRB(
                     paddingLeftRight, 10, paddingLeftRight, 0),
                 child: SizedBox(
-                  height: imageHeight,
+                  height: imageHeight * 1.1,
                   child: Align(
                       alignment: Alignment.center,
                       child: UriHelper.getUriByStringURL(

@@ -191,7 +191,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
           .map<DropdownMenuItem<String>>(
               (Party party) => DropdownMenuItem<String>(
                     value: party.getId,
-                    child: Text(party.getName, overflow: TextOverflow.visible),
+                    child: Text("${party.getName} (${party.getShortName})", overflow: TextOverflow.visible),
                   ))
           .toList(),
     );
