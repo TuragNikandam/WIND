@@ -180,14 +180,18 @@ class _DiscussionViewState extends State<DiscussionView> {
                             child: Tooltip(
                                 message: widget.discussion.getTitle,
                                 triggerMode: TooltipTriggerMode.tap,
-                                child: Text(
-                                  widget.discussion.getTitle,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                  ),
-                                )),
+                                showDuration: const Duration(seconds: 10),
+                                child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: screenWidth * 0.03),
+                                    child: Text(
+                                      widget.discussion.getTitle,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                      ),
+                                    ))),
                           ),
                         ),
                       ),

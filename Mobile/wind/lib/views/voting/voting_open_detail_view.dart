@@ -30,6 +30,10 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
     user = Provider.of<User>(context, listen: false);
   }
 
+  double spaceHeight = 0.0;
+  double spaceWidth = 0.0;
+  double screenHeight = 0.0;
+  double radius = 0.0;
   List<String> selectedOptionIds = [];
 
   void _updateLocalModelAfterVote() {
@@ -49,11 +53,15 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.width * 0.06;
     return Scaffold(
       appBar: AppBar(title: const Text("Voting Detail")),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(spaceHeight * 1.2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: _buildVotingDetailForm(),
@@ -65,11 +73,11 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
 
   List<Widget> _buildVotingDetailForm() => [
         _buildHeaderText(),
-        const SizedBox(height: 16),
+        SizedBox(height: spaceHeight),
         _buildVotingQuestion(),
-        const SizedBox(height: 16),
+        SizedBox(height: spaceHeight),
         _buildVoteOptions(),
-        const SizedBox(height: 16),
+        SizedBox(height: spaceHeight * 3),
         _buildVoteButton()
       ];
 
@@ -90,45 +98,49 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
   }
 
   Widget _buildVoteOptions() {
-    return ListView.separated(
-      shrinkWrap: true,
-      itemCount: widget.voting.options.length,
-      separatorBuilder: (BuildContext context, int index) {
-        return const SizedBox(height: 16);
-      },
-      itemBuilder: (context, index) {
-        final option = widget.voting.options[index];
-        final isSelected = selectedOptionIds.contains(option.id);
+    return SizedBox(
+        height: screenHeight * 0.5,
+        child: ListView.separated(
+          itemCount: widget.voting.options.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(height: spaceHeight);
+          },
+          itemBuilder: (context, index) {
+            final option = widget.voting.options[index];
+            final isSelected = selectedOptionIds.contains(option.id);
 
-        return InkWell(
-          onTap: widget.userHasVoted
-              ? null
-              : () {
-                  setState(() {
-                    if (widget.voting.multipleChoices) {
-                      if (isSelected) {
-                        selectedOptionIds.remove(option.id);
-                      } else {
-                        selectedOptionIds.add(option.id);
-                      }
-                    } else {
-                      selectedOptionIds = [option.id];
-                    }
-                  });
-                },
-          customBorder:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Stack(children: _buildOptionsList(option, isSelected)),
-          ),
-        );
-      },
-    );
+            return InkWell(
+                onTap: widget.userHasVoted
+                    ? null
+                    : () {
+                        setState(() {
+                          if (widget.voting.multipleChoices) {
+                            if (isSelected) {
+                              selectedOptionIds.remove(option.id);
+                            } else {
+                              selectedOptionIds.add(option.id);
+                            }
+                          } else {
+                            selectedOptionIds = [option.id];
+                          }
+                        });
+                      },
+                customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(radius)),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(radius * 2),
+                    ),
+                    child:
+                        Stack(children: _buildOptionsList(option, isSelected)),
+                  ),
+                ));
+          },
+        ));
   }
 
   List<Widget> _buildOptionsList(Option option, bool isSelected) {
@@ -152,7 +164,7 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
               userHasVotedForThisOption
                   ? const Icon(Icons.check, color: Colors.green)
                   : Container(),
-              const SizedBox(width: 8),
+              SizedBox(width: spaceWidth),
               Text("$percentage%"),
             ],
           ),
@@ -165,7 +177,7 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(radius),
             ),
           ),
         ),
@@ -212,7 +224,7 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
       margin: const EdgeInsets.only(top: 5),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor, // The button color
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(radius * 0.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -239,14 +251,15 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
                 selectedOptionIds.clear();
               },
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+          padding: EdgeInsets.symmetric(
+              horizontal: spaceWidth * 6, vertical: spaceHeight * 1.5),
           textStyle: const TextStyle(
             fontSize: 16,
           ),
           elevation: 0, // No elevation for the button
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-                10), // Same corner radius as the container
+                radius * 0.5), // Same corner radius as the container
           ),
         ),
         child: const Text('Abstimmen'),

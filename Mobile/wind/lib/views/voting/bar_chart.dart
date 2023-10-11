@@ -27,6 +27,12 @@ class VotingBarChart extends StatefulWidget {
 class _VotingBarChartState extends State<VotingBarChart> {
   bool _isBarClicked = false;
 
+  double spaceHeight = 0.0;
+  double screenWidth = 0.0;
+  double spaceWidth = 0.0;
+  double screenHeight = 0.0;
+  double radius = 0.0;
+
   int _getHighestVote(Voting voting) {
     return voting.options
         .fold(0, (prev, option) => math.max(prev, option.voteCount));
@@ -38,7 +44,7 @@ class _VotingBarChartState extends State<VotingBarChart> {
           barTouchData: _barTouchData(),
           titlesData: _getBarTitlesData(voting),
           borderData: _barBorderData,
-          barGroups: _buildBarGroups(voting),
+          //barGroups: _buildBarGroups(voting),
           gridData: const FlGridData(show: false),
           alignment: BarChartAlignment.spaceAround,
           maxY: _getHighestVote(voting).toDouble() + 1),
@@ -53,7 +59,7 @@ class _VotingBarChartState extends State<VotingBarChart> {
         touchTooltipData: BarTouchTooltipData(
           tooltipBgColor: Colors.transparent,
           tooltipPadding: EdgeInsets.zero,
-          tooltipMargin: 8,
+          tooltipMargin: spaceWidth,
           getTooltipItem: (
             BarChartGroupData group,
             int groupIndex,
@@ -198,6 +204,11 @@ class _VotingBarChartState extends State<VotingBarChart> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.width * 0.06;
     return _buildBarChart(widget.voting);
   }
 }
