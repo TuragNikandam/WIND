@@ -1,12 +1,10 @@
 class UriHelper {
   static Uri? getUriByStringURL(String url) {
-    Uri? uri = Uri.tryParse(url);
-    if (uri == null ||
-        uri.scheme.isEmpty ||
-        uri.host.isEmpty ||
-        uri.path.isEmpty) {
-      return null;
-    }
-    return uri;
+    final Uri? uri = Uri.tryParse(url);
+    if (uri == null) return null;
+
+    return (uri.scheme.isNotEmpty && uri.host.isNotEmpty && uri.path.isNotEmpty)
+        ? uri
+        : null;
   }
 }

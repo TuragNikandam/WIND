@@ -254,12 +254,13 @@ class _ProfileEditViewState extends State<ProfileEditView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          'Meine Organisationen:',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        Text(
+          'Meine Organisationen (${selectedOrganizationIds.length}/5):',
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         SizedBox(
-          height: (spaceHeight * 5 * selectedOrganizationIds.length),
+          height: (spaceHeight * (5 * selectedOrganizationIds.length) + 1),
           child: ReorderableListView(
             scrollDirection: Axis.vertical,
             onReorder: (int oldIndex, int newIndex) {
@@ -348,14 +349,18 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                                 .getShortName[0],
                             style: const TextStyle(color: Colors.white))),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.add,
-                    color: Colors.green,
+                    color: widget.user.getSelectedOrganizations.length < 5
+                        ? Colors.green
+                        : Colors.grey,
                   ), () {
                 setState(() {
-                  final organizations = widget.user.getSelectedOrganizations;
-                  organizations.add(unselectedOrganizations[index].getId);
-                  widget.user.setSelectedOrganizations(organizations);
+                  if (widget.user.getSelectedOrganizations.length < 5) {
+                    final organizations = widget.user.getSelectedOrganizations;
+                    organizations.add(unselectedOrganizations[index].getId);
+                    widget.user.setSelectedOrganizations(organizations);
+                  }
                 });
               });
             },
