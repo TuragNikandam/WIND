@@ -192,10 +192,9 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
                   checkColor: Colors.white,
                   fillColor: MaterialStateProperty.resolveWith((states) {
                     if (states.contains(MaterialState.selected)) {
-                      return Theme.of(context)
-                          .primaryColor; // Sets the fill color to transparent when selected
+                      return Theme.of(context).primaryColor;
                     }
-                    return null; // Default (can also set to another color if needed)
+                    return null;
                   }),
                 )
               : Radio(
@@ -206,10 +205,9 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
                   activeColor: Theme.of(context).primaryColor,
                   fillColor: MaterialStateProperty.resolveWith((states) {
                     if (states.contains(MaterialState.selected)) {
-                      return Theme.of(context)
-                          .primaryColor; // Sets the fill color to transparent when selected
+                      return Theme.of(context).primaryColor;
                     }
-                    return null; // Default (can also set to another color if needed)
+                    return null;
                   })),
           title: Text(option.text),
         ),
