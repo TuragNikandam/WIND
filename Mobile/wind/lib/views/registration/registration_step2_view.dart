@@ -130,7 +130,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 40)),
                           )),
-                      title: Text(organization.getShortName),
+                      title: Text(organization.getName),
                       trailing: IconButton(
                         icon: Icon(
                           Icons.add,

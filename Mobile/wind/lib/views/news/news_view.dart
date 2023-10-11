@@ -38,47 +38,40 @@ class _NewsViewState extends State<NewsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Newsfeed'),
-        ),
-        body: SafeArea(
-            child: Scrollbar(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SingleChildScrollView(
+      appBar: AppBar(
+        title: const Text('Newsfeed'),
+      ),
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverToBoxAdapter(
+                child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.only(left: 10),
-                  child: Row(children: _buildTopicFilters()),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      RefreshIndicator(
-                        onRefresh: () async {
-                          newsArticles = await widget.onFetchNewsArticle();
-                          setState(() {});
-                        },
-                        child: ListView(
-                          scrollDirection: Axis.vertical,
-                          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                          shrinkWrap: true,
-                          children: _buildNewsArticle(),
-                        ),
-                      ),
-                    ],
+                  child: Row(
+                    children: _buildTopicFilters(),
                   ),
                 ),
-              ],
+              ),
+            ];
+          },
+          body: RefreshIndicator(
+            onRefresh: () async {
+              newsArticles = await widget.onFetchNewsArticle();
+              setState(() {});
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                children: _buildNewsArticle(),
+              ),
             ),
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   List<Widget> _buildTopicFilters() {
@@ -185,8 +178,8 @@ class _NewsViewState extends State<NewsView> {
                               child: Text(
                                 newsArticle.getHeadline,
                                 textAlign: TextAlign.start,
-                                maxLines: 3,
-                                overflow: TextOverflow.clip,
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,

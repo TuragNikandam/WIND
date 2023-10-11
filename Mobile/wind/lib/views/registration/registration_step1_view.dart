@@ -51,7 +51,7 @@ class _RegistrationStep1ViewState extends State<RegistrationStep1View> {
                     widget.parties.map<DropdownMenuItem<String>>((Party party) {
                   return DropdownMenuItem<String>(
                     value: party.getId,
-                    child: Text(party.getName),
+                    child: Text("${party.getName} (${party.getShortName})"),
                   );
                 }).toList()),
             Row(
