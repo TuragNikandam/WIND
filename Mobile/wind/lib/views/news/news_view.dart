@@ -249,7 +249,7 @@ class _NewsViewState extends State<NewsView> {
                                 },
                                 height: 90,
                                 width: 100,
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 placeholder: const AssetImage(
                                     "assets/images/placeholder.gif"),
                               )
