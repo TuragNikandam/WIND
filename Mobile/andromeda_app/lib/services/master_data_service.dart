@@ -111,16 +111,8 @@ class MasterDataService extends BaseService {
   }
 
   Future<void> loadMasterData() async {
-    if (OrganizationManager().isOrganizationsEmpty()) {
-      await loadOrganizations();
-    }
-
-    if (PartyManager().isPartiesEmpty()) {
-      await loadParties();
-    }
-
-    if (TopicManager().isTopicsEmpty()) {
-      await loadTopics();
-    }
+    await loadOrganizations();
+    await loadParties();
+    await loadTopics();
   }
 }
