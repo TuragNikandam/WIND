@@ -246,8 +246,6 @@ class UserService extends BaseService {
 
   Future<void> logout() async {
     final Uri url = Uri.parse('${baseService.apiBaseUrl}/user/logout');
-    Map<String, dynamic> emptyTokenMap = {};
-    emptyTokenMap['token'] = "";
 
     try {
       final response = await http
@@ -257,17 +255,15 @@ class UserService extends BaseService {
           )
           .timeout(Duration(seconds: baseService.timeOutSeconds));
 
-      if (response.statusCode == 200) {
-        await setJWTToken(emptyTokenMap);
-      } else {
+      await setJWTToken({'token': ''});
+      if (response.statusCode != 200) {
         logger.e("Error log", error: "Response not ok: ${response.statusCode}");
         throw Exception('Failed to logout!');
       }
     } on TimeoutException catch (tex) {
       logger.e("Error log", error: tex);
       rethrow;
-    } 
-    catch (ex) {
+    } catch (ex) {
       logger.e("Error log", error: ex);
       rethrow;
     }

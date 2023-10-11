@@ -45,6 +45,7 @@ class _ProfileControllerState extends State<ProfileController> {
   Future<void> _logout(BuildContext context) async {
     if (mounted) {
       navigationService.navigateAndRemoveAll(context, '/');
+      user.updateAllFields(User());
     }
     try {
       await userService.logout();
