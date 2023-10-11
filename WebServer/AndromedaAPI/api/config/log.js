@@ -25,9 +25,9 @@ let logger = createLogger({
   ]
 });
 
-if (process.env.NODE_ENV !== 'production') {
+//if (process.env.NODE_ENV !== 'production') {
   logger.add(new transports.Console());
-}
+//}
 
 // Extend logger object to properly log 'Error' types
 let origLog = logger.log;
