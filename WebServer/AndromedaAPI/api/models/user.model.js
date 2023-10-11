@@ -38,6 +38,7 @@ let userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Organization",
   }],
+  validate: [organizationLimit, 'Exceeds the limit of 5 organizations that a user can be a part of.']
   },
   birthyear: {
     type: Number,
@@ -59,6 +60,10 @@ let userSchema = new mongoose.Schema({
   },
   personalInformationVisible : Boolean,
 });
+
+function organizationLimit(list) {
+  return list.length <= 5;
+}
 
 userSchema.plugin(uniqueValidator);
 const User = mongoose.model("User", userSchema);
