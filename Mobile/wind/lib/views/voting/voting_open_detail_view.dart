@@ -46,13 +46,15 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(spaceHeight * 1.2),
-          child: Column(
+          child: Expanded(
+            child:
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: _buildVotingDetailForm(),
           ),
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildVotingDetailForm() => [
@@ -61,7 +63,6 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
         _buildVotingQuestion(),
         SizedBox(height: spaceHeight),
         _buildVoteOptions(),
-        SizedBox(height: spaceHeight * 3),
         _buildVoteButton()
       ];
 
@@ -83,7 +84,7 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
 
   Widget _buildVoteOptions() {
     return SizedBox(
-        height: screenHeight * 0.5,
+        height: screenHeight * 0.45,
         child: ListView.separated(
           itemCount: widget.voting.options.length,
           separatorBuilder: (BuildContext context, int index) {
