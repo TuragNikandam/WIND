@@ -48,31 +48,33 @@ class _VotingChartLegend extends State<VotingChartLegend> {
     int colCount = 0;
 
     filteredVoteCounts.forEach((option, count) {
-      Color indicatorColor = widget.colors[index];
+      if (count > 0) {
+        Color indicatorColor = widget.colors[index % widget.colors.length];
 
-      indicators.add(
-        Padding(
-          padding: EdgeInsets.all(radius * 0.02),
-          child: Indicator(
-            color: indicatorColor,
-            text: option,
-            isSquare: true,
+        indicators.add(
+          Padding(
+            padding: EdgeInsets.all(radius * 0.02),
+            child: Indicator(
+              color: indicatorColor,
+              text: option,
+              isSquare: true,
+            ),
           ),
-        ),
-      );
+        );
 
-      if (colCount == 2) {
-        columns.add(Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Left-aligned
-          children: indicators,
-        ));
-        indicators = [];
-        colCount = 0;
-      } else {
-        colCount++;
+        if (colCount == 2) {
+          columns.add(Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // Left-aligned
+            children: indicators,
+          ));
+          indicators = [];
+          colCount = 0;
+        } else {
+          colCount++;
+        }
+
+        index++;
       }
-
-      index++;
     });
 
     if (indicators.isNotEmpty) {
