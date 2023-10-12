@@ -46,15 +46,13 @@ class _VotingOpenDetailViewState extends State<VotingOpenDetailView> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(spaceHeight * 1.2),
-          child: Expanded(
-            child:
-          Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: _buildVotingDetailForm(),
           ),
         ),
       ),
-    ));
+    );
   }
 
   List<Widget> _buildVotingDetailForm() => [
