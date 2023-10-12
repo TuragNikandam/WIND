@@ -37,6 +37,12 @@ class _DiscussionViewState extends State<DiscussionView> {
   final ScrollController _scrollController = ScrollController();
   final formKey = GlobalKey<FormState>();
 
+  double spaceHeight = 0.0;
+  double screenWidth = 0.0;
+  double spaceWidth = 0.0;
+  double screenHeight = 0.0;
+  double radius = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -57,8 +63,8 @@ class _DiscussionViewState extends State<DiscussionView> {
                 CircleAvatar(
                   radius: avatarRadius,
                   backgroundColor: MyApp.secondaryColor,
-                  child:
-                      const Icon(Icons.person, color: Colors.white, size: 20),
+                  child: Icon(Icons.person,
+                      color: Colors.white, size: radius * 1.2),
                 ),
                 Text(
                   post.getUsername,
@@ -73,8 +79,8 @@ class _DiscussionViewState extends State<DiscussionView> {
           );
   }
 
-  Widget _buildSpeechBubble(
-      DiscussionPost post, bool pointToRight, double width) {
+  Widget _buildSpeechBubble(DiscussionPost post, bool pointToRight,
+      double width, bool isCurrentUser) {
     String formattedDate = dateFormat.format(post.getCreationDate);
     return SizedBox(
       width: width,
@@ -85,7 +91,7 @@ class _DiscussionViewState extends State<DiscussionView> {
               pointToRight: pointToRight, avatarRadius: avatarRadius),
           child: Container(
             padding: EdgeInsets.fromLTRB(
-                pointToRight ? 20 : 10, 10, pointToRight ? 10 : 20, 10),
+                spaceWidth * 1.3, spaceHeight, spaceWidth * 1.3, spaceHeight),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -149,9 +155,11 @@ class _DiscussionViewState extends State<DiscussionView> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double radius = MediaQuery.of(context).size.height * 0.023;
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.height * 0.023;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Diskussion')),
@@ -203,7 +211,7 @@ class _DiscussionViewState extends State<DiscussionView> {
                           bool isCurrentUser = post.getAuthorId == user.getId;
 
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(spaceWidth),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -213,8 +221,11 @@ class _DiscussionViewState extends State<DiscussionView> {
                                         buildUserColumn(post, isCurrentUser)),
                                 SizedBox(
                                     width: screenWidth * 0.55,
-                                    child: _buildSpeechBubble(post,
-                                        isCurrentUser, screenWidth * 0.55)),
+                                    child: _buildSpeechBubble(
+                                        post,
+                                        isCurrentUser,
+                                        screenWidth * 0.55,
+                                        isCurrentUser)),
                                 SizedBox(
                                   width: screenWidth * 0.2,
                                   child: buildUserColumn(post, !isCurrentUser),
@@ -231,7 +242,8 @@ class _DiscussionViewState extends State<DiscussionView> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                  horizontal: spaceHeight, vertical: spaceWidth / 2),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 border: Border(
@@ -239,12 +251,15 @@ class _DiscussionViewState extends State<DiscussionView> {
                 ),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
                     child: Form(
                       autovalidateMode: AutovalidateMode.disabled,
                       key: formKey,
                       child: TextFormField(
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
                         validator: customValidator,
                         controller: _textController,
                         decoration: const InputDecoration(
