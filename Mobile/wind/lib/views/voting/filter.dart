@@ -292,6 +292,7 @@ class _VotingFilterState extends State<VotingFilter> {
               ),
               IconButton(
                 icon: const Icon(Icons.clear),
+                color: Theme.of(context).primaryColor,
                 onPressed: () {
                   dialogSetState(() {
                     _filterParameters.selectedParty = null;
@@ -403,6 +404,7 @@ class _VotingFilterState extends State<VotingFilter> {
             ),
             IconButton(
               icon: const Icon(Icons.clear),
+              color: Theme.of(context).primaryColor,
               onPressed: () {
                 dialogSetState(() {
                   _filterParameters.currentRangeValues =
@@ -497,6 +499,7 @@ class _VotingFilterState extends State<VotingFilter> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.clear),
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     dialogSetState(() {
                       _filterParameters.selectedReligion = null;
@@ -587,6 +590,7 @@ class _VotingFilterState extends State<VotingFilter> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.clear),
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     dialogSetState(() {
                       _filterParameters.selectedGender = null;
