@@ -96,8 +96,8 @@ class ProfileView {
                       "${PartyManager().getPartyById(user.getSelectedParty).getName} "
                           "(${PartyManager().getPartyById(user.getSelectedParty).getShortName})\n"),
                 if (user.getShowOrganizationsInProfile)
-                  _buildImageInfoCard("Organisationen", Icons.business,
-                      _buildImageList(context)),
+                  _buildImageInfoCard(
+                      "Organisationen", Icons.business, _buildImageList()),
                 if (user.getShowPersonalInformationInProfile)
                   buildMultiInfoCard("Persönliches", tileData),
               ],
@@ -108,14 +108,14 @@ class ProfileView {
     );
   }
 
-  List<Widget> _buildImageList(BuildContext context) {
+  List<Widget> _buildImageList() {
     List<Widget> imagesWithText = List<Widget>.empty(growable: true);
     List<String> organizations = user.getSelectedOrganizations;
 
     for (var id in organizations.take(3)) {
       CircleAvatar avatar = CircleAvatar(
         radius: radius / 3,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(currentContext).primaryColor,
         child: Text(
           OrganizationManager().getOrganizationById(id).getShortName[0],
           style: const TextStyle(
@@ -125,34 +125,26 @@ class ProfileView {
       );
 
       imagesWithText.add(
-        Column(
-          children: [
-            ClipOval(
-              child: UriHelper.getUriByStringURL(OrganizationManager()
-                          .getOrganizationById(id)
-                          .getImageUrl) !=
-                      null
-                  ? FadeInImage(
-                      image: NetworkImage(OrganizationManager()
-                          .getOrganizationById(id)
-                          .getImageUrl),
-                      imageErrorBuilder:
-                          (BuildContext context, Object y, StackTrace? z) {
-                        return avatar;
-                      },
-                      height: radius / 1.5,
-                      width: radius / 1.5,
-                      fit: BoxFit.cover,
-                      placeholder:
-                          const AssetImage("assets/images/placeholder.gif"),
-                    )
-                  : avatar,
-            ),
-            Text(
-              "${OrganizationManager().getOrganizationById(id).getShortName}\n",
-              textAlign: TextAlign.center,
-            ),
-          ],
+        ClipRect(
+          child: UriHelper.getUriByStringURL(OrganizationManager()
+                      .getOrganizationById(id)
+                      .getImageUrl) !=
+                  null
+              ? FadeInImage(
+                  image: NetworkImage(OrganizationManager()
+                      .getOrganizationById(id)
+                      .getImageUrl),
+                  imageErrorBuilder:
+                      (BuildContext context, Object y, StackTrace? z) {
+                    return avatar;
+                  },
+                  height: radius,
+                  width: radius * 1.7,
+                  fit: BoxFit.contain,
+                  placeholder:
+                      const AssetImage("assets/images/placeholder.gif"),
+                )
+              : avatar,
         ),
       );
     }
@@ -245,7 +237,7 @@ class ProfileView {
                     .expand((image) => [
                           image,
                           SizedBox(
-                            width: spaceWidth,
+                            width: spaceWidth * 1.5,
                             height: spaceHeight,
                           )
                         ])

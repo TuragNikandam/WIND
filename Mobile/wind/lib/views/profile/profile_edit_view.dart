@@ -386,7 +386,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   }
 
   Widget buildOrganizationImage(Organization organization, Widget avatar) {
-    return ClipOval(
+    return ClipRect(
       child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
           ? FadeInImage(
               image: NetworkImage(organization.getImageUrl),

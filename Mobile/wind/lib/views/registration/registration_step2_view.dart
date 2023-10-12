@@ -59,7 +59,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
   }
 
   Widget buildOrganizationImage(Organization organization, Widget avatar) {
-    return ClipOval(
+    return ClipRect(
       child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
           ? FadeInImage(
               image: NetworkImage(organization.getImageUrl),
