@@ -40,7 +40,7 @@ class _RegistrationStep1ViewState extends State<RegistrationStep1View> {
                 value: user.getSelectedParty.isEmpty
                     ? null
                     : user.getSelectedParty,
-                hint: const Text('Wählen Sie Ihre Partei'),
+                hint: const Text('Partei'),
                 onChanged: (String? newValue) {
                   setState(() {
                     if (newValue != null) {
