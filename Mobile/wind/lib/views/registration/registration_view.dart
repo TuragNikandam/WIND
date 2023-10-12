@@ -18,6 +18,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   late double spaceHeight;
+  bool isTermsAndConditionsChecked = false;
 
   @override
   void initState() {
@@ -54,13 +55,63 @@ class _RegistrationViewState extends State<RegistrationView> {
             _buildPasswordTextField(
                 _confirmPasswordController, 'Passwort bestätigen'),
             SizedBox(height: spaceHeight * 2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      const Flexible(
+                        child: Text(
+                          "Ich akzeptiere die AGBs und Datenschutzbestimmungen",
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.info_outline),
+                        color: Colors.grey,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                    "AGBs & Datenschutzbestimmungen"),
+                                content: const Text(
+                                    "Hier stehen die Informationen zu den AGBs und Datenschutzbestimmungen."),
+                                actions: [
+                                  TextButton(
+                                    child: const Text("Klingt gut"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Checkbox(
+                    value: isTermsAndConditionsChecked,
+                    onChanged: ((value) => setState(() {
+                          isTermsAndConditionsChecked = value!;
+                        }))),
+              ],
+            ),
+            SizedBox(height: spaceHeight),
             ElevatedButton(
-              onPressed: () => widget.onStep1(
-                  _usernameController.text,
-                  _emailController.text,
-                  _passwordController.text,
-                  _confirmPasswordController.text,
-                  _showError),
+              onPressed: () => isTermsAndConditionsChecked
+                  ? widget.onStep1(
+                      _usernameController.text,
+                      _emailController.text,
+                      _passwordController.text,
+                      _confirmPasswordController.text,
+                      _showError)
+                  : _showError(context,
+                      "Akzeptiere die AGB und Datenschutzbestimmungen um mit der Registrierung fortfahren zu können."),
               child: const Text('Registrieren'),
             ),
             SizedBox(height: spaceHeight),
