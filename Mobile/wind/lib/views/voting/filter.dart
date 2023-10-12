@@ -32,6 +32,7 @@ class _VotingFilterState extends State<VotingFilter> {
   late Set<Party> _uniqueParties;
   late Set<String> _uniqueReligions;
   late Set<String> _uniqueGenders;
+  late List<String> _uniqueOrganizations;
 
   bool _isAgeFilterExpanded = false;
   bool _isReligionFilterExpanded = false;
@@ -66,17 +67,22 @@ class _VotingFilterState extends State<VotingFilter> {
 
     _uniqueGenders =
         widget.userList.where((user) => !user.getIsGuest).map((user) {
-      // Replace 'someGender' with the condition you want to check
       return GenderText.getTexts()
           .firstWhere((element) => element == user.getGender);
     }).toSet();
 
     _uniqueReligions =
         widget.userList.where((user) => !user.getIsGuest).map((user) {
-      // Replace 'someGender' with the condition you want to check
       return ReligionText.getTexts()
           .firstWhere((element) => element == user.getReligion);
     }).toSet();
+
+    _uniqueOrganizations = widget.userList
+        .where((user) => !user.getIsGuest)
+        .expand((user) => user.getSelectedOrganizations)
+        .cast<String>()
+        .toSet()
+        .toList();
   }
 
   @override
@@ -594,7 +600,9 @@ class _VotingFilterState extends State<VotingFilter> {
   }
 
   Widget _buildOrganizationFilter(StateSetter dialogSetState) {
-    var organizationList = OrganizationManager().getOrganizationList;
+    var organizationList = _uniqueOrganizations.map((orgId) {
+      return OrganizationManager().getOrganizationById(orgId);
+    }).toList();
 
     return GestureDetector(
       onTap: () {
@@ -728,7 +736,7 @@ class FilterParameters {
       selectedParty: null,
       includeGuests: true,
       currentRangeValues: const RangeValues(16, 99),
-      selectedOrganizations: const [],
+      selectedOrganizations: List<String>.empty(growable: true),
       selectedGender: null,
       selectedReligion: null,
     );

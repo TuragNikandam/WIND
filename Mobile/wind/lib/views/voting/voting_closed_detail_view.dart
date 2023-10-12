@@ -1,5 +1,7 @@
+import 'dart:math';
 import 'package:wind/models/user_model.dart';
 import 'package:wind/views/voting/bar_chart.dart';
+import 'package:wind/views/voting/chart_legend.dart';
 import 'package:wind/views/voting/filter.dart';
 import 'package:wind/views/voting/pie_chart.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,48 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
   double radius = 0.0;
 
   late FilterParameters _filterParameters;
+
+  @override
+  Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.width * 0.06;
+    updateVoteCounts();
+    final controller = PageController(initialPage: currentPage);
+
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Wahlergebnisse'),
+          actions: [
+            VotingFilter(
+              userList: widget.userList,
+              onFilterChanged: onFilterChanged,
+              filterParameters: _filterParameters,
+            )
+          ],
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(spaceHeight * 1.3),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildVotingQuestion(),
+                SizedBox(height: spaceHeight),
+                _buildVoteCounts(),
+                SizedBox(height: spaceHeight),
+                SizedBox(
+                  height: screenHeight * 0.4,
+                  child: _buildChartsCard(controller),
+                ),
+                _buildDotsIndicator(),
+                _buildVotinChartLegend()
+              ],
+            ),
+          ),
+        ));
+  }
 
   void onFilterChanged(FilterParameters filterParameters) {
     setState(() {
@@ -78,56 +122,46 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
     });
   }
 
+  List<Color> _buildColorList() {
+    final Random random = Random();
+    final List<Color> colors = [
+      Colors.red,
+      Colors.blue,
+      Colors.orange,
+      Colors.green,
+      Colors.black,
+      Colors.purple,
+      Colors.teal,
+      Colors.brown,
+      Colors.pink,
+    ];
+
+    int numVotingOptions = getFilteredVoteCounts(widget.voting).length;
+
+    // Generate additional random colors if needed
+    while (colors.length < numVotingOptions) {
+      colors.add(Color.fromRGBO(
+        random.nextInt(256),
+        random.nextInt(256),
+        random.nextInt(256),
+        1,
+      ));
+    }
+
+    return colors;
+  }
+
   @override
   void initState() {
     super.initState();
     _filterParameters = FilterParameters.defaultParameters();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    spaceHeight = MediaQuery.of(context).size.height * 0.015;
-    spaceWidth = MediaQuery.of(context).size.width * 0.015;
-    radius = MediaQuery.of(context).size.width * 0.06;
-    updateVoteCounts();
-    final controller = PageController(initialPage: currentPage);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Wahlergebnisse'),
-        actions: [
-          VotingFilter(
-            userList: widget.userList,
-            onFilterChanged: onFilterChanged,
-            filterParameters: _filterParameters,
-          )
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(spaceHeight * 1.2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildVotingQuestion(),
-            SizedBox(height: spaceHeight),
-            _buildVoteCounts(),
-            SizedBox(height: spaceHeight),
-            Expanded(
-              child: _buildChartsCard(controller),
-            ),
-            _buildDotsIndicator(),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildVotingQuestion() {
     return Text(
       widget.voting.question,
       style: const TextStyle(
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -138,16 +172,16 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Anzahl der Stimmen: $_totalVotes",
+          "Stimmen: $_totalVotes",
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
-          "Anzahl Gäste Stimmen: $_guestVotes",
+          "Gäste Stimmen: $_guestVotes",
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -158,7 +192,6 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
   Widget _buildChartsCard(PageController controller) {
     return Card(
       elevation: 4.0,
-      margin: EdgeInsets.all(spaceHeight * 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
@@ -183,11 +216,12 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
 
   Widget _buildVotingPieChart() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(spaceWidth, spaceHeight, spaceWidth, 0),
+      padding: EdgeInsets.fromLTRB(spaceWidth, 0, spaceWidth, 0),
       child: VotingPieChart(
         userList: widget.userList,
         filterParameters: _filterParameters,
         filteredVoteCounts: getFilteredVoteCounts(widget.voting),
+        colors: _buildColorList(),
       ),
     );
   }
@@ -200,12 +234,18 @@ class _VotingClosedDetailViewState extends State<VotingClosedDetailView> {
         userList: widget.userList,
         filterParameters: _filterParameters,
         filteredVoteCounts: getFilteredVoteCounts(widget.voting),
+        colors: _buildColorList(),
       ),
     );
   }
 
-  Widget _buildVotingOptions() {
-    return Container();
+  Widget _buildVotinChartLegend() {
+    return VotingChartLegend(
+      userList: widget.userList,
+      filterParameters: _filterParameters,
+      filteredVoteCounts: getFilteredVoteCounts(widget.voting),
+      colors: _buildColorList(),
+    );
   }
 
   Widget _buildDotsIndicator() {

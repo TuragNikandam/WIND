@@ -1,4 +1,3 @@
-import 'package:wind/main.dart';
 import 'package:wind/models/user_model.dart';
 import 'package:wind/views/voting/filter.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -12,12 +11,15 @@ class VotingBarChart extends StatefulWidget {
   final FilterParameters filterParameters;
   final Map<String, int> filteredVoteCounts;
 
+  final List<Color> colors;
+
   const VotingBarChart({
     Key? key,
     required this.userList,
     required this.filterParameters,
     required this.filteredVoteCounts,
     required this.voting,
+    required this.colors,
   }) : super(key: key);
 
   @override
@@ -33,23 +35,36 @@ class _VotingBarChartState extends State<VotingBarChart> {
   double screenHeight = 0.0;
   double radius = 0.0;
 
+  @override
+  Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    spaceHeight = MediaQuery.of(context).size.height * 0.015;
+    spaceWidth = MediaQuery.of(context).size.width * 0.015;
+    radius = MediaQuery.of(context).size.width * 0.06;
+    return _buildBarChart(widget.voting);
+  }
+
   int _getHighestVote(Voting voting) {
     return voting.options
         .fold(0, (prev, option) => math.max(prev, option.voteCount));
   }
 
   Widget _buildBarChart(Voting voting) {
-    return BarChart(
-      BarChartData(
-          barTouchData: _barTouchData(),
-          titlesData: _getBarTitlesData(voting),
-          borderData: _barBorderData,
-          barGroups: _buildBarGroups(voting),
-          gridData: const FlGridData(show: false),
-          alignment: BarChartAlignment.spaceAround,
-          maxY: _getHighestVote(voting).toDouble() + 1),
-      swapAnimationDuration: const Duration(milliseconds: 500),
-      swapAnimationCurve: Curves.linear,
+    return Padding(
+      padding: EdgeInsets.all(spaceHeight),
+      child: BarChart(
+        BarChartData(
+            barTouchData: _barTouchData(),
+            titlesData: _getBarTitlesData(voting),
+            borderData: _barBorderData,
+            barGroups: _buildBarGroups(voting),
+            gridData: const FlGridData(show: false),
+            alignment: BarChartAlignment.spaceAround,
+            maxY: _getHighestVote(voting).toDouble()),
+        swapAnimationDuration: const Duration(milliseconds: 500),
+        swapAnimationCurve: Curves.linear,
+      ),
     );
   }
 
@@ -91,27 +106,27 @@ class _VotingBarChartState extends State<VotingBarChart> {
   }
 
   FlTitlesData _getBarTitlesData(Voting voting) {
+    int maxVote = _getHighestVote(voting);
+    int numberOfIntervals = 5;
+    double dynamicInterval = (maxVote / numberOfIntervals).toDouble() == 0
+        ? 1
+        : (maxVote / numberOfIntervals).toDouble();
     return FlTitlesData(
       show: true,
-      bottomTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 40,
-          getTitlesWidget: (value, meta) => _getBarTitles(value, meta, voting),
-        ),
+      bottomTitles: const AxisTitles(
+        sideTitles: SideTitles(showTitles: false),
       ),
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 30,
-          interval: 3,
+          reservedSize: spaceWidth * 3,
+          interval: dynamicInterval,
           getTitlesWidget: (value, meta) {
             return Text(
               value.toInt().toString(),
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
               ),
             );
           },
@@ -122,33 +137,6 @@ class _VotingBarChartState extends State<VotingBarChart> {
       ),
       rightTitles: const AxisTitles(
         sideTitles: SideTitles(showTitles: false),
-      ),
-    );
-  }
-
-  Widget _getBarTitles(double value, TitleMeta meta, Voting voting) {
-    const style = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-    );
-    if (value < 0 || value >= voting.options.length) {
-      return const SizedBox();
-    }
-    String text = voting.options[value.toInt()].text;
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 4,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: 60,
-        ),
-        child: Text(
-          text,
-          style: style,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2, // Limit the number of lines
-        ),
       ),
     );
   }
@@ -167,21 +155,13 @@ class _VotingBarChartState extends State<VotingBarChart> {
         ),
       );
 
-  LinearGradient get _barsGradient => LinearGradient(
-        colors: [
-          Theme.of(context).primaryColor,
-          MyApp.secondaryColor,
-        ],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-
   List<BarChartGroupData> _buildBarGroups(Voting voting) {
     List<BarChartGroupData> barGroups = [];
 
     for (int i = 0; i < voting.options.length; i++) {
       final option = voting.options[i];
       final filteredVoteCount = widget.filteredVoteCounts[option.text] ?? 0;
+      final barColor = widget.colors[i % widget.colors.length];
 
       barGroups.add(
         BarChartGroupData(
@@ -189,26 +169,17 @@ class _VotingBarChartState extends State<VotingBarChart> {
           barRods: [
             BarChartRodData(
               toY: filteredVoteCount.toDouble(),
-              color: Theme.of(context).primaryColor,
-              gradient: _barsGradient,
-              width: 30,
+              //color: Theme.of(context).primaryColor,
+              //gradient: _barsGradient,
+              color: barColor,
+              width: spaceWidth * 4.5,
             ),
           ],
-          showingTooltipIndicators: [1],
+          showingTooltipIndicators: [0],
         ),
       );
     }
 
     return barGroups;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
-    spaceHeight = MediaQuery.of(context).size.height * 0.015;
-    spaceWidth = MediaQuery.of(context).size.width * 0.015;
-    radius = MediaQuery.of(context).size.width * 0.06;
-    return _buildBarChart(widget.voting);
   }
 }
