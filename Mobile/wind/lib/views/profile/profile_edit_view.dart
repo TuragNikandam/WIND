@@ -396,7 +396,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
               },
               height: radius / 2,
               width: radius / 2,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               placeholder: const AssetImage("assets/images/placeholder.gif"),
             )
           : avatar,
