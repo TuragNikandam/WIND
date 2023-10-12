@@ -161,6 +161,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                             title: Text("Referenzen"),
                           );
                         },
+                        canTapOnHeader: true,
                         isExpanded: isExpandedWidget,
                         body: ListView.builder(
                           itemCount: widget.newsArticle.getSources.length,
