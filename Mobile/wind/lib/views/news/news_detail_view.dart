@@ -151,7 +151,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                   child: ExpansionPanelList(
                     expansionCallback: (int index, bool isExpanded) {
                       setState(() {
-                        isExpandedWidget = !isExpanded;
+                        isExpandedWidget = isExpanded;
                       });
                     },
                     children: [
@@ -161,6 +161,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                             title: Text("Referenzen"),
                           );
                         },
+                        canTapOnHeader: true,
                         isExpanded: isExpandedWidget,
                         body: ListView.builder(
                           itemCount: widget.newsArticle.getSources.length,

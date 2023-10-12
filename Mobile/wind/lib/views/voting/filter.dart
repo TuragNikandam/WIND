@@ -226,7 +226,7 @@ class _VotingFilterState extends State<VotingFilter> {
         ),
         expansionCallback: (int index, bool isExpanded) {
           dialogSetState(() {
-            _isPartyFilterExpanded = !isExpanded;
+            _isPartyFilterExpanded = isExpanded;
           });
         },
         children: [
@@ -323,7 +323,7 @@ class _VotingFilterState extends State<VotingFilter> {
         ),
         expansionCallback: (int index, bool isExpanded) {
           dialogSetState(() {
-            _isAgeFilterExpanded = !isExpanded;
+            _isAgeFilterExpanded = isExpanded;
           });
         },
         children: [
@@ -433,7 +433,7 @@ class _VotingFilterState extends State<VotingFilter> {
         ),
         expansionCallback: (int index, bool isExpanded) {
           dialogSetState(() {
-            _isReligionFilterExpanded = !isExpanded;
+            _isReligionFilterExpanded = isExpanded;
           });
         },
         children: [
@@ -524,7 +524,7 @@ class _VotingFilterState extends State<VotingFilter> {
         expandedHeaderPadding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
         expansionCallback: (int index, bool isExpanded) {
           dialogSetState(() {
-            _isGenderFilterExpanded = !isExpanded;
+            _isGenderFilterExpanded = isExpanded;
           });
         },
         children: [
@@ -619,7 +619,7 @@ class _VotingFilterState extends State<VotingFilter> {
         expandedHeaderPadding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
         expansionCallback: (int index, bool isExpanded) {
           dialogSetState(() {
-            _isOrganizationFilterExpanded = !isExpanded;
+            _isOrganizationFilterExpanded = isExpanded;
           });
         },
         children: [
