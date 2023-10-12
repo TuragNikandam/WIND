@@ -151,7 +151,7 @@ class _NewsDetailViewState extends State<NewsDetailView> {
                   child: ExpansionPanelList(
                     expansionCallback: (int index, bool isExpanded) {
                       setState(() {
-                        isExpandedWidget = !isExpanded;
+                        isExpandedWidget = isExpanded;
                       });
                     },
                     children: [
