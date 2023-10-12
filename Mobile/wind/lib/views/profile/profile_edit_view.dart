@@ -386,7 +386,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   }
 
   Widget buildOrganizationImage(Organization organization, Widget avatar) {
-    return ClipOval(
+    return ClipRect(
       child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
           ? FadeInImage(
               image: NetworkImage(organization.getImageUrl),
@@ -396,7 +396,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
               },
               height: radius / 2,
               width: radius / 2,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               placeholder: const AssetImage("assets/images/placeholder.gif"),
             )
           : avatar,

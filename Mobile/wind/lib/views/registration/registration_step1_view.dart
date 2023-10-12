@@ -35,27 +35,26 @@ class _RegistrationStep1ViewState extends State<RegistrationStep1View> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            FittedBox(
-              child: DropdownButton<String>(
-                  value: user.getSelectedParty.isEmpty
-                      ? null
-                      : user.getSelectedParty,
-                  hint: const Text('Wählen Sie Ihre Partei'),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      if (newValue != null) {
-                        user.setSelectedParty(newValue);
-                      }
-                    });
-                  },
-                  items:
-                      widget.parties.map<DropdownMenuItem<String>>((Party party) {
-                    return DropdownMenuItem<String>(
-                      value: party.getId,
-                      child: Text("${party.getName} (${party.getShortName})"),
-                    );
-                  }).toList()),
-            ),
+            DropdownButton<String>(
+              isExpanded: true,
+                value: user.getSelectedParty.isEmpty
+                    ? null
+                    : user.getSelectedParty,
+                hint: const Text('Wählen Sie Ihre Partei'),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    if (newValue != null) {
+                      user.setSelectedParty(newValue);
+                    }
+                  });
+                },
+                items:
+                    widget.parties.map<DropdownMenuItem<String>>((Party party) {
+                  return DropdownMenuItem<String>(
+                    value: party.getId,
+                    child: Text("${party.getName} (${party.getShortName})"),
+                  );
+                }).toList()),
             Row(
               children: [
                 const Text('Im Profil anzeigen?'),
