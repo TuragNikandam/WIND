@@ -1,6 +1,6 @@
 # W. I. N. D. (Waehlen, Informieren, Netzwerken, Diskutieren)
 
-**Overview**
+**Overview:**
 W. I. N. D. is a product that emerged from the Andromeda project. It serves as a platform for voting, information, networking, and discussion on various topics.
 
 ## Features
@@ -11,8 +11,11 @@ W. I. N. D. is a product that emerged from the Andromeda project. It serves as a
 
 ## Technology Stack
 **Frontend:** [Flutter](https://flutter.dev/) Cross-Platform App for iOS / Android
+
 **Backend**: Express.js, Node.js
+
 **Database**: MongoDB
+
 **Other Libraries**: Mongoose, Helmet, JWT, Winston, etc.
 
 ## Installation
