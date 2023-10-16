@@ -1,4 +1,4 @@
-![WIND Cover](Media/WIND_LOGO.png)
+<img src="Media/WIND_LOGO.png" width="300" height="400">
 
 # W. I. N. D. (Waehlen, Informieren, Netzwerken, Diskutieren)
 
