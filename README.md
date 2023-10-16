@@ -1,4 +1,4 @@
-![WIND Cover](Mobile/wind/assets/images/WIND_logo.png)
+![WIND Cover](Media/WIND_LOGO.png)
 
 # W. I. N. D. (Waehlen, Informieren, Netzwerken, Diskutieren)
 
