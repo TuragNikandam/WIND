@@ -1,4 +1,6 @@
-<img src="Media/WIND_LOGO.png" width="400" height="400">
+<p align="center">
+  <img src="Media/WIND_LOGO.png" width="400" height="400">
+</p>
 
 # W. I. N. D. (Waehlen, Informieren, Netzwerken, Diskutieren)
 
