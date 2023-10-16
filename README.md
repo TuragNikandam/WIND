@@ -1,4 +1,4 @@
-# W. I. N. D. (Wählen, Informieren, Netzwerken, Diskutieren)
+# W. I. N. D. (Waehlen, Informieren, Netzwerken, Diskutieren)
 
 **Overview**
 W. I. N. D. is a product that emerged from the Andromeda project. It serves as a platform for voting, information, networking, and discussion on various topics.
