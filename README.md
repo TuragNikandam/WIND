@@ -11,22 +11,29 @@ W. I. N. D. is a product that emerged from the Andromeda project. It serves as a
 
 ## Technology Stack
 **Frontend:** [Flutter](https://flutter.dev/) Cross-Platform App for iOS / Android
-**Backend**: Express.js
+**Backend**: Express.js, Node.js
+**Database**: MongoDB
+**Other Libraries**: Mongoose, Helmet, JWT, Winston, etc.
 
 ## Installation
 
 ### Prerequisites
 - Node.js
 - Flutter SDK
+- MongoDB
+- Mongoose
 
 ### Steps
 1. Clone the repository
-2. Install the dependencies
-3. Start the server
-4. Launch the app
+2. Navigate to the backend directory and run npm install
+3. Navigate to the mobile app directory and run flutter pub get
+4. Start the MongoDB service
+5. Start the backend server by running node server.js
+6. Launch the mobile app by running flutter run
 
 ### Usage
-Register 
+1. Backend: The backend is built with Express.js and connects to a MongoDB database. It uses JWT for authentication and Helmet for security. It is ready to run on a server and act as a Node.js backend providing a API. 
+2. Mobile App: The mobile app is built with Flutter and Dart. It uses the Provider package for state management, MVC for decoupling and much more. 
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
