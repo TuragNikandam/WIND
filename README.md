@@ -1,3 +1,5 @@
+![WIND Cover](Mobile/wind/assets/images/WIND_logo.png)
+
 # W. I. N. D. (Waehlen, Informieren, Netzwerken, Diskutieren)
 
 **Overview:**
@@ -50,7 +52,7 @@ npm install
 cd WIND/Mobile/wind
 ```
 ```bash
-pub get
+flutter pub get
 ```
 4. Start the MongoDB service
 5. Start the backend server by running node server.js
