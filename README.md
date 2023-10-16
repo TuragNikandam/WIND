@@ -3,6 +3,10 @@
 **Overview:**
 W. I. N. D. is a product that emerged from the Andromeda project. It serves as a platform for voting, information, networking, and discussion on various topics.
 
+## Authors
+- [@TuragNikandam](https://www.github.com/TuragNikandam)
+- [@MalteHein](https://www.github.com/MalteHein)
+
 ## Features
 - Vote: Voting features for various topics.
 - Inform: Latest news and updates.
@@ -18,6 +22,9 @@ W. I. N. D. is a product that emerged from the Andromeda project. It serves as a
 
 **Other Libraries**: Mongoose, Helmet, JWT, Winston, etc.
 
+## Demo
+TBD
+
 ## Installation
 
 ### Prerequisites
@@ -26,13 +33,34 @@ W. I. N. D. is a product that emerged from the Andromeda project. It serves as a
 - MongoDB
 - Mongoose
 
-### Steps
+### Steps (WIP)
 1. Clone the repository
+```bash
+git clone https://github.com/TuragNikandam/WIND
+```
 2. Navigate to the backend directory and run npm install
+```bash
+cd WIND/WebServer/AndromedaAPI/api
+```
+```bash
+npm install
+```
 3. Navigate to the mobile app directory and run flutter pub get
+```bash
+cd WIND/Mobile/wind
+```
+```bash
+pub get
+```
 4. Start the MongoDB service
 5. Start the backend server by running node server.js
+```bash
+node server.js
+```
 6. Launch the mobile app by running flutter run
+```bash
+flutter run
+```
 
 ### Usage
 1. Backend: The backend is built with Express.js and connects to a MongoDB database. It uses JWT for authentication and Helmet for security. It is ready to run on a server and act as a Node.js backend providing a API. 
