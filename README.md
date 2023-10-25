@@ -29,7 +29,7 @@ Emerging from the Andromeda project, W. I. N. D. serves as an intricate platform
 **Database**: MongoDB
 
 ## Demo
-To Be Determined (TBD)
+![WIND Demo](Media/demo_1.gif)
 
 ## Installation
 
