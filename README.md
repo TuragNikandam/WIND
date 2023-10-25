@@ -85,8 +85,8 @@ If you use a dedicated server to run the Node backend you need to specify the pa
 ```bash
 node server.js
 ```
-10. Launch your emulator for Android or simulator for iOS.
-11. Run the mobile app
+9. Launch your emulator for Android or simulator for iOS.
+10. Run the mobile app
 ```bash
 flutter run
 ```
