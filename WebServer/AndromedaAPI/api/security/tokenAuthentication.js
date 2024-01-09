@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const log = require("../config/log");
+const log = require("../config/log.js");
 const database = require("../config/database.js");
 
 async function authenticate(req, res, next) {

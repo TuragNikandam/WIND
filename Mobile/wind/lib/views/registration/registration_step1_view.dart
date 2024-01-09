@@ -36,7 +36,7 @@ class _RegistrationStep1ViewState extends State<RegistrationStep1View> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DropdownButton<String>(
-              isExpanded: true,
+                isExpanded: true,
                 value: user.getSelectedParty.isEmpty
                     ? null
                     : user.getSelectedParty,

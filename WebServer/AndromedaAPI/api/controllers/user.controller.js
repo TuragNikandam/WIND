@@ -334,7 +334,7 @@ exports.loginAsGuest = async (req, res) => {
     const data = await user.save();
     log.info(`Guest created: ${data}`);
     const token = jwt.sign({ _id: user._id, role: 'guest' }, process.env.JWT_SECRET, {
-      expiresIn: "3h",
+      expiresIn: process.env.JWT_EXPIRATION_TIME,
     });
     log.info(`Token for guest created.`);
     res.status(200).json({ token });

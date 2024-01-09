@@ -144,7 +144,7 @@ class _DiscussionViewState extends State<DiscussionView> {
     }
   }
 
-  String? customValidator(String? value) {
+  String? _customValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Bitte schreibe einen Beitrag.';
     }
@@ -260,7 +260,7 @@ class _DiscussionViewState extends State<DiscussionView> {
                       child: TextFormField(
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
-                        validator: customValidator,
+                        validator: _customValidator,
                         controller: _textController,
                         decoration: const InputDecoration(
                           hintText: 'Sag was du denkst...',

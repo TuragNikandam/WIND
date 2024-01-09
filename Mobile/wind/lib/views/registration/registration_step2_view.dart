@@ -41,24 +41,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
         .toList();
   }
 
-  Widget buildChip(String label, Widget image, VoidCallback? onDelete) {
-    return Padding(
-      padding: EdgeInsets.all(spaceHeight),
-      child: Chip(
-        avatar: image,
-        label: Text(label),
-        deleteIcon: onDelete == null
-            ? null
-            : const Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
-        onDeleted: onDelete,
-      ),
-    );
-  }
-
-  Widget buildOrganizationImage(Organization organization, Widget avatar) {
+  Widget _buildOrganizationImage(Organization organization, Widget avatar) {
     return ClipRect(
       child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
           ? FadeInImage(
@@ -118,7 +101,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                   final organization = _unselectedOrganizations[index];
                   return Card(
                     child: ListTile(
-                      leading: buildOrganizationImage(
+                      leading: _buildOrganizationImage(
                           organization,
                           CircleAvatar(
                             radius: radius,
@@ -199,7 +182,7 @@ class _RegistrationStep2ViewState extends State<RegistrationStep2View> {
                         key: ValueKey(_selectedOrganizations[index]),
                         child: Card(
                           child: ListTile(
-                            leading: buildOrganizationImage(
+                            leading: _buildOrganizationImage(
                                 OrganizationManager().getOrganizationById(
                                     _selectedOrganizations[index]),
                                 CircleAvatar(

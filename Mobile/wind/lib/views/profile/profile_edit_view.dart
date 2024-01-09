@@ -191,7 +191,8 @@ class _ProfileEditViewState extends State<ProfileEditView> {
           .map<DropdownMenuItem<String>>(
               (Party party) => DropdownMenuItem<String>(
                     value: party.getId,
-                    child: Text("${party.getName} (${party.getShortName})", overflow: TextOverflow.visible),
+                    child: Text("${party.getName} (${party.getShortName})",
+                        overflow: TextOverflow.visible),
                   ))
           .toList(),
     );
@@ -283,7 +284,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                   key: ValueKey(selectedOrganizationIds[index]),
                   child: Card(
                     child: ListTile(
-                      leading: buildOrganizationImage(
+                      leading: _buildOrganizationImage(
                           OrganizationManager().getOrganizationById(
                               selectedOrganizationIds[index]),
                           CircleAvatar(
@@ -338,7 +339,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
             itemBuilder: (context, index) {
               return buildChip(
                   unselectedOrganizations[index].getShortName,
-                  buildOrganizationImage(
+                  _buildOrganizationImage(
                     OrganizationManager().getOrganizationById(
                         unselectedOrganizations[index].getId),
                     CircleAvatar(
@@ -385,7 +386,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
     );
   }
 
-  Widget buildOrganizationImage(Organization organization, Widget avatar) {
+  Widget _buildOrganizationImage(Organization organization, Widget avatar) {
     return ClipRect(
       child: UriHelper.getUriByStringURL(organization.getImageUrl) != null
           ? FadeInImage(
