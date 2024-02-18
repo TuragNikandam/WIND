@@ -1,7 +1,6 @@
 import 'package:wind/controllers/registration/registration_step3_controller.dart';
 import 'package:wind/models/organization_model.dart';
 import 'package:wind/models/user_model.dart';
-import 'package:wind/services/master_data_service.dart';
 import 'package:wind/services/navigation_service.dart';
 import 'package:wind/views/registration/registration_step2_view.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class RegistrationStep2Controller extends StatefulWidget {
 class _RegistrationStep2ContollerState
     extends State<RegistrationStep2Controller> {
   late User user;
-  late MasterDataService masterDataService;
   late NavigationService navigationService;
   late List<Organization> organizations;
 

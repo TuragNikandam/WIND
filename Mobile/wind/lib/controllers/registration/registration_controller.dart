@@ -1,7 +1,6 @@
 import 'package:wind/controllers/registration/registration_step1_controller.dart';
 import 'package:wind/models/user_model.dart';
 import 'package:wind/services/navigation_service.dart';
-import 'package:wind/services/user_service.dart';
 import 'package:wind/utils/validators.dart';
 import 'package:wind/views/registration/registration_view.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +15,17 @@ class RegistrationController extends StatefulWidget {
 }
 
 class _RegistrationControllerState extends State<RegistrationController> {
-  late UserService userService;
   late User user;
   late NavigationService navigationService;
 
   @override
   void initState() {
     super.initState();
-    userService = Provider.of<UserService>(context, listen: false);
     user = Provider.of<User>(context, listen: false);
     navigationService = Provider.of<NavigationService>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      user.updateAllFields(User());
+    });
   }
 
   Future<String?> _validate(BuildContext context, String username, String email,

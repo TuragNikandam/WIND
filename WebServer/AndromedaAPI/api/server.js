@@ -25,9 +25,7 @@ const https = require("https"),
   helmet = require("helmet"),
   permissionMiddleware = require("./security/permissions.js"),
   corseMiddleware = require("./security/corse.js"),
-  authorization = require("./security/tokenAuthorization.js");
-
-
+  authentication = require("./security/tokenAuthentication.js");
 
 process.env.JWT_SECRET = crypto.randomBytes(32).toString("hex");
 database.connect(
@@ -42,7 +40,7 @@ app.use(bodyParser.json());
 app.use(helmet());
 app.use(corseMiddleware);
 app.use("/", unprotected);
-app.use(authorization);
+app.use(authentication);
 app.use(permissionMiddleware);
 app.use("/user", user);
 app.use("/voting", voting);
